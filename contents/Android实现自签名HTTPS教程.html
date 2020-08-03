@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon.ico">
+  <link rel="mask-icon" href="/favicon.ico" color="#222">
+  <meta name="google-site-verification" content="yHqnmkvA-12pculpP0D-q6lLqYStfJAnZCn5OLVFDfQ">
+  <meta name="baidu-site-verification" content="VLW4ITHnBoryM4WZ">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"lxmymjr.github.io","root":"/","scheme":"Gemini","version":"8.0.0-rc.4","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":-1,"unescape":false,"preload":false},"motion":{"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"prism":false,"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="本文使用 okhttp 的封装类 okhttp-utils 实现 https 通讯 okhttp-utils 对应 okhttp 版本 3.3.1.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android 实现自签名 HTTPS 教程">
+<meta property="og:url" content="https://lxmymjr.github.io/contents/Android%E5%AE%9E%E7%8E%B0%E8%87%AA%E7%AD%BE%E5%90%8DHTTPS%E6%95%99%E7%A8%8B.html">
+<meta property="og:site_name" content="xmliu&#39;s blog">
+<meta property="og:description" content="本文使用 okhttp 的封装类 okhttp-utils 实现 https 通讯 okhttp-utils 对应 okhttp 版本 3.3.1.">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2017-03-10T05:38:04.000Z">
+<meta property="article:modified_time" content="2020-08-03T02:47:30.981Z">
+<meta property="article:author" content="LIU, XIMING">
+<meta property="article:tag" content="Tutorial">
+<meta property="article:tag" content="Android">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://lxmymjr.github.io/contents/Android%E5%AE%9E%E7%8E%B0%E8%87%AA%E7%AD%BE%E5%90%8DHTTPS%E6%95%99%E7%A8%8B.html">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>Android 实现自签名 HTTPS 教程 | xmliu's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container use-motion">
+    <div class="headband"></div>
+
+    <main class="main">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+        <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+        <span class="toggle-line toggle-line-first"></span>
+        <span class="toggle-line toggle-line-middle"></span>
+        <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">xmliu's blog</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">9</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">4</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">16</span></a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <section class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%89%E8%A3%85"><span class="nav-number">1.</span> <span class="nav-text">安装</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%85%8D%E7%BD%AEokhttpclient%E5%92%8Cssl%E8%AF%81%E4%B9%A6"><span class="nav-number">2.</span> <span class="nav-text">配置 OkhttpClient 和 SSL 证书</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%80%9A%E8%BF%87https%E5%8F%91%E9%80%81json%E6%B6%88%E6%81%AF"><span class="nav-number">3.</span> <span class="nav-text">通过 HTTPS 发送 Json 消息</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%80%9A%E8%BF%87https%E5%8F%91%E9%80%81%E5%90%8C%E6%AD%A5post%E8%AF%B7%E6%B1%82"><span class="nav-number">4.</span> <span class="nav-text">通过 HTTPS 发送同步 POST 请求</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%80%9A%E8%BF%87https%E5%8F%91%E9%80%81%E5%BC%82%E6%AD%A5post%E8%AF%B7%E6%B1%82"><span class="nav-number">5.</span> <span class="nav-text">通过 HTTPS 发送异步 POST 请求</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#post%E8%A1%A8%E5%8D%95%E5%BD%A2%E5%BC%8F%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6"><span class="nav-number">6.</span> <span class="nav-text">Post 表单形式上传文件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%A4%84%E7%90%86%E8%BF%94%E5%9B%9E%E6%B6%88%E6%81%AF"><span class="nav-number">7.</span> <span class="nav-text">处理返回消息</span></a></li></ol></div>
+      </section>
+      <!--/noindex-->
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="LIU, XIMING"
+      src="/assets/avatar/yuntianhe.jpg">
+  <p class="site-author-name" itemprop="name">LIU, XIMING</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">16</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/lxmymjr?tab=repositories" title="GitHub → https://github.com/lxmymjr?tab=repositories" rel="noopener" target="_blank"><i class="github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:xmliu.2015@smu.edu.sg" title="E-Mail → mailto:xmliu.2015@smu.edu.sg" rel="noopener" target="_blank"><i class="envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://sites.google.com/view/xmliu-smu/home" title="https://sites.google.com/view/xmliu-smu/home" rel="noopener" target="_blank">Personal Homepage</a>
+        </li>
+    </ul>
+  </div>
+
+      </section>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </header>
+
+      
+
+<noscript>
+  <div id="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+      <div class="main-inner">
+        
+
+        <div class="content post posts-expand">
+          
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://lxmymjr.github.io/contents/Android%E5%AE%9E%E7%8E%B0%E8%87%AA%E7%AD%BE%E5%90%8DHTTPS%E6%95%99%E7%A8%8B.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/assets/avatar/yuntianhe.jpg">
+      <meta itemprop="name" content="LIU, XIMING">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xmliu's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Android 实现自签名 HTTPS 教程<a href="https://github.com/lxmymjr/Blog/blob/master/source/_posts/Android实现自签名HTTPS教程.md" class="post-edit-link" title="Edit this post" rel="noopener" target="_blank"><i class="fa fa-pen-nib"></i></a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2017-03-10 13:38:04" itemprop="dateCreated datePublished" datetime="2017-03-10T13:38:04+08:00">2017-03-10</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-08-03 10:47:30" itemprop="dateModified" datetime="2020-08-03T10:47:30+08:00">2020-08-03</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index"><span itemprop="name">Android</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="Symbols count in article">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">Symbols count in article: </span>
+              <span>2.9k</span>
+            </span>
+            <span class="post-meta-item" title="Reading time">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">Reading time &asymp;</span>
+              <span>3 mins.</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>本文使用 <a target="_blank" rel="noopener" href="https://github.com/square/okhttp">okhttp</a> 的封装类 <a target="_blank" rel="noopener" href="https://github.com/hongyangAndroid/okhttputils">okhttp-utils</a> 实现 https 通讯<br>
+okhttp-utils 对应 okhttp 版本 3.3.1.<br>
+<a id="more"></a></p>
+<h1 id="安装">安装</h1>
+<ul>
+<li>Android Studio<br>
+<code>compile 'com.zhy:okhttputils:2.6.2'</code></li>
+<li>Eclipse<br>
+下载最新 jar:<a href="okhttputils-2_6_2.jar?raw=true">okhttputils-2_6_2.jar</a>。<br>
+注：需要同时导入 okhttp 和 okio 的 jar，下载见：<a target="_blank" rel="noopener" href="https://github.com/square/okhttp">https://github.com/square/okhttp</a>。</li>
+</ul>
+<h1 id="配置okhttpclient和ssl证书">配置 OkhttpClient 和 SSL 证书</h1>
+<p>在 onCreate 函数中<br>
+</p><figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">InputStream certification = <span class="keyword">null</span>;</span><br><span class="line"><span class="keyword">try</span> {</span><br><span class="line">    certification = getAssets().open(<span class="string">"xxxxx.cer"</span>);</span><br><span class="line">} <span class="keyword">catch</span> (IOException e) {</span><br><span class="line">    e.printStackTrace();</span><br><span class="line">}</span><br><span class="line">HttpsUtils.SSLParams sslParams = HttpsUtils.getSslSocketFactory(<span class="keyword">new</span> InputStream[]{certification}, <span class="keyword">null</span>, <span class="keyword">null</span>);</span><br><span class="line">OkHttpClient okHttpClient = <span class="keyword">new</span> OkHttpClient.Builder()</span><br><span class="line">    .hostnameVerifier(<span class="keyword">new</span> HostnameVerifier() {</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">verify</span><span class="params">(String hostname, SSLSession session)</span> </span>{</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">        }</span><br><span class="line">    })</span><br><span class="line">    .sslSocketFactory(sslParams.sSLSocketFactory, sslParams.trustManager)</span><br><span class="line">    .build();</span><br><span class="line">OkHttpUtils.initClient(okHttpClient);</span><br></pre></td></tr></tbody></table></figure><br>
+其中xxxxx.cer为所连接服务器的证书，可从浏览器导出。<br>
+也可以通过OpenSSL工具自签名生成，生成方法详见文章<a href="https://lxmymjr.github.io/2017/09/19/Python-Web%E6%A1%86%E6%9E%B6-CherryPy/#全局配置-global">Python Web 框架 - CherryPy</a><p></p>
+<h1 id="通过https发送json消息">通过 HTTPS 发送 Json 消息</h1>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">String url = <span class="string">"https://xxxxx"</span>;</span><br><span class="line">String json = <span class="string">"{\"key1\":\"value1\", \"key1\":\"value1\"}"</span>;</span><br><span class="line">OkHttpUtils</span><br><span class="line">    .postString()</span><br><span class="line">    .url(url)</span><br><span class="line">    .content(json)</span><br><span class="line">    .mediaType(MediaType.parse(<span class="string">"application/json; charset=utf-8"</span>))</span><br><span class="line">    .build()</span><br><span class="line">    .execute(<span class="keyword">new</span> MyStringCallback());</span><br></pre></td></tr></tbody></table></figure>
+<h1 id="通过https发送同步post请求">通过 HTTPS 发送同步 POST 请求</h1>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> Thread() {</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>{</span><br><span class="line">        String url = <span class="string">"https://xxxxx"</span>;</span><br><span class="line">        Response response;</span><br><span class="line">        <span class="keyword">try</span> {</span><br><span class="line">            response = OkHttpUtils</span><br><span class="line">                    .post()</span><br><span class="line">                    .url(url)</span><br><span class="line">                    .addParams(<span class="string">"abc"</span>, <span class="string">"xxx"</span>)</span><br><span class="line">                    .addParams(<span class="string">"def"</span>, <span class="string">"yyy"</span>)</span><br><span class="line">                    .build()</span><br><span class="line">                    .execute();</span><br><span class="line">            <span class="keyword">if</span> (response.isSuccessful()) {</span><br><span class="line">                Log.d(<span class="string">"OkHTTP"</span>,<span class="string">"OkHTTP is request success"</span>);</span><br><span class="line">            } <span class="keyword">else</span> {</span><br><span class="line">                Log.e(<span class="string">"OkHTTP"</span>, <span class="string">"OkHTTP is request error"</span>);</span><br><span class="line">            }</span><br><span class="line">            String data=response.body().string();</span><br><span class="line">        } <span class="keyword">catch</span> (IOException e) {</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">}.start();</span><br></pre></td></tr></tbody></table></figure>
+<p>同步的 HTTPS 请求不能再主线程中进行，所以要新建一个线程处理同步请求。</p>
+<h1 id="通过https发送异步post请求">通过 HTTPS 发送异步 POST 请求</h1>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">String url = <span class="string">"https://xxxxx"</span>;</span><br><span class="line">OkHttpUtils</span><br><span class="line">    .post()</span><br><span class="line">    .url(url)</span><br><span class="line">    .addParams(<span class="string">"abc"</span>, <span class="string">"xxx"</span>)</span><br><span class="line">    .addParams(<span class="string">"def"</span>, <span class="string">"yyy"</span>)</span><br><span class="line">    .build()</span><br><span class="line">    .execute(<span class="keyword">new</span> MyStringCallback());</span><br></pre></td></tr></tbody></table></figure>
+<h1 id="post表单形式上传文件">Post 表单形式上传文件</h1>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">OkHttpUtils.post()</span><br><span class="line">    .addFile(<span class="string">"file"</span>, <span class="string">"filename"</span>, file)</span><br><span class="line">    .url(url)</span><br><span class="line">    .params(params)</span><br><span class="line">    .headers(headers)</span><br><span class="line">    .build()</span><br><span class="line">    .execute(<span class="keyword">new</span> MyStringCallback());</span><br></pre></td></tr></tbody></table></figure>
+<p>支持上传多个文件，addFile 的第一个参数为文件的 key，即类别表单中 <code>&lt;input type="file" name="file"/&gt;</code> 的 name 属性。<br>
+params (params) 和 headers (headers) 可以省略。其中 params (params) 为参数格式，类似 addParams ()。<br>
+</p><figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Map&lt;String, String&gt; params = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">params.put(<span class="string">"abc"</span>, <span class="string">"xxx"</span>);</span><br><span class="line">params.put(<span class="string">"def"</span>, <span class="string">"yyy"</span>);</span><br></pre></td></tr></tbody></table></figure><p></p>
+<h1 id="处理返回消息">处理返回消息</h1>
+<p>新建类 MyStringCallback：<br>
+</p><figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyStringCallback</span> <span class="keyword">extends</span> <span class="title">StringCallback</span></span></span><br><span class="line"><span class="class"></span>{</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onError</span><span class="params">(Call call, Exception e, <span class="keyword">int</span> id)</span></span></span><br><span class="line"><span class="function">    </span>{</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">    }</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onResponse</span><span class="params">(String response, <span class="keyword">int</span> id)</span> </span>{</span><br><span class="line">        Log.i(<span class="string">"HTTP"</span>, <span class="string">"onResponse："</span> + response);</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure><p></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Tutorial/" rel="tag"># Tutorial</a>
+              <a href="/tags/Android/" rel="tag"># Android</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/contents/%E6%9E%81%E5%85%89%E6%8E%A8%E9%80%81JPush%E6%95%99%E7%A8%8B.html" rel="prev" title="极光推送 JPush 教程">
+      <i class="fa fa-chevron-left"></i> 极光推送 JPush 教程
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/contents/ML-1-Regression.html" rel="next" title="Machine Learning：1. Regression">
+      Machine Learning：1. Regression <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+        </div>
+        
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">LIU, XIMING</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="Symbols count total">165k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="Reading time total">2:30</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/pangu@4/dist/browser/pangu.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+<script>
+document.querySelectorAll('.pdfobject-container').forEach(element => {
+  let url = element.dataset.target;
+  let pdfOpenParams = {
+    navpanes : 0,
+    toolbar  : 0,
+    statusbar: 0,
+    pagemode : 'thumbs',
+    view     : 'FitH'
+  };
+  let pdfOpenFragment = '#' + Object.entries(pdfOpenParams).map(([key, value]) => `${key}=${encodeURIComponent(value)}`).join('&');
+  let fullURL = `/lib/pdf/web/viewer.html?file=${encodeURIComponent(url)}${pdfOpenFragment}`;
+
+  if (NexT.utils.supportsPDFs()) {
+    element.innerHTML = `<embed class="pdfobject" src="${url + pdfOpenFragment}" type="application/pdf" style="height: ${element.dataset.height};">`;
+  } else {
+    element.innerHTML = `<iframe src="${fullURL}" style="height: ${element.dataset.height};" frameborder="0"></iframe>`;
+  }
+});
+</script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>
