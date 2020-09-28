@@ -22,20 +22,20 @@
     var CONFIG = {"hostname":"lxmymjr.github.io","root":"/","scheme":"Gemini","version":"8.0.0-rc.4","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":-1,"unescape":false,"preload":false},"motion":{"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"prism":false,"path":"search.xml"};
   </script>
 
-  <meta name="description" content="Git 指南，参考 git - 简明指南">
+  <meta name="description" content="Linux 的终端上有很多实用小工具，能提高工作效率，比如 tmux。 在此介绍他们的用法、配置和快捷键。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Git Tutorials">
-<meta property="og:url" content="https://lxmymjr.github.io/contents/Git-Tutorials.html">
+<meta property="og:title" content="Linux 实用工具">
+<meta property="og:url" content="https://lxmymjr.github.io/contents/Linux-%E5%AE%9E%E7%94%A8%E5%B7%A5%E5%85%B7.html">
 <meta property="og:site_name" content="xmliu&#39;s blog">
-<meta property="og:description" content="Git 指南，参考 git - 简明指南">
+<meta property="og:description" content="Linux 的终端上有很多实用小工具，能提高工作效率，比如 tmux。 在此介绍他们的用法、配置和快捷键。">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2017-09-01T08:12:42.000Z">
-<meta property="article:modified_time" content="2020-08-03T02:47:30.983Z">
+<meta property="article:published_time" content="2020-09-28T08:18:44.000Z">
+<meta property="article:modified_time" content="2020-09-28T11:05:26.167Z">
 <meta property="article:author" content="LIU, XIMING">
 <meta property="article:tag" content="Tutorial">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="https://lxmymjr.github.io/contents/Git-Tutorials.html">
+<link rel="canonical" href="https://lxmymjr.github.io/contents/Linux-%E5%AE%9E%E7%94%A8%E5%B7%A5%E5%85%B7.html">
 
 
 <script id="page-configurations">
@@ -48,7 +48,7 @@
   };
 </script>
 
-  <title>Git Tutorials | xmliu's blog</title>
+  <title>Linux 实用工具 | xmliu's blog</title>
   
 
 
@@ -201,7 +201,7 @@
 
       <!--noindex-->
       <section class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%89%E8%A3%85"><span class="nav-number">1.</span> <span class="nav-text">安装</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8C%87%E4%BB%A4"><span class="nav-number">2.</span> <span class="nav-text">指令</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#tmux"><span class="nav-number">1.</span> <span class="nav-text">TMUX</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#tmux-%E7%9A%84%E5%AE%89%E8%A3%85"><span class="nav-number">1.1.</span> <span class="nav-text">tmux 的安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#tmux-%E7%9A%84%E5%89%8D%E7%BC%80%E9%94%AE"><span class="nav-number">1.2.</span> <span class="nav-text">tmux 的前缀键</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#tmux-%E7%9A%84%E4%BC%9A%E8%AF%9D%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C"><span class="nav-number">1.3.</span> <span class="nav-text">tmux 的会话常用操作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#tmux-%E7%9A%84%E7%AA%97%E6%A0%BC%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C"><span class="nav-number">1.4.</span> <span class="nav-text">tmux 的窗格常用操作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#tmux-%E7%9A%84%E7%AA%97%E5%8F%A3%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C"><span class="nav-number">1.5.</span> <span class="nav-text">tmux 的窗口常用操作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#tmux-%E7%9A%84%E9%85%8D%E7%BD%AE"><span class="nav-number">1.6.</span> <span class="nav-text">tmux 的配置</span></a></li></ol></li></ol></div>
       </section>
       <!--/noindex-->
 
@@ -285,7 +285,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://lxmymjr.github.io/contents/Git-Tutorials.html">
+    <link itemprop="mainEntityOfPage" href="https://lxmymjr.github.io/contents/Linux-%E5%AE%9E%E7%94%A8%E5%B7%A5%E5%85%B7.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/assets/avatar/yuntianhe.jpg">
@@ -298,7 +298,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          Git Tutorials<a href="https://github.com/lxmymjr/Blog/blob/master/source/_posts/Git-Tutorials.md" class="post-edit-link" title="Edit this post" rel="noopener" target="_blank"><i class="fa fa-pen-nib"></i></a>
+          Linux 实用工具<a href="https://github.com/lxmymjr/Blog/blob/master/source/_posts/Linux-实用工具.md" class="post-edit-link" title="Edit this post" rel="noopener" target="_blank"><i class="fa fa-pen-nib"></i></a>
         </h1>
 
         <div class="post-meta">
@@ -307,16 +307,10 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
+              
 
-              <time title="Created: 2017-09-01 16:12:42" itemprop="dateCreated datePublished" datetime="2017-09-01T16:12:42+08:00">2017-09-01</time>
+              <time title="Created: 2020-09-28 16:18:44 / Modified: 19:05:26" itemprop="dateCreated datePublished" datetime="2020-09-28T16:18:44+08:00">2020-09-28</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-08-03 10:47:30" itemprop="dateModified" datetime="2020-08-03T10:47:30+08:00">2020-08-03</time>
-              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -333,14 +327,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">Symbols count in article: </span>
-              <span>1.5k</span>
+              <span>2.6k</span>
             </span>
             <span class="post-meta-item" title="Reading time">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">Reading time &asymp;</span>
-              <span>1 mins.</span>
+              <span>2 mins.</span>
             </span>
 
         </div>
@@ -352,26 +346,194 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>Git 指南，参考 <a target="_blank" rel="noopener" href="http://rogerdudler.github.io/git-guide/index.zh.html">git - 简明指南</a><br>
-<a id="more"></a></p>
-<h1 id="安装">安装</h1>
-<p><a target="_blank" rel="noopener" href="https://book.git-scm.com/download/mac">MAC 版</a><br>
-<a target="_blank" rel="noopener" href="https://book.git-scm.com/download/win">Windows 版</a><br>
-<a target="_blank" rel="noopener" href="https://book.git-scm.com/download/linux">Linux 版</a></p>
-<h1 id="指令">指令</h1>
-<ul>
-<li><strong>创建新仓库</strong>：本地创建新文件夹，打开，然后执行 <code>git init</code> 以创建新的 git 仓库。</li>
-<li><strong>克隆仓库</strong>：执行 <code>git clone /path/to/repository</code> 以创建一个本地仓库的克隆版本；如果是远端服务器上的仓库，执行 <code>git clone username@host:/path/to/repository</code>。</li>
-<li><strong>工作流</strong>：你的本地仓库由 git 维护的三棵 “树” 组成。第一个是你的<font color="red"><strong>工作目录</strong></font>，它持有实际文件；第二个是<font color="red"><strong>暂存区（Index）</strong></font>，它像个缓存区域，临时保存你的改动；最后是<font color="red"><strong> HEAD</strong></font>，它指向你最后一次提交的结果。</li>
-<li><strong>查看不同</strong>：你可以修改你的文档或者代码，并且可以通过 <code>git diff</code> 查看具体修改内容和 <code>git diff --stat</code> 查看修改的总体信息。</li>
-<li><strong>添加和提交</strong>：你可以提出更改（把它们添加到暂存区），执行 <code>git add &lt;filename&gt;</code> 或 <code>git add *</code>，这是 git 本工作流程的第一步；执行 <code>git commit -m "代码提交信息"</code> 以实际提交改动，现在你的改动已经提交到了 HEAD，但是还没到你的远端仓库。</li>
-<li><strong>推送改动</strong>：改动被提交到本地仓库的 HEAD 后，执行 <code>git push origin master</code> 以将这些改动提交到远端仓库（可以把 master 换成你想要推送的任何分支）。如果你还没有克隆现有仓库，并欲将你的仓库连接到某个远程服务器，执行 <code>git remote add origin &lt;server&gt;</code> 以添加服务器。执行 <code>git remote -v</code> 查看远程服务器。</li>
-<li><strong>分支</strong>：分支是用来将特性开发绝缘开来的。在你创建仓库的时候，master 是 “默认的” 分支。在其他分支上进行开发，完成后再将它们合并到主分支上。执行 <code>git checkout -b feature_x</code> 以创建一个叫做 “feature_x” 的分支，并切换过去；执行 <code>git checkout master</code> 以切换回主分支；执行 <code>git checkout master</code> 以删除新建的分支；除非你将分支推送到远端仓库 <code>git push origin &lt;branch&gt;</code>，不然该分支就是不为他人所见的；执行 <code>git branch</code> 查看本地分支。</li>
-<li><strong>更新与合并</strong>：执行 <code>git pull</code> 以更新你的本地仓库至最新改动（在你的工作目录中获取并合并远端的改动）。执行 <code>git merge &lt;branch&gt;</code> 以合并其他分支到你的当前分支（例如 master）。git 会尝试去自动合并改动。遗憾的是，这可能并非每次都成功，并可能出现冲突。 这时候就需要你手动修改这些文件来合并这些冲突。改完之后，你需要执行 <code>git add &lt;filename&gt;</code> 以将它们标记为合并成功。在合并改动之前，可以执行 <code>git diff &lt;source_branch&gt; &lt;target_branch&gt;</code> 以预览差异。</li>
-<li><strong>标签</strong>：推荐为软件发布创建标签，你可以执行 <code>git tag 1.0.0 1b2e1d63ff</code> 以创建一个叫做 1.0.0 的标签，其中 1b2e1d63ff 是你想要标记的提交 ID 的前 10 位字符。可以执行 <code>git log</code> 以获取提交 ID，你也可以使用少一点的提交 ID 前几位，只要它的指向具有唯一性。</li>
-<li><strong>历史记录</strong>：执行 <code>git log</code> 以了解本地仓库的历史记录。</li>
-<li><strong>替换本地改动</strong>：假如你操作失误，执行 <code>git checkout -- &lt;filename&gt;</code> 替换掉本地改动，此命令会使用 HEAD 中的最新内容替换掉你的工作目录中的文件。已添加到暂存区的改动以及新文件都不会受到影响。假如你想丢弃你在本地的所有改动与提交，可以到服务器上获取最新的版本历史，并将你本地主分支指向它：执行 <code>git fetch origin</code> 和 <code>git reset --hard origin/master</code>。</li>
-</ul>
+        <p>Linux 的终端上有很多实用小工具，能提高工作效率，比如 tmux。</p>
+<p>在此介绍他们的用法、配置和快捷键。</p>
+<a id="more"></a>
+<h1 id="tmux">TMUX</h1>
+<p>参考资料：<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/102546608">一文助你打通 tmux</a>，<a target="_blank" rel="noopener" href="http://www.ruanyifeng.com/blog/2019/10/tmux.html">Tmux 使用教程</a></p>
+<p>命令行的典型使用方式是，打开一个终端窗口（terminal window，以下简称 "窗口"），窗口可以被不断切割，切割成一个个小块，这一个个小块我们叫做窗格（pane）。在里面输入命令。用户与计算机的这种临时的交互，称为一次 "会话"（session） 。</p>
+<p>会话的一个重要特点是，窗口与其中启动的进程是连在一起的。打开窗口，会话开始；关闭窗口，会话结束，会话内部的进程也会随之终止，不管有没有运行完。</p>
+<p>Tmux 就是会话与窗口的 "解绑" 工具，将它们彻底分离：窗口关闭时，会话并不终止，而是继续运行，等到以后需要的时候，再让会话 "绑定" 其他窗口。</p>
+<ol type="1">
+<li><p>它允许在单个窗口中，同时访问多个会话。这对于同时运行多个命令行程序很有用。</p></li>
+<li><p>它可以让新窗口 "接入" 已经存在的会话。</p></li>
+<li><p>它允许每个会话有多个连接窗口，因此可以多人实时共享会话。</p></li>
+<li><p>它还支持窗口任意的垂直和水平拆分。</p></li>
+</ol>
+<h2 id="tmux-的安装">tmux 的安装</h2>
+<p>Linux 系统中通常使用 yum 来安装 tmux : <code>yum install tmux</code></p>
+<p>Mac OS 系统中通常使用 brew 来安装 tmux :<code>brew install tmux</code></p>
+<h2 id="tmux-的前缀键">tmux 的前缀键</h2>
+<p>tmux 中的很多操作都是通过快捷键来实现的，通过快捷键我们可以更加高效的完成任务。如果想使用 tmux 中的快捷键，我们必须使用 tmux 的前缀按键 ctrl + b , 在 tmux 中所有的快捷键都需要通过前缀按键去唤起的。</p>
+<h2 id="tmux-的会话常用操作">tmux 的会话常用操作</h2>
+<table>
+<colgroup>
+<col style="width: 13%">
+<col style="width: 69%">
+<col style="width: 16%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>操作</th>
+<th>命令</th>
+<th>快捷键</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>新建会话</td>
+<td><code>tmux</code> / <code>tmux new -s &lt;session-name&gt;</code></td>
+<td>无</td>
+</tr>
+<tr class="even">
+<td>离开会话</td>
+<td><code>tmux detach</code></td>
+<td><code>(ctrl + b) d</code></td>
+</tr>
+<tr class="odd">
+<td>查看会话列表</td>
+<td><code>tmux ls</code></td>
+<td><code>(ctrl + b) s</code></td>
+</tr>
+<tr class="even">
+<td>进入会话</td>
+<td><code>ta</code>/<code>tmux attach -t &lt;session-name&gt;</code></td>
+<td>无</td>
+</tr>
+<tr class="odd">
+<td>关闭会话</td>
+<td><code>tmux kill-session -t &lt;session-name&gt;</code></td>
+<td><code>ctrl + d</code></td>
+</tr>
+<tr class="even">
+<td>切换会话</td>
+<td><code>tmux switch -t &lt;session-name&gt;</code></td>
+<td>无</td>
+</tr>
+<tr class="odd">
+<td>重命名会话</td>
+<td><code>tmux rename-session -t &lt;old-session-name&gt; &lt;new-session-name&gt;</code></td>
+<td><code>(ctrl +b) $</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="tmux-的窗格常用操作">tmux 的窗格常用操作</h2>
+<table>
+<thead>
+<tr class="header">
+<th>操作</th>
+<th>命令</th>
+<th>快捷键</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>水平分割窗格</td>
+<td><code>tmux split-window -h</code>（左右）</td>
+<td><code>(ctrl + b) %</code>（左右）</td>
+</tr>
+<tr class="even">
+<td>垂直分割窗格</td>
+<td><code>tmux split-window</code> （上下）</td>
+<td><code>(ctrl + b) “</code>（上下）</td>
+</tr>
+<tr class="odd">
+<td>光标移动到上方窗格</td>
+<td><code>tmux select-pane -U</code></td>
+<td><code>(ctrl +b) ↑</code></td>
+</tr>
+<tr class="even">
+<td>光标移动到下方窗格</td>
+<td><code>tmux select-pane -D</code></td>
+<td><code>(ctrl +b) ↓</code></td>
+</tr>
+<tr class="odd">
+<td>光标移动到左边窗格</td>
+<td><code>tmux select-pane -L</code></td>
+<td><code>(ctrl +b) ←</code></td>
+</tr>
+<tr class="even">
+<td>光标移动到右边窗格</td>
+<td><code>tmux select-pane -R</code></td>
+<td><code>(ctrl +b) →</code></td>
+</tr>
+<tr class="odd">
+<td>光标切换到上一个窗格</td>
+<td>无</td>
+<td><code>(ctrl +b) ;</code></td>
+</tr>
+<tr class="even">
+<td>光标切换到下一个窗格</td>
+<td>无</td>
+<td><code>(ctrl +b) o</code></td>
+</tr>
+<tr class="odd">
+<td>当前窗格向上移动</td>
+<td><code>tmux swap-pane -U</code></td>
+<td>无</td>
+</tr>
+<tr class="even">
+<td>当前窗格向下移动</td>
+<td><code>tmux swap-pane -D</code></td>
+<td>无</td>
+</tr>
+<tr class="odd">
+<td>关闭当前的窗格</td>
+<td>无</td>
+<td><code>(ctrl +b) x</code></td>
+</tr>
+<tr class="even">
+<td>最大化窗格</td>
+<td>无</td>
+<td><code>(ctrl +b) z</code> 触发两次还原当前的窗格大小</td>
+</tr>
+<tr class="odd">
+<td>显示时间</td>
+<td>无</td>
+<td><code>(ctrl +b) t</code> 点击 Enter 将会复原</td>
+</tr>
+</tbody>
+</table>
+<h2 id="tmux-的窗口常用操作">tmux 的窗口常用操作</h2>
+<table>
+<colgroup>
+<col style="width: 9%">
+<col style="width: 35%">
+<col style="width: 55%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>操作</th>
+<th>命令</th>
+<th>快捷键</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>创建窗口</td>
+<td><code>tmux new-window -n &lt;window-name&gt;</code></td>
+<td><code>(ctrl + b) c</code></td>
+</tr>
+<tr class="even">
+<td>切换窗口</td>
+<td><code>tmux select-window -t &lt;window-name&gt;</code></td>
+<td><code>(ctrl +b) w</code> 显示窗口列表可以通过 j,k 上下进行选择窗口，然后回车进入指定的窗口。<br><code>(ctrl +b) n</code> 快速切换到下一个窗口。<br><code>(ctrl +b) p</code> 快速切换到上一个窗口。</td>
+</tr>
+<tr class="odd">
+<td>重命名窗口</td>
+<td><code>tmux rename-window &lt;new-window-name&gt;</code></td>
+<td><code>(ctrl +b) ,</code></td>
+</tr>
+<tr class="even">
+<td>关闭窗口</td>
+<td><code>tmux kill-window -t &lt;window-name&gt;</code></td>
+<td><code>(ctrl +b) &amp;</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="tmux-的配置">tmux 的配置</h2>
+<p>.tmux.conf 默认放在 ～（home 目录） 目录下面，以下是本人配置：</p>
+<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">set -g mode-keys vi</span><br><span class="line">set -g default-shell /bin/zsh</span><br><span class="line">set -g mouse on</span><br><span class="line"></span><br><span class="line">set -g @plugin 'tmux-plugins/tpm'</span><br><span class="line">set -g @plugin 'tmux-plugins/tmux-sensible'</span><br><span class="line">set -g @plugin 'tmux-plugins/tmux-yank'</span><br><span class="line">set -g @plugin 'tmux-plugins/tmux-logging'</span><br><span class="line"></span><br><span class="line">set -g @plugin 'hntee/tmux-plugin-ip'</span><br><span class="line">set -g @plugin 'fcsonline/tmux-thumbs'</span><br><span class="line">set -g @plugin 'schasse/tmux-jump'</span><br><span class="line"></span><br><span class="line">if '[ -f ~/dotfiles/tmux/bindings.tmux ]' 'source ~/dotfiles/tmux/bindings.tmux'</span><br><span class="line">source ~/dotfiles/tmux/theme/dracula.tmux</span><br><span class="line"></span><br><span class="line">if-shell "uname | grep -q Darwin" "source-file ~/dotfiles/tmux/mac.tmux"</span><br><span class="line">if-shell "uname | grep -q Linux" "source-file ~/dotfiles/tmux/linux.tmux"</span><br><span class="line"></span><br><span class="line">run '~/.tmux/plugins/tpm/tpm'</span><br></pre></td></tr></tbody></table></figure>
 
     </div>
 
@@ -390,13 +552,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/contents/ML-1-Regression.html" rel="prev" title="Machine Learning：1. Regression">
-      <i class="fa fa-chevron-left"></i> Machine Learning：1. Regression
+    <a href="/contents/%E8%A7%A3%E9%94%81%E7%BD%91%E6%98%93%E4%BA%91%E9%9F%B3%E4%B9%90%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%8F%98%E7%81%B0%E6%AD%8C%E6%9B%B2.html" rel="prev" title="解锁网易云音乐客户端变灰歌曲">
+      <i class="fa fa-chevron-left"></i> 解锁网易云音乐客户端变灰歌曲
     </a></div>
-      <div class="post-nav-item">
-    <a href="/contents/Backpropagation.html" rel="next" title="Backpropagation">
-      Backpropagation <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
