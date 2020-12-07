@@ -3021,9 +3021,9 @@ body {
   .main-inner {
     width: calc(100% - 312px);
   }
-}
-.header-inner {
-  width: 300px;
+  .header-inner {
+    width: 300px;
+  }
 }
 .sidebar {
   width: 300px;

@@ -30,7 +30,7 @@
 <meta property="og:description" content="PySpark 和 Pandas 中都有 DataFrame 这个数据结构，但是他们的使用方法大有不同。 Reference：pyspark 系列 --pandas 与 pyspark 对比 ;Pandas 和 PySpark 中的 DataFrame 比较 ;PySpark API;Pandas API">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2020-10-29T09:59:28.000Z">
-<meta property="article:modified_time" content="2020-12-01T09:31:48.838Z">
+<meta property="article:modified_time" content="2020-12-07T02:43:15.208Z">
 <meta property="article:author" content="LIU, XIMING">
 <meta property="article:tag" content="Tutorial">
 <meta property="article:tag" content="Python">
@@ -317,7 +317,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-12-01 17:31:48" itemprop="dateModified" datetime="2020-12-01T17:31:48+08:00">2020-12-01</time>
+                <time title="Modified: 2020-12-07 10:43:15" itemprop="dateModified" datetime="2020-12-07T10:43:15+08:00">2020-12-07</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -335,7 +335,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">Symbols count in article: </span>
-              <span>4.6k</span>
+              <span>4.7k</span>
             </span>
             <span class="post-meta-item" title="Reading time">
               <span class="post-meta-item-icon">
@@ -559,7 +559,10 @@ Pandas 下有 <code>merge</code> 方法，支持多列合并<br>
 <li><p>PySpark<br>
 <code>pandas_df = spark_df.toPandas()</code></p></li>
 <li><p>Pandas<br>
-<code>spark_df = spark.createDataFrame(pandas_df)</code></p></li>
+<code>spark_df = spark.createDataFrame(pandas_df)</code><br>
+转换过程中可能会遇到报错： TypeError: field XXX: Can not merge type A and B<br>
+原因是该列存在空值。解决方法是转换成 String<br>
+<code>pandas_df.XXX = pandas_df.XXX.astype(str)</code></p></li>
 </ul>
 <h1 id="函数应用">函数应用</h1>
 <ul>
@@ -663,7 +666,7 @@ Pandas 下有 <code>merge</code> 方法，支持多列合并<br>
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="Symbols count total">191k</span>
+    <span title="Symbols count total">192k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
