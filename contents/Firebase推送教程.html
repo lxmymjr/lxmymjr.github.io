@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon.ico">
+  <link rel="mask-icon" href="/favicon.ico" color="#222">
+  <meta name="google-site-verification" content="yHqnmkvA-12pculpP0D-q6lLqYStfJAnZCn5OLVFDfQ">
+  <meta name="baidu-site-verification" content="VLW4ITHnBoryM4WZ">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css" integrity="sha256-mUZM63G8m73Mcidfrv5E+Y61y7a12O5mW4ezU3bxqW4=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"lxmymjr.github.io","root":"/","images":"/images","scheme":"Gemini","version":"8.7.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":false,"async":true,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":-1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+<meta name="description" content="Firebase 云信息传递 (FCM) 是 Google 官方提供的一种跨平台消息传递解决方案，可供免费、可靠地传递消息。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Firebase 推送教程">
+<meta property="og:url" content="https://lxmymjr.github.io/contents/Firebase%E6%8E%A8%E9%80%81%E6%95%99%E7%A8%8B.html">
+<meta property="og:site_name" content="xmliu&#39;s blog">
+<meta property="og:description" content="Firebase 云信息传递 (FCM) 是 Google 官方提供的一种跨平台消息传递解决方案，可供免费、可靠地传递消息。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2017-10-28T15:37:26.000Z">
+<meta property="article:modified_time" content="2021-09-16T02:56:10.893Z">
+<meta property="article:author" content="LIU, XIMING">
+<meta property="article:tag" content="Tutorial">
+<meta property="article:tag" content="Android">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://lxmymjr.github.io/contents/Firebase%E6%8E%A8%E9%80%81%E6%95%99%E7%A8%8B.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://lxmymjr.github.io/contents/Firebase%E6%8E%A8%E9%80%81%E6%95%99%E7%A8%8B.html","path":"contents/Firebase推送教程.html","title":"Firebase 推送教程"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Firebase 推送教程 | xmliu's blog</title>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">xmliu's blog</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%87%86%E5%A4%87%E5%B7%A5%E4%BD%9C"><span class="nav-number">1.</span> <span class="nav-text">准备工作</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%AB%AF"><span class="nav-number">2.</span> <span class="nav-text">服务器端</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE"><span class="nav-number">2.1.</span> <span class="nav-text">环境配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%8D%E5%8A%A1%E7%AB%AF%E4%B8%BB%E5%87%BD%E6%95%B0"><span class="nav-number">2.2.</span> <span class="nav-text">服务端主函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#android%E4%B8%8A%E7%9A%84%E4%B8%BB%E9%A2%98%E6%B6%88%E6%81%AF%E4%BC%A0%E9%80%92"><span class="nav-number">2.3.</span> <span class="nav-text">Android 上的主题消息传递</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%BE%E7%BD%AE%E6%B6%88%E6%81%AF%E7%9A%84%E4%BC%98%E5%85%88%E7%BA%A7"><span class="nav-number">2.4.</span> <span class="nav-text">设置消息的优先级</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8D%E5%8F%AF%E6%8A%98%E5%8F%A0%E6%B6%88%E6%81%AF%E5%92%8C%E5%8F%AF%E6%8A%98%E5%8F%A0%E6%B6%88%E6%81%AF"><span class="nav-number">2.5.</span> <span class="nav-text">不可折叠消息和可折叠消息</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#android%E5%AE%A2%E6%88%B7%E7%AB%AF"><span class="nav-number">3.</span> <span class="nav-text">Android 客户端</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B0%86firebase%E6%B7%BB%E5%8A%A0%E5%88%B0android%E9%A1%B9%E7%9B%AE"><span class="nav-number">3.1.</span> <span class="nav-text">将 Firebase 添加到 Android 项目</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B7%BB%E5%8A%A0%E6%89%80%E9%9C%80%E7%9A%84%E4%BE%9D%E8%B5%96"><span class="nav-number">3.2.</span> <span class="nav-text">添加所需的依赖</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9%E5%BA%94%E7%94%A8%E6%B8%85%E5%8D%95androidmanifest.xml"><span class="nav-number">3.3.</span> <span class="nav-text">修改应用清单 AndroidManifest.xml</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%8E%B7%E5%8F%96%E8%AE%BE%E5%A4%87%E6%B3%A8%E5%86%8C%E4%BB%A4%E7%89%8C"><span class="nav-number">3.4.</span> <span class="nav-text">获取设备注册令牌</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A3%80%E6%9F%A5-google-play-%E6%9C%8D%E5%8A%A1"><span class="nav-number">3.5.</span> <span class="nav-text">检查 Google Play 服务</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%BA%94%E7%94%A8%E8%AE%A2%E9%98%85%E4%B8%BB%E9%A2%98"><span class="nav-number">3.6.</span> <span class="nav-text">为客户端应用订阅主题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%84%E7%90%86%E6%B6%88%E6%81%AF"><span class="nav-number">3.7.</span> <span class="nav-text">处理消息</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%87%8D%E5%86%99onmessagereceived"><span class="nav-number">3.7.1.</span> <span class="nav-text">重写 onMessageReceived</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%87%8D%E5%86%99ondeletedmessages"><span class="nav-number">3.7.2.</span> <span class="nav-text">重写 onDeletedMessages</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%84%E7%90%86%E5%90%8E%E5%8F%B0%E5%BA%94%E7%94%A8%E4%B8%AD%E7%9A%84%E9%80%9A%E7%9F%A5%E6%B6%88%E6%81%AF"><span class="nav-number">3.7.3.</span> <span class="nav-text">处理后台应用中的通知消息</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-overview">
+            <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="LIU, XIMING"
+      src="/assets/avatar/yuntianhe.jpg">
+  <p class="site-author-name" itemprop="name">LIU, XIMING</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">18</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/lxmymjr?tab=repositories" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;lxmymjr?tab&#x3D;repositories" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:xmliu.2015@smu.edu.sg" title="E-Mail → mailto:xmliu.2015@smu.edu.sg" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://sites.google.com/view/xmliu-smu/home" title="https:&#x2F;&#x2F;sites.google.com&#x2F;view&#x2F;xmliu-smu&#x2F;home" rel="noopener" target="_blank">Personal Homepage</a>
+        </li>
+    </ul>
+  </div>
+
+          </div>
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://lxmymjr.github.io/contents/Firebase%E6%8E%A8%E9%80%81%E6%95%99%E7%A8%8B.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/assets/avatar/yuntianhe.jpg">
+      <meta itemprop="name" content="LIU, XIMING">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xmliu's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Firebase 推送教程<a href="https://github.com/lxmymjr/Blog/blob/master/source/_posts/Firebase%E6%8E%A8%E9%80%81%E6%95%99%E7%A8%8B.md" class="post-edit-link" title="Edit this post" rel="noopener" target="_blank"><i class="fa fa-pen-nib"></i></a>
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2017-10-28 23:37:26" itemprop="dateCreated datePublished" datetime="2017-10-28T23:37:26+08:00">2017-10-28</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2021-09-16 10:56:10" itemprop="dateModified" datetime="2021-09-16T10:56:10+08:00">2021-09-16</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Android/" itemprop="url" rel="index"><span itemprop="name">Android</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="Symbols count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Symbols count in article: </span>
+      <span>12k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>21 mins.</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>Firebase 云信息传递 (FCM) 是 Google 官方提供的一种跨平台消息传递解决方案，可供免费、可靠地传递消息。<br>
+<span id="more"></span></p>
+<h1 id="准备工作">准备工作</h1>
+<ol type="1">
+<li>注册成为 Firebase 开发者<br>
+在 <a target="_blank" rel="noopener" href="https://console.firebase.google.com">Firebase Console</a> 注册账号并登陆。</li>
+<li>添加项目<br>
+点击 “添加项目”，填写项目名称和国家 / 地区。添加完成后进入项目。</li>
+<li>添加应用<br>
+在此只演示安卓系统，点击 “Overview 概览” 页面的 “将 Firebase 添加到您的 Android 应用” 按钮。填写 Android 应用包名（不可更改），别名（选填），调试签名证书 SHA1（可选）。</li>
+<li>下载配置文件<br>
+点击 “注册应用”，下载配置文件 “google-services.json”。（此配置文件也可以在 Overview 的右边设置中的 “项目设置” 中查看、下载。）<br>
+在 Android Studio 中切换到项目视图，查看项目根目录（即 app 目录），并将配置文件放入到此根目录下。<br>
+修改 Gradle：项目级 build.gradle（<code>&lt;project&gt;/build.gradle</code>）：<br>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">buildscript {</span><br><span class="line">  dependencies {</span><br><span class="line">    // Add this line</span><br><span class="line">    classpath 'com.google.gms:google-services:3.1.0'</span><br><span class="line">  }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure><br>
+应用级 build.gradle（<code>&lt;project&gt;/&lt;app-module&gt;/build.gradle</code>）：<br>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line">// Add to the bottom of the file （一定要放最后）</span><br><span class="line">apply plugin: 'com.google.gms.google-services'</span><br></pre></td></tr></tbody></table></figure><br>
+按 IDE 中显示的栏中的 “立即同步”（Sync now）。</li>
+</ol>
+<h1 id="服务器端">服务器端</h1>
+<p>本文使用 Python 作为服务器脚本语言。<br>
+PyFCM 源码：<a target="_blank" rel="noopener" href="https://github.com/olucurious/pyfcm">PyFCM</a></p>
+<h2 id="环境配置">环境配置</h2>
+<p>pip 方式：<code>pip install pyfcm</code></p>
+<h2 id="服务端主函数">服务端主函数</h2>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pyfcm <span class="keyword">import</span> FCMNotification</span><br><span class="line"></span><br><span class="line">push_service = FCMNotification(api_key=<span class="string">"&lt;api-key&gt;"</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 或者设置一个代理</span></span><br><span class="line"><span class="comment"># proxy_dict = {</span></span><br><span class="line">          <span class="string">"http"</span>  : <span class="string">"http://127.0.0.1"</span>,</span><br><span class="line">          <span class="string">"https"</span> : <span class="string">"http://127.0.0.1"</span>,</span><br><span class="line">        }</span><br><span class="line"><span class="comment"># push_service = FCMNotification(api_key="&lt;api-key&gt;", proxy_dict=proxy_dict)</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># api-key可以从https://console.firebase.google.com/project/&lt;project-name&gt;/settings/cloudmessaging获得，即firebase console→对应项目→设置→云消息传递→服务器密钥。</span></span><br><span class="line"></span><br><span class="line">message_title = <span class="string">"xxxxx"</span> <span class="comment">#通知的标题</span></span><br><span class="line">message_body = <span class="string">"xxxxx"</span> <span class="comment">#通知的内容</span></span><br><span class="line">data_message = {</span><br><span class="line">    <span class="string">"a"</span> : <span class="string">"b"</span>,</span><br><span class="line">    <span class="string">"c"</span> : <span class="string">"d"</span>,</span><br><span class="line">    <span class="string">"e"</span> : <span class="string">"f"</span></span><br><span class="line">} <span class="comment"># 数据消息，为键值对</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 如果是发送给单台设备。</span></span><br><span class="line">registration_id = <span class="string">"&lt;device registration_id&gt;"</span> <span class="comment">#Android应用的token</span></span><br><span class="line"><span class="comment"># 发送通知</span></span><br><span class="line">result = push_service.notify_single_device(registration_id=registration_id, message_title=message_title, message_body=message_body)</span><br><span class="line"><span class="comment"># 发送数据</span></span><br><span class="line">result = push_service.single_device_data_message(registration_id=registration_id, data_message=data_message)</span><br><span class="line"><span class="comment"># 发送带有数据的通知</span></span><br><span class="line">result = push_service.notify_single_device(registration_id=registration_id, message_body=message_body, data_message=data_message)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 如果是发送给多台设备消息通知。</span></span><br><span class="line">registration_ids = [<span class="string">"&lt;device registration_id 1&gt;"</span>, <span class="string">"&lt;device registration_id 2&gt;"</span>, ...]</span><br><span class="line"><span class="comment"># 发送通知</span></span><br><span class="line">result = push_service.notify_multiple_devices(registration_ids=registration_ids, message_title=message_title, message_body=message_body)</span><br><span class="line"><span class="comment"># 发送数据</span></span><br><span class="line">result = push_service.multiple_devices_data_message(registration_ids=registration_ids, data_message=data_message)</span><br><span class="line"><span class="comment"># 发送带有数据的通知</span></span><br><span class="line">result = push_service.notify_multiple_devices(registration_ids=registration_ids, message_body=message_body, data_message=data_message)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 其他配置</span></span><br><span class="line"><span class="comment"># 发送一个高优先级的数据</span></span><br><span class="line">extra_kwargs = {</span><br><span class="line">    <span class="string">'priority'</span>: <span class="string">'high'</span></span><br><span class="line">}</span><br><span class="line">result = push_service.notify_single_device(registration_id=registration_id, data_message=data_message, extra_kwargs=extra_kwargs)</span><br><span class="line"><span class="comment"># 发送一个低优先级的数据</span></span><br><span class="line"><span class="comment"># low_priority默认为False</span></span><br><span class="line">result = push_service.notify_multiple_devices(registration_ids=registration_ids, message_body=message, low_priority=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 获得有效的registration_ids（可以用于清洗数据库中有效的registration_ids）</span></span><br><span class="line">registration_ids = [<span class="string">'reg id 1'</span>, <span class="string">'reg id 2'</span>, <span class="string">'reg id 3'</span>, <span class="string">'reg id 4'</span>, ...]</span><br><span class="line">valid_registration_ids = push_service.clean_registration_ids(registration_ids)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 发送消息至主题</span></span><br><span class="line">result = push_service.notify_topic_subscribers(topic_name=<span class="string">"xxx"</span>, message_body=message)</span><br><span class="line"><span class="comment"># 有条件的发送消息至主题，如果用户订阅了TopicA和TopicB或者TopicA和TopicC则能收到消息。</span></span><br><span class="line">topic_condition = <span class="string">"'TopicA' in topics &amp;&amp; ('TopicB' in topics || 'TopicC' in topics)"</span></span><br><span class="line">result = push_service.notify_topic_subscribers(message_body=message, condition=topic_condition)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 其他可选配置</span></span><br><span class="line">collapse_key (<span class="built_in">str</span>): 设置折叠消息</span><br><span class="line">delay_while_idle (<span class="built_in">bool</span>): 如果设置为真则表示消息将不会送达直到设备被激活。</span><br><span class="line">time_to_live (<span class="built_in">int</span>): 消息将会被保留多少秒，最多保留<span class="number">4</span>周，默认值也是<span class="number">4</span>周。</span><br><span class="line">restricted_package_name (<span class="built_in">str</span>): 应用包名必须匹配才收的到消息。</span><br><span class="line">dry_run (<span class="built_in">bool</span>): 如果设置为真则表示没有消息将会被送达，但是请求还是会被测试。</span><br><span class="line"></span><br><span class="line"><span class="comment"># 返回数据</span></span><br><span class="line">response_dict = {</span><br><span class="line">    <span class="string">'multicast_ids'</span>: <span class="built_in">list</span>(), <span class="comment">#多播消息的唯一ID</span></span><br><span class="line">    <span class="string">'success'</span>: <span class="number">0</span>, <span class="comment">#没有报错的消息数目</span></span><br><span class="line">    <span class="string">'failure'</span>: <span class="number">0</span>, <span class="comment">#没有处理的消息数目</span></span><br><span class="line">    <span class="string">'canonical_ids'</span>: <span class="number">0</span>, <span class="comment">#包括标准registration token的结果数目</span></span><br><span class="line">    <span class="string">'results'</span>: <span class="built_in">list</span>(), <span class="comment">#表示消息状态的字典</span></span><br><span class="line">    <span class="string">'topic_message_id'</span>: <span class="literal">None</span> <span class="keyword">or</span> <span class="built_in">str</span></span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<h2 id="android上的主题消息传递">Android 上的主题消息传递</h2>
+<p>在发布 / 订阅模式下，利用 FCM 主题消息传递功能，可以将消息发送至已经选择加入特定主题的多台设备。根据需要撰写主题消息，FCM 将处理消息路由并将消息可靠地传送至正确的设备。<br>
+关于主题，请注意以下事项：</p>
+<ol type="1">
+<li>主题消息传递不限制每个应用拥有的主题和订阅数。</li>
+<li>目前，主题消息的有效负载不得超过 2KB。</li>
+<li>主题消息传递最适合传递新闻、天气或其他可通过公开途径获得的信息等内容。</li>
+<li>主题消息针对吞吐量（而非延迟）进行了优化。要将消息快速安全地传送到单台设备或小规模设备组，应将消息定位至注册令牌，而非主题。</li>
+<li>如果需要向一位用户的多台设备发送消息，可考虑针对这些使用情形进行设备组消息传递。</li>
+</ol>
+<h2 id="设置消息的优先级">设置消息的优先级</h2>
+<ul>
+<li>普通优先级：这是数据消息的默认优先级。普通优先级消息不会让休眠设备打开网络连接，为了省电，它们可能会被延迟传递。如果是对时间不太敏感的消息，例如新电子邮件通知或其他要同步的数据，建议选择普通传递优先级。</li>
+<li>高优先级：这是通知消息的默认优先级。FCM 会立即尝试传递高优先级消息，允许 FCM 服务在可能的情况下唤醒休眠设备并打开与应用服务器的网络连接。例如，带有即时通讯、聊天或语音通话提醒功能的应用通常需要打开网络连接并确保 FCM 及时将消息传递给设备。如果消息属于时间关键型且需要用户立刻交互，请设置高优先级，但需要注意的是，将消息设置为高优先级会比普通优先级耗费更多电池电量。<br>
+有效值为 normal 和 high。</li>
+</ul>
+<h2 id="不可折叠消息和可折叠消息">不可折叠消息和可折叠消息</h2>
+<p>不可折叠消息表示每一条消息都将被传递至设备。不可折叠消息可传递一些有用内容至手机应用，从而联系服务器以获取数据，这与 “ping” 相反。默认情况下，消息不可折叠，但通知消息（始终是可折叠消息）除外。<br>
+聊天消息或关键消息都是典型的不可折叠消息。例如，在 IM 应用中，可能想要传递每一条消息，因为它们的内容各不相同。<br>
+在不折叠的情况下，最多可存储 100 条消息。达到此限值后，所有存储的消息都将被舍弃。设备在重新联网后将收到一条特殊消息，提示已达到此上限。之后，应用可以正常处理该状况，一般情况下会请求与应用服务器完全同步。<br>
+可折叠消息在还未被传递至设备的情况下可能会被新消息替代。<br>
+两种常见的可折叠消息是 “发送以同步” 消息和通知消息。“发送以同步” 消息是一个 “ping”，它会告诉移动应用从服务器同步数据。为用户更新最新比分的体育应用就属于这种消息。只有最新的消息是相关的。<br>
+要将消息标记为可折叠，请在消息有效负载中添加 collapse_key 参数。FCM 允许应用服务器在任意指定时间内为每台设备使用最多 4 个不同的折叠键。也就是说，FCM 连接服务器可以为每台设备同时存储 4 条不同的可折叠 “发送以同步” 消息，每一条都含有不同的折叠键。如果超出此限值，FCM 将仅保留 4 个折叠键，具体保留哪几个不一定。</p>
+<h1 id="android客户端">Android 客户端</h1>
+<p>官方集成文档：<a target="_blank" rel="noopener" href="https://firebase.google.com/docs/cloud-messaging/android/client">在 Android 上设置 Firebase 云消息传递客户端应用</a></p>
+<h2 id="将firebase添加到android项目">将 Firebase 添加到 Android 项目</h2>
+<p>前提条件：</p>
+<ol type="1">
+<li>运行 Android 4.0 (Ice Cream Sandwich) 或更高版本以及 Google Play 服务 11.0.4 或更高版本的设备。</li>
+<li>Google 代码库中的 Google Play Services SDK，可通过 Android SDK Manager 获得。</li>
+<li>最新版本的 Android Studio，1.5 版或更高版本。</li>
+</ol>
+<p>如果使用最新版本的 Android Studio（2.2 版或更高版本），建议使用 Firebase 智能助理来将的应用关联至 Firebase。Firebase 智能助理可以关联现有的项目，或者为创建一个新项目，并自动安装任何必要的 Gradle 依赖项。</p>
+<ol type="1">
+<li>依次点击 Tools&gt;Firebase 以打开 Assistant 窗口。</li>
+<li>点击以展开所列功能之一（例如 Cloud Messaging），然后点击所提供的教程链接。</li>
+<li>点击 Connect to Firebase 按钮以关联至 Firebase，并向应用添加必要的代码。</li>
+</ol>
+<h2 id="添加所需的依赖">添加所需的依赖</h2>
+<ol type="1">
+<li>向根项目级 build.gradle 文件添加规则，以纳入 Google 服务插件：<br>
+<figure class="highlight json"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">buildscript {</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">    dependencies {</span><br><span class="line">        <span class="comment">// ...</span></span><br><span class="line">        classpath 'com.google.gms:google-services:<span class="number">3.1</span><span class="number">.0</span>'</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure></li>
+<li>在模块 Gradle 文件（通常是 app/build.gradle）中，在文件的底部添加 apply plugin 代码行，以启用 Gradle 插件：<br>
+<figure class="highlight json"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">apply plugin: 'com.android.application'</span><br><span class="line">android {</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">}</span><br><span class="line">dependencies {</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">  compile 'com.google.firebase:firebase-messaging:<span class="number">11.4</span><span class="number">.2</span>' #修改为最新版本</span><br><span class="line">  compile 'com.google.android.gms:play-services-base:<span class="number">11.4</span><span class="number">.2</span>' #修改为最新版本</span><br><span class="line">}</span><br><span class="line"><span class="comment">// 一定要放在最底部</span></span><br><span class="line">apply plugin: 'com.google.gms.google-services'</span><br></pre></td></tr></tbody></table></figure></li>
+<li>如果 FCM 对于 Android 应用的功能至关重要，请务必在应用的 build.gradle 中设置 minSdkVersion 8 或更高版本。这可确保 Android 应用无法安装在不能让其正常运行的环境中。</li>
+</ol>
+<h2 id="修改应用清单androidmanifest.xml">修改应用清单 AndroidManifest.xml</h2>
+<ol type="1">
+<li>一项继承 FirebaseMessagingService 的服务。如果希望在后台进行除接收应用通知之外的消息处理，则必须添加此服务。要接收前台应用中的通知、接收数据有效负载以及发送上行消息等，必须继承此服务。<br>
+<figure class="highlight xml"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">service</span> <span class="attr">android:name</span>=<span class="string">".MyFirebaseMessagingService"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">intent-filter</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">action</span> <span class="attr">android:name</span>=<span class="string">"com.google.firebase.MESSAGING_EVENT"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">intent-filter</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">service</span>&gt;</span></span><br></pre></td></tr></tbody></table></figure></li>
+<li>一项继承 FirebaseInstanceIdService 的服务，用于处理注册令牌的创建、轮替和更新。如果要发送至特定设备或者创建设备组，则必须添加此服务。<br>
+<figure class="highlight xml"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">service</span> <span class="attr">android:name</span>=<span class="string">".MyFirebaseInstanceIDService"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">intent-filter</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">action</span> <span class="attr">android:name</span>=<span class="string">"com.google.firebase.INSTANCE_ID_EVENT"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">intent-filter</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">service</span>&gt;</span></span><br></pre></td></tr></tbody></table></figure></li>
+<li>（可选）在应用组件中，用于设置通知的默认图标、颜色和通知渠道（Android O 的新功能）的元数据元素。如果传入的消息未明确设置图标、颜色或通知渠道，则 Android 会使用这些值。<br>
+<figure class="highlight xml"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">meta-data</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:name</span>=<span class="string">"com.google.firebase.messaging.default_notification_icon"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:resource</span>=<span class="string">"@drawable/ic_stat_ic_notification"</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">meta-data</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:name</span>=<span class="string">"com.google.firebase.messaging.default_notification_color"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:resource</span>=<span class="string">"@color/colorAccent"</span> /&gt;</span></span><br></pre></td></tr></tbody></table></figure></li>
+</ol>
+<h2 id="获取设备注册令牌">获取设备注册令牌</h2>
+<p>初次启动应用时，FCM SDK 会为客户端应用实例生成一个注册令牌。如果希望定位至单台设备或创建设备组，则需要通过继承 FirebaseInstanceIdService 来访问此令牌。<br>
+令牌会在初始启动后生成，建议检索最新更新的注册令牌。<br>
+注册令牌可能会在发生下列情况时更改：<br>
+- 应用删除实例 ID<br>
+- 应用在新设备上恢复<br>
+- 用户卸载 / 重新安装应用<br>
+- 用户清除应用数据</p>
+<ol type="1">
+<li>检索当前注册令牌<br>
+如果需要检索当前令牌，调用 FirebaseInstanceId.getInstance ().getToken ()。如果令牌尚未生成，此方法将返回 null。</li>
+<li>监控令牌的生成<br>
+每次生成新的令牌时，都会触发 onTokenRefresh 回调，因此，在上下文中调用 getToken 可以确保访问的是当前可用的注册令牌。确保已将服务添加到清单文件中，然后在 onTokenRefresh 的上下文中调用 getToken，并记录相应值，如下所示：<br>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onTokenRefresh</span><span class="params">()</span> </span>{</span><br><span class="line">    <span class="comment">// 获得注册令牌</span></span><br><span class="line">    String refreshedToken = FirebaseInstanceId.getInstance().getToken();</span><br><span class="line">    Log.d(TAG, <span class="string">"Refreshed token: "</span> + refreshedToken);</span><br><span class="line">    <span class="comment">// 后续操作，如发送令牌到服务器</span></span><br><span class="line">    sendRegistrationToServer(refreshedToken);</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure><br>
+获取该令牌后，可以将其发送到应用服务器并进行存储。</li>
+</ol>
+<h2 id="检查-google-play-服务">检查 Google Play 服务</h2>
+<p>依靠 Play 服务 SDK 运行的应用在访问 Google Play 服务功能之前，应始终检查设备是否拥有兼容的 Google Play 服务 APK。建议在以下两个位置进行检查：主 Activity 的 onCreate () 方法中，及其 onResume () 方法中。在 onCreate () 中检查可确保该应用在检查成功之前无法使用。在 onResume () 中检查可确保当用户通过一些其他方式返回正在运行的应用（比如通过返回按钮）时，检查仍将继续进行。<br>
+如果设备没有兼容的 Google Play 服务版本，应用可以调用 <code>GoogleApiAvailability.makeGooglePlayServicesAvailable(this)</code>，以便让用户从 Play 商店下载 Google Play 服务，需要 <code>import com.google.android.gms.common.GoogleApiAvailability;</code></p>
+<h2 id="为客户端应用订阅主题">为客户端应用订阅主题</h2>
+<p>客户端应用可以订阅任何现有主题，也可创建新主题。当客户端应用订阅新的主题名称（Firebase 项目中尚不存在的名称）时，系统会在 FCM 中创建使用这个名称的新主题，随后任何客户端都可订阅该主题。<br>
+若要订阅某个主题，客户端应用需使用 FCM 主题名称调用 Firebase 云消息传递 subscribeToTopic ()：<code>FirebaseMessaging.getInstance().subscribeToTopic("news");</code><br>
+若要退订，客户端应用需使用主题名称调用 Firebase 云消息传递 unsubscribeFromTopic ()。</p>
+<h2 id="处理消息">处理消息</h2>
+<p>要接收消息，使用继承 FirebaseMessagingService 的服务。重写 onMessageReceived 和 onDeletedMessages 回调。<br>
+在收到消息后的 10 秒内处理该消息。超过 10 秒后，Android 无法保证能够执行，并可能随时终止进程。如果应用需要更多时间来处理消息，使用 Firebase Job Dispatcher。<br>
+onMessageReceived 是为大多数消息类型提供的，但有以下例外情况：当应用在后台时送达的通知消息。在这种情况下，通知将传送至设备的系统任务栏。默认情况下，用户点按通知即可打开应用启动器。同时具备通知和数据有效负载的消息，无论应用在前台还是后台。在这种情况下，通知将传送至设备的系统任务栏，数据有效负载则传送至启动器 Activity 的 intent 的 extras 参数中。</p>
+<table>
+<thead>
+<tr class="header">
+<th>应用状态</th>
+<th>通知</th>
+<th>数据</th>
+<th>两者</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>前台</td>
+<td> onMessageReceived</td>
+<td>onMessageReceived</td>
+<td>onMessageReceived</td>
+</tr>
+<tr class="even">
+<td> 后台</td>
+<td>系统任务栏</td>
+<td> onMessageReceived</td>
+<td> 通知：系统任务栏<br>数据：intent 的 extras 参数。</td>
+</tr>
+</tbody>
+</table>
+<p>注意：当需要发送通知（和数据）但是又希望不需要用户打开通知消息的情况下进行其他操作，则可以只发送数据，但是在 onMessageReceived 函数中手动生成 notification。</p>
+<h3 id="重写onmessagereceived">重写 onMessageReceived</h3>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onMessageReceived</span><span class="params">(RemoteMessage remoteMessage)</span> </span>{</span><br><span class="line">    Log.d(TAG, <span class="string">"From: "</span> + remoteMessage.getFrom());</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 检查是否收到数据</span></span><br><span class="line">    <span class="keyword">if</span> (remoteMessage.getData().size() &gt; <span class="number">0</span>) {</span><br><span class="line">        Log.d(TAG, <span class="string">"Message data payload: "</span> + remoteMessage.getData());</span><br><span class="line">        <span class="keyword">if</span> (<span class="comment">/*如果数据处理超过10秒*/</span> <span class="keyword">true</span>) {</span><br><span class="line">            scheduleJob();</span><br><span class="line">        } <span class="keyword">else</span> {</span><br><span class="line">            <span class="comment">// 如果数据处理在10秒以内</span></span><br><span class="line">            handleNow();</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 检查数据是否携带通知</span></span><br><span class="line">    <span class="keyword">if</span> (remoteMessage.getNotification() != <span class="keyword">null</span>) {</span><br><span class="line">        Log.d(TAG, <span class="string">"Message Notification Body: "</span> + remoteMessage.getNotification().getBody());</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<p>如果服务器只发送数据，但是需要应用主动生成通知则：<br>
+</p><figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyFirebaseMessagingService</span> <span class="keyword">extends</span> <span class="title">FirebaseMessagingService</span> </span>{</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String TAG = <span class="string">"MyFirebaseMsgService"</span>;</span><br><span class="line">    Map&lt;String, String&gt; messageBody;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onMessageReceived</span><span class="params">(RemoteMessage remoteMessage)</span> </span>{</span><br><span class="line">        <span class="keyword">if</span> (remoteMessage.getData().size() &gt; <span class="number">0</span>) {</span><br><span class="line">            Log.d(TAG, <span class="string">"Message data payload: "</span> + remoteMessage.getData());</span><br><span class="line">            messageBody = remoteMessage.getData();</span><br><span class="line">            sendNotification(messageBody.get(<span class="string">"xxx"</span>)); # 这里messageBody类似json格式，messageBody.get(<span class="string">"xxx"</span>)获得key为xxx的值。</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">sendNotification</span><span class="params">(String messageBody)</span> </span>{</span><br><span class="line">        Intent intent = <span class="keyword">new</span> Intent(<span class="keyword">this</span>, &lt;Activity&gt;.class); # 这里指定用户点击通知后所需打开的activity</span><br><span class="line">        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);</span><br><span class="line">        PendingIntent pendingIntent = PendingIntent.getActivity(<span class="keyword">this</span>, <span class="number">0</span>, intent, PendingIntent.FLAG_ONE_SHOT);</span><br><span class="line">        Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);</span><br><span class="line">        NotificationCompat.Builder notificationBuilder =</span><br><span class="line">                <span class="keyword">new</span> NotificationCompat.Builder(<span class="keyword">this</span>, <span class="string">"default"</span>)</span><br><span class="line">                        .setSmallIcon(R.drawable.ic_stat_ic_notification)</span><br><span class="line">                        .setContentTitle(<span class="string">"Typing-Proof"</span>)</span><br><span class="line">                        .setContentText(messageBody)</span><br><span class="line">                        .setAutoCancel(<span class="keyword">true</span>)</span><br><span class="line">                        .setSound(defaultSoundUri)</span><br><span class="line">                        .setContentIntent(pendingIntent);</span><br><span class="line">        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);</span><br><span class="line">        <span class="keyword">if</span> (notificationManager != <span class="keyword">null</span>) {</span><br><span class="line">            notificationManager.notify(<span class="number">0</span>, notificationBuilder.build());</span><br><span class="line">        }</span><br><span class="line">    }</span><br></pre></td></tr></tbody></table></figure><p></p>
+<h3 id="重写ondeletedmessages">重写 onDeletedMessages</h3>
+<p>如果应用在连接了 FCM 的特定设备上的待处理消息过多（超过 100 条），或者设备已有一个月以上的时间没有连接 FCM，FCM 可能不会传送消息。<br>
+在这些情况下，可能会收到对 FirebaseMessagingService.onDeletedMessages () 的回调。<br>
+当应用实例收到此回调时，应该执行与应用服务器的完全同步。<br>
+如果在过去 4 周内未向该设备上的应用发送消息，FCM 将不会调用 onDeletedMessages ()。</p>
+<h3 id="处理后台应用中的通知消息">处理后台应用中的通知消息</h3>
+<p>当应用位于后台时，Android 会将通知消息转发至系统任务栏。默认情况下，用户点按通知时将打开应用启动器。<br>
+这包括同时含有通知和数据有效负载的消息（以及从通知控制台发送的所有消息）。<br>
+在这些情况下，通知将传送至设备的系统任务栏，数据有效负载则传送至启动器 Activity 的 intent 的 extras 参数中。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Tutorial/" rel="tag"># Tutorial</a>
+              <a href="/tags/Android/" rel="tag"># Android</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/contents/Python-Pandas%E5%BA%93%E5%9F%BA%E7%A1%80.html" rel="prev" title="Python Pandas 库基础">
+                  <i class="fa fa-chevron-left"></i> Python Pandas 库基础
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/contents/Firebase%E5%AD%98%E5%82%A8%E6%95%99%E7%A8%8B.html" rel="next" title="Firebase 存储教程">
+                  Firebase 存储教程 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">LIU, XIMING</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="Symbols count total">192k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="Reading time total">5:49</span>
+  </span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="/js/third-party/search/local-search.js"></script>
+
+  <script class="next-config" data-name="pdf" type="application/json">{"object_url":{"url":"https://cdn.jsdelivr.net/npm/pdfobject@2.2.6/pdfobject.min.js","integrity":"sha256-77geM50MfxCD17eqyJR+Dag1svjJOLN+BJ2F/DMqMEY="},"url":"/lib/pdf/web/viewer.html"}</script>
+  <script src="/js/third-party/tags/pdf.js"></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdn.jsdelivr.net/npm/mathjax@3.2.0/es5/tex-mml-chtml.js","integrity":"sha256-r+3itOMtGGjap0x+10hu6jW/gZCzxHsoKrOd7gyRSGY="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+
+
+</body>
+</html>

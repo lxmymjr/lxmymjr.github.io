@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon.ico">
+  <link rel="mask-icon" href="/favicon.ico" color="#222">
+  <meta name="google-site-verification" content="yHqnmkvA-12pculpP0D-q6lLqYStfJAnZCn5OLVFDfQ">
+  <meta name="baidu-site-verification" content="VLW4ITHnBoryM4WZ">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css" integrity="sha256-mUZM63G8m73Mcidfrv5E+Y61y7a12O5mW4ezU3bxqW4=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"lxmymjr.github.io","root":"/","images":"/images","scheme":"Gemini","version":"8.7.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":false,"async":true,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":-1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+<meta name="description" content="CherryPy is a pythonic, object-oriented web framework. CherryPy allows developers to build web applications in much the same way they would build any other object-oriented Python program. This results">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python Web 框架 - CherryPy">
+<meta property="og:url" content="https://lxmymjr.github.io/contents/Python-Web%E6%A1%86%E6%9E%B6-CherryPy.html">
+<meta property="og:site_name" content="xmliu&#39;s blog">
+<meta property="og:description" content="CherryPy is a pythonic, object-oriented web framework. CherryPy allows developers to build web applications in much the same way they would build any other object-oriented Python program. This results">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2017-09-19T11:25:14.000Z">
+<meta property="article:modified_time" content="2021-09-16T02:56:10.895Z">
+<meta property="article:author" content="LIU, XIMING">
+<meta property="article:tag" content="Tutorial">
+<meta property="article:tag" content="Python">
+<meta property="article:tag" content="Web Framework">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://lxmymjr.github.io/contents/Python-Web%E6%A1%86%E6%9E%B6-CherryPy.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://lxmymjr.github.io/contents/Python-Web%E6%A1%86%E6%9E%B6-CherryPy.html","path":"contents/Python-Web框架-CherryPy.html","title":"Python Web 框架 - CherryPy"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Python Web 框架 - CherryPy | xmliu's blog</title>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">xmliu's blog</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%89%E8%A3%85"><span class="nav-number">1.</span> <span class="nav-text">安装</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#hello-world%E9%A1%B5%E9%9D%A2%E9%83%A8%E7%BD%B2"><span class="nav-number">2.</span> <span class="nav-text">Hello World 页面部署</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%8D%E5%90%8C%E7%9A%84urls%E5%AF%B9%E5%BA%94%E4%B8%8D%E5%90%8C%E7%9A%84functions"><span class="nav-number">3.</span> <span class="nav-text">不同的 URLs 对应不同的 functions</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%80%9A%E8%BF%87url%E4%BC%A0%E9%80%92%E5%8F%82%E6%95%B0"><span class="nav-number">4.</span> <span class="nav-text">通过 URL 传递参数</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8F%90%E4%BA%A4%E8%A1%A8%E5%8D%95"><span class="nav-number">5.</span> <span class="nav-text">提交表单</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#session"><span class="nav-number">6.</span> <span class="nav-text">Session</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#cookies"><span class="nav-number">7.</span> <span class="nav-text">Cookies</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%85%81%E8%AE%B8%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E4%B8%8B%E8%BD%BD"><span class="nav-number">8.</span> <span class="nav-text">允许文件上传、下载</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%A5%E6%B5%81%E5%BD%A2%E5%BC%8F%E5%A4%84%E7%90%86%E8%AF%B7%E6%B1%82%E4%B8%BB%E4%BD%93"><span class="nav-number">9.</span> <span class="nav-text">以流形式处理请求主体</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%B0%83%E7%94%A8%E7%BD%91%E7%AB%99%E8%B5%84%E6%BA%90"><span class="nav-number">10.</span> <span class="nav-text">调用网站资源</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#rest"><span class="nav-number">11.</span> <span class="nav-text">REST</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ajax"><span class="nav-number">12.</span> <span class="nav-text">AJAX</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AD%98%E5%82%A8"><span class="nav-number">13.</span> <span class="nav-text">数据库存储</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%97%A5%E5%BF%97%E8%AE%B0%E5%BD%95"><span class="nav-number">14.</span> <span class="nav-text">日志记录</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%85%8D%E7%BD%AE"><span class="nav-number">15.</span> <span class="nav-text">服务器配置</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%A8%E5%B1%80%E9%85%8D%E7%BD%AEglobal"><span class="nav-number">15.1.</span> <span class="nav-text">全局配置 (global)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BD%91%E7%AB%99gzip"><span class="nav-number">15.2.</span> <span class="nav-text">网站 Gzip</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E9%85%8D%E7%BD%AE"><span class="nav-number">15.3.</span> <span class="nav-text">其他配置</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%A4%84%E7%90%86json"><span class="nav-number">16.</span> <span class="nav-text">处理 JSON</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A3%E7%A0%81-request"><span class="nav-number">16.1.</span> <span class="nav-text">解码 request</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%96%E7%A0%81response"><span class="nav-number">16.2.</span> <span class="nav-text">编码 response</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%AE%A4%E8%AF%81"><span class="nav-number">17.</span> <span class="nav-text">认证</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#basic"><span class="nav-number">17.1.</span> <span class="nav-text">Basic</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#digest"><span class="nav-number">17.2.</span> <span class="nav-text">Digest</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BD%91%E7%AB%99%E5%9B%BE%E6%A0%87"><span class="nav-number">18.</span> <span class="nav-text">网站图标</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%AE%BE%E7%BD%AE%E9%A1%B5%E9%9D%A2%E5%88%AB%E5%90%8D"><span class="nav-number">19.</span> <span class="nav-text">设置页面别名</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%AF%B7%E6%B1%82%E8%B6%85%E6%97%B6"><span class="nav-number">20.</span> <span class="nav-text">请求超时</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86"><span class="nav-number">21.</span> <span class="nav-text">信号处理</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-overview">
+            <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="LIU, XIMING"
+      src="/assets/avatar/yuntianhe.jpg">
+  <p class="site-author-name" itemprop="name">LIU, XIMING</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">18</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/lxmymjr?tab=repositories" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;lxmymjr?tab&#x3D;repositories" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:xmliu.2015@smu.edu.sg" title="E-Mail → mailto:xmliu.2015@smu.edu.sg" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://sites.google.com/view/xmliu-smu/home" title="https:&#x2F;&#x2F;sites.google.com&#x2F;view&#x2F;xmliu-smu&#x2F;home" rel="noopener" target="_blank">Personal Homepage</a>
+        </li>
+    </ul>
+  </div>
+
+          </div>
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://lxmymjr.github.io/contents/Python-Web%E6%A1%86%E6%9E%B6-CherryPy.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/assets/avatar/yuntianhe.jpg">
+      <meta itemprop="name" content="LIU, XIMING">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xmliu's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Python Web 框架 - CherryPy<a href="https://github.com/lxmymjr/Blog/blob/master/source/_posts/Python-Web%E6%A1%86%E6%9E%B6-CherryPy.md" class="post-edit-link" title="Edit this post" rel="noopener" target="_blank"><i class="fa fa-pen-nib"></i></a>
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2017-09-19 19:25:14" itemprop="dateCreated datePublished" datetime="2017-09-19T19:25:14+08:00">2017-09-19</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2021-09-16 10:56:10" itemprop="dateModified" datetime="2021-09-16T10:56:10+08:00">2021-09-16</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Python/" itemprop="url" rel="index"><span itemprop="name">Python</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="Symbols count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Symbols count in article: </span>
+      <span>25k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>45 mins.</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>CherryPy is a pythonic, object-oriented web framework.<br>
+CherryPy allows developers to build web applications in much the same way they would build any other object-oriented Python program. This results in smaller source code developed in less time.<br>
+Reference：<a target="_blank" rel="noopener" href="http://cherrypy.org">官网</a>；<a target="_blank" rel="noopener" href="https://github.com/cherrypy/cherrypy">GitHub</a><br>
+<span id="more"></span></p>
+<h1 id="安装">安装</h1>
+<p>直接执行 <code>$ pip install cherrypy</code>。<br>
+也可以从 GitHub 的 CherryPy 获取最新版的源代码并安装：<br>
+</p><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ git clone https://github.com/cherrypy/cherrypy</span><br><span class="line">$ cd cherrypy</span><br><span class="line">$ python setup.py install</span><br></pre></td></tr></tbody></table></figure><br>
+用测试用例检验是否安装成功，直接执行 <code>$ python -m cherrypy.tutorial.tut01_helloworld</code>。<br>
+打开页面http://127.0.0.1:8080 或者http://localhost:8080 查看结果。<br>
+一旦成功，控制台也会显示log：<br>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">ENGINE Listening for SIGHUP.</span><br><span class="line">ENGINE Listening for SIGTERM.</span><br><span class="line">ENGINE Listening for SIGUSR1.</span><br><span class="line">ENGINE Bus STARTING</span><br><span class="line">ENGINE Started monitor thread 'Autoreloader'.</span><br><span class="line">ENGINE Started monitor thread '_TimeoutMonitor'.</span><br><span class="line">ENGINE Serving on http://127.0.0.1:8080</span><br><span class="line">ENGINE Bus STARTED</span><br></pre></td></tr></tbody></table></figure><p></p>
+<h1 id="hello-world页面部署">Hello World 页面部署</h1>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> cherrypy</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">HelloWorld</span>(<span class="params"><span class="built_in">object</span></span>):</span></span><br><span class="line"><span class="meta">    @cherrypy.expose</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">index</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="keyword">return</span> <span class="string">"Hello world!"</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    cherrypy.quickstart(HelloWorld())</span><br></pre></td></tr></tbody></table></figure>
+<p>运行此程序后，控制台则会显示：<br>
+</p><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">ENGINE Listening for SIGHUP.</span><br><span class="line">ENGINE Listening for SIGTERM.</span><br><span class="line">ENGINE Listening for SIGUSR1.</span><br><span class="line">ENGINE Bus STARTING</span><br><span class="line">CherryPy Checker:</span><br><span class="line">The Application mounted at '' has an empty config.</span><br><span class="line"></span><br><span class="line">ENGINE Started monitor thread 'Autoreloader'.</span><br><span class="line">ENGINE Started monitor thread '_TimeoutMonitor'.</span><br><span class="line">ENGINE Serving on http://127.0.0.1:8080</span><br><span class="line">ENGINE Bus STARTED</span><br></pre></td></tr></tbody></table></figure><br>
+前三行表示服务器会处理signal；第四行表示服务器的状态，此刻在启动阶段；第五、六行表示你的应用没有特别的配置；第八、九行表示服务器开始了一些内部的功能，倒数第二行表示已经准备好通信并且监听地址127.0.0.1:8080，最后一行表示现在你的应用已经开始运行，可以使用。<br>
+这里return为index页面的源码：<br>
+- 可以是一般字符串，比如 <code>"Hello world!"</code>，页面直接显示字符串<br>
+- 可以是<a target="_blank" rel="noopener" href="http://www.w3school.com.cn/html/">HTML</a>格式的字符串，比如<br>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">"""</span><br><span class="line">&lt;html&gt;</span><br><span class="line">    &lt;head&gt;</span><br><span class="line">        &lt;script type="text/javascript" src="/xxx/xxx/xxx.js"&gt;&lt;/script&gt;</span><br><span class="line">        &lt;title&gt;Write Your WebPage Title Here&lt;/title&gt;</span><br><span class="line">        &lt;link rel="stylesheet" type="text/css" href="/xxx/xxx/xxx.css" /&gt;</span><br><span class="line">    &lt;/head&gt;</span><br><span class="line">    &lt;body&gt;</span><br><span class="line">        &lt;div class="xxx"&gt;</span><br><span class="line">            Hello world!</span><br><span class="line">        &lt;/div&gt;</span><br><span class="line">    &lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br><span class="line">"""</span><br></pre></td></tr></tbody></table></figure><br>
+这里使用三对双引号，用来输入多行文本，之中的单号和双引号不用转义，其中的不可见字符比如。<br>
+- 可以是HTML文件 <code>open('xxx/xxx/xxx.html')</code><br>
+注打开文件的时候可以传递参数<br>
+<code>open("xxx.html").read().format(a=a, b=b, c=c, ...)</code>，则HTML文件中 <code>{a:}</code>; <code>{b:}</code>; <code>{c:}</code>; ...来表示相应的字符串。<br>
+或者 <code>open("xxx.html").read() % (a, b, c, ...)</code>，HTML文件中 <code>%s</code>;<code>%d</code>;<code>%f</code> 等来表示相应位置的字符串。<br>
+原理：<code>open("xxx.html").read()</code> 返回一个string对象，传递参数同格式化输出。<p></p>
+<p>用 <code>cherrypy.quickstart()</code> 启动单个应用，此函数至少需要一个参数，第一个必选一般为类名；第二个可选参数为应用访问的基础路径；第三个可选参数为应用配置。<br>
+如果要启动多个应用，则用 <code>cherrypy.tree.mount()</code>，此函数的参数和 <code>cherrypy.quickstart()</code> 一样，均为一个应用的类名，一个主机路径，一个配置。举例如下<br>
+</p><figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">cherrypy.tree.mount(A(), <span class="string">'/a'</span>, a_conf)</span><br><span class="line">cherrypy.tree.mount(B(), <span class="string">'/b'</span>, b_conf)</span><br><span class="line"></span><br><span class="line">cherrypy.engine.start()</span><br><span class="line">cherrypy.engine.block()</span><br></pre></td></tr></tbody></table></figure><p></p>
+<h1 id="不同的urls对应不同的functions">不同的 URLs 对应不同的 functions</h1>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> random</span><br><span class="line"><span class="keyword">import</span> string</span><br><span class="line"><span class="keyword">import</span> cherrypy</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">StringGenerator</span>(<span class="params"><span class="built_in">object</span></span>):</span></span><br><span class="line"><span class="meta">    @cherrypy.expose</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">index</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="keyword">return</span> <span class="string">"Hello world!"</span></span><br><span class="line"></span><br><span class="line"><span class="meta">    @cherrypy.expose</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">generate</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="keyword">return</span> <span class="string">''</span>.join(random.sample(string.hexdigits, <span class="number">8</span>))</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    cherrypy.quickstart(StringGenerator())</span><br></pre></td></tr></tbody></table></figure>
+<p>运行此程序后，打开 http://localhost:8080 或者 http://localhost:8080/index 则会显示 Helloworld 界面（index 可以省略）。<br>
+而打开 http://localhost:8080/generate 则会运行 generate 函数并返回且显示一个 8 位随机字符串。<br>
+此外，开发者可以实现一个 default 方法，如果服务器找不到任何对应的方法时，将会调用 default 方法。<br>
+</p><figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> random</span><br><span class="line"><span class="keyword">import</span> string</span><br><span class="line"><span class="keyword">import</span> cherrypy</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">StringGenerator</span>(<span class="params"><span class="built_in">object</span></span>):</span></span><br><span class="line"><span class="meta">    @cherrypy.expose</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">index</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="keyword">return</span> <span class="string">"Hello world!"</span></span><br><span class="line"></span><br><span class="line"><span class="meta">    @cherrypy.expose</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">default</span>(<span class="params">self, url</span>):</span></span><br><span class="line">        <span class="keyword">return</span> <span class="string">''</span>.join(random.sample(string.hexdigits, <span class="number">8</span>))</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    cherrypy.quickstart(StringGenerator())</span><br></pre></td></tr></tbody></table></figure><br>
+运行此程序后，打开http://localhost:8080/xxx 则会运行default函数并返回且显示一个8位随机字符串，这里xxx为任意网址。<br>
+注意，default函数必须有两个参数，url会传入用户所访问的网址，即 <code>url=xxx</code><p></p>
+<h1 id="通过url传递参数">通过 URL 传递参数</h1>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> random</span><br><span class="line"><span class="keyword">import</span> string</span><br><span class="line"><span class="keyword">import</span> cherrypy</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">StringGenerator</span>(<span class="params"><span class="built_in">object</span></span>):</span></span><br><span class="line"><span class="meta">    @cherrypy.expose</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">index</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="keyword">return</span> <span class="string">"Hello world!"</span></span><br><span class="line"></span><br><span class="line"><span class="meta">    @cherrypy.expose</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">generate</span>(<span class="params">self, length=<span class="number">8</span></span>):</span></span><br><span class="line">        <span class="keyword">return</span> <span class="string">''</span>.join(random.sample(string.hexdigits, <span class="built_in">int</span>(length)))</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    cherrypy.quickstart(StringGenerator())</span><br></pre></td></tr></tbody></table></figure>
+<p>运行此程序后，打开 http://localhost:8080/generate?length=16 ，<br>
+则地址栏中的 16 会被从客户端传递到服务器端，作为 generate 的参数 length 的值，其结果是返回且显示一个长度为 16 的随机字符串。<br>
+如果直接访问 http://localhost:8080/generate 则参数为缺省值 length=8。<br>
+如果并未设置缺省值也没有通过 url 传递参数则会报错。</p>
+<h1 id="提交表单">提交表单</h1>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> random</span><br><span class="line"><span class="keyword">import</span> string</span><br><span class="line"><span class="keyword">import</span> cherrypy</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">StringGenerator</span>(<span class="params"><span class="built_in">object</span></span>):</span></span><br><span class="line"><span class="meta">    @cherrypy.expose</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">index</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="keyword">return</span> <span class="string">"""&lt;html&gt;</span></span><br><span class="line"><span class="string">          &lt;head&gt;&lt;/head&gt;</span></span><br><span class="line"><span class="string">          &lt;body&gt;</span></span><br><span class="line"><span class="string">            &lt;form method="get" action="generate"&gt;</span></span><br><span class="line"><span class="string">              &lt;input type="text" value="8" name="length" /&gt;</span></span><br><span class="line"><span class="string">              &lt;button type="submit"&gt;Give it now!&lt;/button&gt;</span></span><br><span class="line"><span class="string">            &lt;/form&gt;</span></span><br><span class="line"><span class="string">          &lt;/body&gt;</span></span><br><span class="line"><span class="string">        &lt;/html&gt;"""</span></span><br><span class="line"></span><br><span class="line"><span class="meta">    @cherrypy.expose</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">generate</span>(<span class="params">self, length=<span class="number">8</span></span>):</span></span><br><span class="line">        <span class="keyword">return</span> <span class="string">''</span>.join(random.sample(string.hexdigits, <span class="built_in">int</span>(length)))</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    cherrypy.quickstart(StringGenerator())</span><br></pre></td></tr></tbody></table></figure>
+<p>运行此程序后，打开 http://localhost:8080/ ，填写表格并提交。<br>
+触发 submit 时候，根据 form 中定义的 action 的名字寻找对应的 function，并将表单元素提交的内容作为 name 属性所对应的参数传递。</p>
+<h1 id="session">Session</h1>
+<p>一个应用经常需要追踪用户的行为，一个常用的做法是使用 session 暂存数据，并且在客户端服务器通信中保持。<br>
+</p><figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> random</span><br><span class="line"><span class="keyword">import</span> string</span><br><span class="line"><span class="keyword">import</span> cherrypy</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">StringGenerator</span>(<span class="params"><span class="built_in">object</span></span>):</span></span><br><span class="line"><span class="meta">    @cherrypy.expose</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">index</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="keyword">return</span> <span class="string">"""&lt;html&gt;</span></span><br><span class="line"><span class="string">          &lt;head&gt;&lt;/head&gt;</span></span><br><span class="line"><span class="string">          &lt;body&gt;</span></span><br><span class="line"><span class="string">            &lt;form method="get" action="generate"&gt;</span></span><br><span class="line"><span class="string">              &lt;input type="text" value="8" name="length" /&gt;</span></span><br><span class="line"><span class="string">              &lt;button type="submit"&gt;Give it now!&lt;/button&gt;</span></span><br><span class="line"><span class="string">            &lt;/form&gt;</span></span><br><span class="line"><span class="string">          &lt;/body&gt;</span></span><br><span class="line"><span class="string">        &lt;/html&gt;"""</span></span><br><span class="line"></span><br><span class="line"><span class="meta">    @cherrypy.expose</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">generate</span>(<span class="params">self, length=<span class="number">8</span></span>):</span></span><br><span class="line">        some_string = <span class="string">''</span>.join(random.sample(string.hexdigits, <span class="built_in">int</span>(length)))</span><br><span class="line">        cherrypy.session[<span class="string">'mystring'</span>] = some_string</span><br><span class="line">        <span class="keyword">return</span> some_string</span><br><span class="line"></span><br><span class="line"><span class="meta">    @cherrypy.expose</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">display</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="keyword">return</span> cherrypy.session[<span class="string">'mystring'</span>]</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    conf = {</span><br><span class="line">        <span class="string">'/'</span>: {</span><br><span class="line">            <span class="string">'tools.sessions.on'</span>: <span class="literal">True</span></span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">    cherrypy.quickstart(StringGenerator(), <span class="string">'/'</span>, conf)</span><br></pre></td></tr></tbody></table></figure><br>
+运行此程序后，打开http://localhost:8080/generate 生成一个随机字符串并存入session的'mystring'字段之中。<br>
+打开http://localhost:8080/display 展示session中存储的字符串。<br>
+CherryPy会存储session的信息在进程的内存中。<br>
+注意此时要修改.conf文件。<br>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[/]</span><br><span class="line">tools.sessions.on = True</span><br></pre></td></tr></tbody></table></figure><p></p>
+<h1 id="cookies">Cookies</h1>
+<p>CherryPy 使用 Python 模块 Cookie，Cookie.SimpleCookie 对象来处理 cookie<br>
+要将 cookie 发送至浏览器，使用 <code>cherrypy.response.cookie[key] = value</code><br>
+要提取浏览器的 cookie，使用 <code>cherrypy.request.cookie[key]</code><br>
+要删除 cookie（在客户端），必须将 cookie 的过期时间设置为 0：<code>cherrypy.response.cookie[key]['expires'] = 0</code></p>
+<h1 id="允许文件上传下载">允许文件上传、下载</h1>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> os.path</span><br><span class="line"><span class="keyword">import</span> cherrypy</span><br><span class="line"><span class="keyword">from</span> cherrypy.lib <span class="keyword">import</span> static</span><br><span class="line"></span><br><span class="line">localDir = os.path.dirname(__file__)</span><br><span class="line">absDir = os.path.join(os.getcwd(), localDir)</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">FileDemo</span>(<span class="params"><span class="built_in">object</span></span>):</span></span><br><span class="line"><span class="meta">    @cherrypy.expose</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">index</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="keyword">return</span> <span class="string">"""</span></span><br><span class="line"><span class="string">        &lt;html&gt;&lt;body&gt;</span></span><br><span class="line"><span class="string">            &lt;h2&gt;Upload a file&lt;/h2&gt;</span></span><br><span class="line"><span class="string">            &lt;form action="upload" method="post" enctype="multipart/form-data"&gt;</span></span><br><span class="line"><span class="string">            filename: &lt;input type="file" name="myFile" /&gt;&lt;br/&gt;</span></span><br><span class="line"><span class="string">            &lt;input type="submit" /&gt;</span></span><br><span class="line"><span class="string">            &lt;/form&gt;</span></span><br><span class="line"><span class="string">            &lt;h2&gt;Download a file&lt;/h2&gt;</span></span><br><span class="line"><span class="string">            &lt;a href='download'&gt;This one&lt;/a&gt;</span></span><br><span class="line"><span class="string">        &lt;/body&gt;&lt;/html&gt;</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line"></span><br><span class="line"><span class="meta">    @cherrypy.expose</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">upload</span>(<span class="params">self, myFile</span>):</span></span><br><span class="line">        out = <span class="string">"""&lt;html&gt;</span></span><br><span class="line"><span class="string">        &lt;body&gt;</span></span><br><span class="line"><span class="string">            myFile length: %s&lt;br /&gt;</span></span><br><span class="line"><span class="string">            myFile filename: %s&lt;br /&gt;</span></span><br><span class="line"><span class="string">            myFile mime-type: %s</span></span><br><span class="line"><span class="string">        &lt;/body&gt;</span></span><br><span class="line"><span class="string">        &lt;/html&gt;"""</span></span><br><span class="line">        size = <span class="number">0</span></span><br><span class="line">        <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">            data = myFile.file.read(<span class="number">8192</span>)</span><br><span class="line">            <span class="keyword">if</span> <span class="keyword">not</span> data:</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">            size += <span class="built_in">len</span>(data)</span><br><span class="line">        <span class="keyword">return</span> out % (size, myFile.filename, myFile.content_type)</span><br><span class="line"></span><br><span class="line"><span class="meta">    @cherrypy.expose</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">download</span>(<span class="params">self</span>):</span></span><br><span class="line">        path = os.path.join(absDir, <span class="string">'pdf_file.pdf'</span>)</span><br><span class="line">        <span class="keyword">return</span> static.serve_file(path, <span class="string">'application/x-download'</span>, <span class="string">'attachment'</span>, os.path.basename(path))</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    cherrypy.quickstart(FileDemo())</span><br></pre></td></tr></tbody></table></figure>
+<p><strong>上传</strong>：<br>
+当客户端上传一个文件到 CherryPy 应用时，CherryPy 将会将文件作为一个参数传给方法（upload (self, myFile)）。<br>
+此参数有一个 file 属性，可以用于操作临时传入的文件，如果想要永久的保留文件，则需要用 read () 函数读取 myFile.file 的数据并且写入到某个文件中。<br>
+<strong>下载</strong>：<br>
+使用响应类型 “application/x-download”，可以告诉浏览器，应该将资源下载到用户的机器上，而不是显示。<br>
+<code>serve_file(path, content_type=None, disposition=None, name=None, debug=False)</code> 函数：第一个参数为文件路径；第二个参数为内容类型；第三个参数为 Content-Disposition 信息（Content-Disposition 就是当用户想把请求所得的内容存为一个文件的时候提供一个默认的文件名），如果不为空，则 Content-Disposition header 会被设置为 <code>"&lt;disposition&gt;; filename=&lt;name&gt;"</code>，如果 name 为空，则 name 被设置为文件的 basename。</p>
+<h1 id="以流形式处理请求主体">以流形式处理请求主体</h1>
+<p>CherryPy 收到 HTTP 请求后，对于底层信心进行处理后将请求传给页面处理部分，这里就会生成请求主体 (response body).<br>
+ChereyPy 支持多种类型的请求主体，如字符串、字符串列表或者文件；同样，也可以通过 yield 内容的方式形成 stream。<br>
+默认是关闭流输出的，因为这更加安全也更容易处理；如果要开启这个功能，需要对 session 会话有所了解。<br>
+一般请求的处理过程中，HTTP 服务器是一次性将整个请求接受、一次性将整个结果返回。<br>
+这对于简单的网页或者静态内容比较合适，因为请求、代码等都可以随时改变。<br>
+而流输出中程序不是一次性的返回数据，而是返回生成器，再通过生成器不断的以流的形式获取数据。<br>
+使用 <code>response.stream = true</code> 并结合 yield，示例如下：<br>
+</p><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">import os.path</span><br><span class="line">import cherrypy</span><br><span class="line"></span><br><span class="line">class HelloWorld(object):</span><br><span class="line">    @cherrypy.expose</span><br><span class="line">    def index(self):</span><br><span class="line">        yield "Hello "</span><br><span class="line">        yield "world!"</span><br><span class="line"></span><br><span class="line">if __name__ == '__main__':</span><br><span class="line">    conf = {</span><br><span class="line">        '/': {</span><br><span class="line">            'response.stream': True</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">    cherrypy.quickstart(HelloWorld(), '/', conf)</span><br></pre></td></tr></tbody></table></figure><p></p>
+<h1 id="调用网站资源">调用网站资源</h1>
+<p>网络应用经常会调用一些静态资源，比如 <a target="_blank" rel="noopener" href="http://www.w3school.com.cn/js/index.asp">JavaScript</a>，<a target="_blank" rel="noopener" href="http://www.w3school.com.cn/css/index.asp">CSS</a> 或 image 等资源。<br>
+在网站的根目录下新建文件夹 public，在 public 中可以自己新建文件夹 js，css，image 等子文件夹，并在相应文件夹中存放相应的资源。<br>
+在 HTML 调用资源的地方写入：<br>
+<code>&lt;script type="text/javascript" src="/static/js/xxx.js"&gt;&lt;/script&gt;</code><br>
+<code>&lt;link rel="stylesheet" type="text/css" href="/static/css/xxx.css" /&gt;</code><br>
+<code>&lt;img src="/static/image/xxx.jpg" alt="xxx" style="width:123px;height:123px;"&gt;</code><br>
+并且修改.conf 文件。<br>
+</p><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[/]</span><br><span class="line">tools.staticdir.root = os.path.abspath(os.getcwd())</span><br><span class="line"></span><br><span class="line">[/static]</span><br><span class="line">tools.staticdir.on = True</span><br><span class="line">tools.staticdir.dir = "public"</span><br></pre></td></tr></tbody></table></figure><br>
+对于独立文件资源：<br>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[/style.css]</span><br><span class="line">tools.staticfile.on = True</span><br><span class="line">tools.staticfile.filename = filepath</span><br></pre></td></tr></tbody></table></figure><p></p>
+<h1 id="rest">REST</h1>
+<p>客户端除了浏览器之外，还有其他一些形式比如 python，iOS，Android 等。<br>
+RESTful 可以通过一套统一的接口为他们提供服务。<br>
+而且对于很多平台来说，不需要有显式的前端，只需要一套提供服务的接口。<br>
+REST 用 URL 定位资源，用 HTTP 动词（GET，POST，PUT，DELETE 等）描述操作。<br>
+</p><figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> random</span><br><span class="line"><span class="keyword">import</span> string</span><br><span class="line"><span class="keyword">import</span> cherrypy</span><br><span class="line"></span><br><span class="line"><span class="meta">@cherrypy.expose</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">StringGeneratorWebService</span>(<span class="params"><span class="built_in">object</span></span>):</span></span><br><span class="line"></span><br><span class="line"><span class="meta">    @cherrypy.tools.accept(<span class="params">media=<span class="string">'text/plain'</span></span>)</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">GET</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="keyword">return</span> cherrypy.session[<span class="string">'mystring'</span>]</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">POST</span>(<span class="params">self, length=<span class="number">8</span></span>):</span></span><br><span class="line">        some_string = <span class="string">''</span>.join(random.sample(string.hexdigits, <span class="built_in">int</span>(length)))</span><br><span class="line">        cherrypy.session[<span class="string">'mystring'</span>] = some_string</span><br><span class="line">        <span class="keyword">return</span> some_string</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">PUT</span>(<span class="params">self, another_string</span>):</span></span><br><span class="line">        cherrypy.session[<span class="string">'mystring'</span>] = another_string</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">DELETE</span>(<span class="params">self</span>):</span></span><br><span class="line">        cherrypy.session.pop(<span class="string">'mystring'</span>, <span class="literal">None</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    conf = {</span><br><span class="line">        <span class="string">'/'</span>: {</span><br><span class="line">            <span class="string">'request.dispatch'</span>: cherrypy.dispatch.MethodDispatcher(),</span><br><span class="line">            <span class="string">'tools.sessions.on'</span>: <span class="literal">True</span>,</span><br><span class="line">            <span class="string">'tools.response_headers.on'</span>: <span class="literal">True</span>,</span><br><span class="line">            <span class="string">'tools.response_headers.headers'</span>: [(<span class="string">'Content-Type'</span>, <span class="string">'text/plain'</span>)],</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">    cherrypy.quickstart(StringGeneratorWebService(), <span class="string">'/'</span>, conf)</span><br></pre></td></tr></tbody></table></figure><br>
+运行此程序后，可以使用python的requests库来进行交互。<br>
+这里通过@cherrypy.expose装饰器一次性暴露StringGeneratorWebService类的所有方法。<br>
+该应用不再是以&lt;URL，函数&gt;匹配的方式进行工作，而是在配置里面创建了cherrypy.dispatch.MethodDispatcher实例，用于自动匹配。<br>
+对于get函数强制response的contenttype为text/plain。<br>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">import</span> requests</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>s = requests.Session()</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>r = s.get(<span class="string">'http://127.0.0.1:8080/'</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>r.status_code</span><br><span class="line"><span class="number">500</span> <span class="comment"># 因为session['mystring']为空，所以产生服务器错误</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>r = s.post(<span class="string">'http://127.0.0.1:8080/'</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>r.status_code, r.text</span><br><span class="line">(<span class="number">200</span>, <span class="string">u'04A92138'</span>) <span class="comment"># post提交一个长度为8的随机字符串并存入session中</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>r = s.get(<span class="string">'http://127.0.0.1:8080/'</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>r.status_code, r.text</span><br><span class="line">(<span class="number">200</span>, <span class="string">u'04A92138'</span>) <span class="comment"># get获取session中所存的字符串</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>r = s.get(<span class="string">'http://127.0.0.1:8080/'</span>, headers={<span class="string">'Accept'</span>: <span class="string">'application/json'</span>})</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>r.status_code</span><br><span class="line"><span class="number">406</span> <span class="comment"># 因为提出请求，将获取所生成的字符串作为一个JSON格式返回，格式不符所以返回406错误</span></span><br><span class="line"><span class="comment"># 406 Not Acceptable 请求的资源的内容特性无法满足请求头中的条件，因而无法生成响应实体，该请求不可接受。</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>r = s.put(<span class="string">'http://127.0.0.1:8080/'</span>, params={<span class="string">'another_string'</span>: <span class="string">'hello'</span>})</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>r = s.get(<span class="string">'http://127.0.0.1:8080/'</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>r.status_code, r.text</span><br><span class="line">(<span class="number">200</span>, <span class="string">u'hello'</span>) <span class="comment"># put更新session中所存的字符串</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>r = s.delete(<span class="string">'http://127.0.0.1:8080/'</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>r = s.get(<span class="string">'http://127.0.0.1:8080/'</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>r.status_code</span><br><span class="line"><span class="number">500</span> <span class="comment"># delete删除session中的字符串，所以产生服务器错误</span></span><br></pre></td></tr></tbody></table></figure><p></p>
+<h1 id="ajax">AJAX</h1>
+<p><a target="_blank" rel="noopener" href="http://www.w3school.com.cn/ajax/index.asp">AJAX</a> = Asynchronous JavaScript and XML（异步的 JavaScript 和 XML）。<br>
+AJAX 是在不重新加载整个页面的情况下与服务器交换数据并<strong>更新部分</strong>网页的技术。<br>
+</p><figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os, os.path</span><br><span class="line"><span class="keyword">import</span> random</span><br><span class="line"><span class="keyword">import</span> string</span><br><span class="line"><span class="keyword">import</span> cherrypy</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">StringGenerator</span>(<span class="params"><span class="built_in">object</span></span>):</span></span><br><span class="line"><span class="meta">    @cherrypy.expose</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">index</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="keyword">return</span> <span class="string">'''&lt;!DOCTYPE html&gt;</span></span><br><span class="line"><span class="string">                    &lt;html&gt;</span></span><br><span class="line"><span class="string">                      &lt;head&gt;</span></span><br><span class="line"><span class="string">                        &lt;style&gt;</span></span><br><span class="line"><span class="string">                          #the-string {</span></span><br><span class="line"><span class="string">                            display: none;</span></span><br><span class="line"><span class="string">                          }</span></span><br><span class="line"><span class="string">                        &lt;/style&gt;</span></span><br><span class="line"><span class="string">                        &lt;script src="http://code.jquery.com/jquery-2.0.3.min.js"&gt;&lt;/script&gt;</span></span><br><span class="line"><span class="string">                        &lt;script type="text/javascript"&gt;</span></span><br><span class="line"><span class="string">                          $(document).ready(function() {</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">                            $("#generate-string").click(function(e) {</span></span><br><span class="line"><span class="string">                              $.ajax({</span></span><br><span class="line"><span class="string">                                type: "POST",</span></span><br><span class="line"><span class="string">                                url: "/generator",</span></span><br><span class="line"><span class="string">                                data: {"length": $("input[name='length']").val()}</span></span><br><span class="line"><span class="string">                              })</span></span><br><span class="line"><span class="string">                              e.preventDefault();</span></span><br><span class="line"><span class="string">                            });</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">                            $("#replace-string").click(function(e) {</span></span><br><span class="line"><span class="string">                              $.ajax({</span></span><br><span class="line"><span class="string">                                type: "PUT",</span></span><br><span class="line"><span class="string">                                url: "/generator",</span></span><br><span class="line"><span class="string">                                data: {"another_string": $("#the-string input").val()}</span></span><br><span class="line"><span class="string">                              })</span></span><br><span class="line"><span class="string">                              .done(function() {</span></span><br><span class="line"><span class="string">                                alert("Replaced!");</span></span><br><span class="line"><span class="string">                              });</span></span><br><span class="line"><span class="string">                              e.preventDefault();</span></span><br><span class="line"><span class="string">                            });</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">                            $("#delete-string").click(function(e) {</span></span><br><span class="line"><span class="string">                              $.ajax({</span></span><br><span class="line"><span class="string">                                type: "DELETE",</span></span><br><span class="line"><span class="string">                                url: "/generator"</span></span><br><span class="line"><span class="string">                              })</span></span><br><span class="line"><span class="string">                              .done(function() {</span></span><br><span class="line"><span class="string">                                $("#the-string").hide();</span></span><br><span class="line"><span class="string">                              });</span></span><br><span class="line"><span class="string">                              e.preventDefault();</span></span><br><span class="line"><span class="string">                            });</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">                          });</span></span><br><span class="line"><span class="string">                        &lt;/script&gt;</span></span><br><span class="line"><span class="string">                      &lt;/head&gt;</span></span><br><span class="line"><span class="string">                      &lt;body&gt;</span></span><br><span class="line"><span class="string">                        &lt;input type="text" value="8" name="length"/&gt;</span></span><br><span class="line"><span class="string">                        &lt;button id="generate-string"&gt;Give it now!&lt;/button&gt;</span></span><br><span class="line"><span class="string">                        &lt;div id="the-string"&gt;</span></span><br><span class="line"><span class="string">                          &lt;input type="text" /&gt;</span></span><br><span class="line"><span class="string">                          &lt;button id="replace-string"&gt;Replace&lt;/button&gt;</span></span><br><span class="line"><span class="string">                          &lt;button id="delete-string"&gt;Delete it&lt;/button&gt;</span></span><br><span class="line"><span class="string">                        &lt;/div&gt;</span></span><br><span class="line"><span class="string">                      &lt;/body&gt;</span></span><br><span class="line"><span class="string">                    &lt;/html&gt;</span></span><br><span class="line"><span class="string">                    '''</span></span><br><span class="line"></span><br><span class="line"><span class="meta">@cherrypy.expose</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">StringGeneratorWebService</span>(<span class="params"><span class="built_in">object</span></span>):</span></span><br><span class="line"></span><br><span class="line"><span class="meta">    @cherrypy.tools.accept(<span class="params">media=<span class="string">'text/plain'</span></span>)</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">GET</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="keyword">return</span> cherrypy.session[<span class="string">'mystring'</span>]</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">POST</span>(<span class="params">self, length=<span class="number">8</span></span>):</span></span><br><span class="line">        some_string = <span class="string">''</span>.join(random.sample(string.hexdigits, <span class="built_in">int</span>(length)))</span><br><span class="line">        cherrypy.session[<span class="string">'mystring'</span>] = some_string</span><br><span class="line">        <span class="keyword">return</span> some_string</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">PUT</span>(<span class="params">self, another_string</span>):</span></span><br><span class="line">        cherrypy.session[<span class="string">'mystring'</span>] = another_string</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">DELETE</span>(<span class="params">self</span>):</span></span><br><span class="line">        cherrypy.session.pop(<span class="string">'mystring'</span>, <span class="literal">None</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    conf = {</span><br><span class="line">        <span class="string">'/'</span>: {</span><br><span class="line">            <span class="string">'tools.sessions.on'</span>: <span class="literal">True</span>,</span><br><span class="line">            <span class="string">'tools.staticdir.root'</span>: os.path.abspath(os.getcwd())</span><br><span class="line">        },</span><br><span class="line">        <span class="string">'/generator'</span>: {</span><br><span class="line">            <span class="string">'request.dispatch'</span>: cherrypy.dispatch.MethodDispatcher(),</span><br><span class="line">            <span class="string">'tools.response_headers.on'</span>: <span class="literal">True</span>,</span><br><span class="line">            <span class="string">'tools.response_headers.headers'</span>: [(<span class="string">'Content-Type'</span>, <span class="string">'text/plain'</span>)],</span><br><span class="line">        },</span><br><span class="line">    }</span><br><span class="line">    webapp = StringGenerator()</span><br><span class="line">    webapp.generator = StringGeneratorWebService()</span><br><span class="line">    cherrypy.quickstart(webapp, <span class="string">'/'</span>, conf)</span><br></pre></td></tr></tbody></table></figure><br>
+运行此程序后，可以使用按钮触发ajax结合<a target="_blank" rel="noopener" href="http://www.w3school.com.cn/jquery/index.asp">jQuery</a>来进行交互。<br>
+其中：<br>
+<figure class="highlight javascript"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">$(<span class="string">"#generate-string"</span>).click(<span class="function"><span class="keyword">function</span>(<span class="params">e</span>) </span>{</span><br><span class="line">  $.ajax({</span><br><span class="line">    <span class="attr">type</span>: <span class="string">"POST"</span>,</span><br><span class="line">    <span class="attr">url</span>: <span class="string">"/generator"</span>,</span><br><span class="line">    <span class="attr">data</span>: {<span class="string">"length"</span>: $(<span class="string">"input[name='length']"</span>).val()}</span><br><span class="line">  })</span><br><span class="line">   .done(<span class="function"><span class="keyword">function</span>(<span class="params">string</span>) </span>{</span><br><span class="line">    $(<span class="string">"#the-string"</span>).show();</span><br><span class="line">    $(<span class="string">"#the-string input"</span>).val(string);</span><br><span class="line">  });</span><br><span class="line">  e.preventDefault();</span><br><span class="line">});</span><br></pre></td></tr></tbody></table></figure><br>
+表示当id为generate-string的按钮被点击后，执行POST命令，目标url是generator，以<a target="_blank" rel="noopener" href="http://www.w3school.com.cn/json/index.asp">JSON</a>方式传参数length，length的值为名字等于length的input组件的值。完成POST后服务器返回string，并且将id为the-string的组件显示出来，将其input组件的值赋值为string。<br>
+<figure class="highlight javascript"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">$(<span class="string">"#replace-string"</span>).click(<span class="function"><span class="keyword">function</span>(<span class="params">e</span>) </span>{</span><br><span class="line">  $.ajax({</span><br><span class="line">    <span class="attr">type</span>: <span class="string">"PUT"</span>,</span><br><span class="line">    <span class="attr">url</span>: <span class="string">"/generator"</span>,</span><br><span class="line">    <span class="attr">data</span>: {<span class="string">"another_string"</span>: $(<span class="string">"#the-string input"</span>).val()}</span><br><span class="line">  })</span><br><span class="line">  .done(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>{</span><br><span class="line">    alert(<span class="string">"Replaced!"</span>);</span><br><span class="line">  });</span><br><span class="line">  e.preventDefault();</span><br><span class="line">});</span><br></pre></td></tr></tbody></table></figure><br>
+表示当id为replace-string的按钮被点击后，执行PUT命令，目标url是generator，以JSON方式传参数another_string，another_string的值为id为the-string的组件中的input组件的值。完成PUT后弹出警告框"Replaced"。<br>
+<figure class="highlight javascript"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">$(<span class="string">"#delete-string"</span>).click(<span class="function"><span class="keyword">function</span>(<span class="params">e</span>) </span>{</span><br><span class="line">  $.ajax({</span><br><span class="line">    <span class="attr">type</span>: <span class="string">"DELETE"</span>,</span><br><span class="line">    <span class="attr">url</span>: <span class="string">"/generator"</span></span><br><span class="line">  })</span><br><span class="line">  .done(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>{</span><br><span class="line">    $(<span class="string">"#the-string"</span>).hide();</span><br><span class="line">  });</span><br><span class="line">  e.preventDefault();</span><br><span class="line">});</span><br></pre></td></tr></tbody></table></figure><br>
+表示当id为delete-string的按钮被点击后，执行DELETE命令，目标url是generator，完成DELETE后将id为the-string的组件隐藏。<p></p>
+<h1 id="数据库存储">数据库存储</h1>
+<p>这里以 SQLite 数据库为例，演示如何将网页数据存入<a target="_blank" rel="noopener" href="http://www.w3school.com.cn/sql/index.asp">数据库</a>。<br>
+</p><figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os, os.path</span><br><span class="line"><span class="keyword">import</span> random</span><br><span class="line"><span class="keyword">import</span> sqlite3</span><br><span class="line"><span class="keyword">import</span> string</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">import</span> cherrypy</span><br><span class="line"></span><br><span class="line">DB_STRING = <span class="string">"my.db"</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">StringGenerator</span>(<span class="params"><span class="built_in">object</span></span>):</span></span><br><span class="line"><span class="meta">    @cherrypy.expose</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">index</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="keyword">return</span> <span class="string">'''&lt;!DOCTYPE html&gt;</span></span><br><span class="line"><span class="string">                    &lt;html&gt;</span></span><br><span class="line"><span class="string">                      &lt;head&gt;</span></span><br><span class="line"><span class="string">                        &lt;style&gt;</span></span><br><span class="line"><span class="string">                          #the-string {</span></span><br><span class="line"><span class="string">                            display: none;</span></span><br><span class="line"><span class="string">                          }</span></span><br><span class="line"><span class="string">                        &lt;/style&gt;</span></span><br><span class="line"><span class="string">                        &lt;script src="http://code.jquery.com/jquery-2.0.3.min.js"&gt;&lt;/script&gt;</span></span><br><span class="line"><span class="string">                        &lt;script type="text/javascript"&gt;</span></span><br><span class="line"><span class="string">                          $(document).ready(function() {</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">                            $("#generate-string").click(function(e) {</span></span><br><span class="line"><span class="string">                              $.ajax({</span></span><br><span class="line"><span class="string">                                type: "POST",</span></span><br><span class="line"><span class="string">                                url: "/generator",</span></span><br><span class="line"><span class="string">                                data: {"length": $("input[name='length']").val()}</span></span><br><span class="line"><span class="string">                              })</span></span><br><span class="line"><span class="string">                              e.preventDefault();</span></span><br><span class="line"><span class="string">                            });</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">                            $("#replace-string").click(function(e) {</span></span><br><span class="line"><span class="string">                              $.ajax({</span></span><br><span class="line"><span class="string">                                type: "PUT",</span></span><br><span class="line"><span class="string">                                url: "/generator",</span></span><br><span class="line"><span class="string">                                data: {"another_string": $("#the-string input").val()}</span></span><br><span class="line"><span class="string">                              })</span></span><br><span class="line"><span class="string">                              .done(function() {</span></span><br><span class="line"><span class="string">                                alert("Replaced!");</span></span><br><span class="line"><span class="string">                              });</span></span><br><span class="line"><span class="string">                              e.preventDefault();</span></span><br><span class="line"><span class="string">                            });</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">                            $("#delete-string").click(function(e) {</span></span><br><span class="line"><span class="string">                              $.ajax({</span></span><br><span class="line"><span class="string">                                type: "DELETE",</span></span><br><span class="line"><span class="string">                                url: "/generator"</span></span><br><span class="line"><span class="string">                              })</span></span><br><span class="line"><span class="string">                              .done(function() {</span></span><br><span class="line"><span class="string">                                $("#the-string").hide();</span></span><br><span class="line"><span class="string">                              });</span></span><br><span class="line"><span class="string">                              e.preventDefault();</span></span><br><span class="line"><span class="string">                            });</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">                          });</span></span><br><span class="line"><span class="string">                        &lt;/script&gt;</span></span><br><span class="line"><span class="string">                      &lt;/head&gt;</span></span><br><span class="line"><span class="string">                      &lt;body&gt;</span></span><br><span class="line"><span class="string">                        &lt;input type="text" value="8" name="length"/&gt;</span></span><br><span class="line"><span class="string">                        &lt;button id="generate-string"&gt;Give it now!&lt;/button&gt;</span></span><br><span class="line"><span class="string">                        &lt;div id="the-string"&gt;</span></span><br><span class="line"><span class="string">                          &lt;input type="text" /&gt;</span></span><br><span class="line"><span class="string">                          &lt;button id="replace-string"&gt;Replace&lt;/button&gt;</span></span><br><span class="line"><span class="string">                          &lt;button id="delete-string"&gt;Delete it&lt;/button&gt;</span></span><br><span class="line"><span class="string">                        &lt;/div&gt;</span></span><br><span class="line"><span class="string">                      &lt;/body&gt;</span></span><br><span class="line"><span class="string">                    &lt;/html&gt;</span></span><br><span class="line"><span class="string">                    '''</span></span><br><span class="line"></span><br><span class="line"><span class="meta">@cherrypy.expose</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">StringGeneratorWebService</span>(<span class="params"><span class="built_in">object</span></span>):</span></span><br><span class="line"></span><br><span class="line"><span class="meta">    @cherrypy.tools.accept(<span class="params">media=<span class="string">'text/plain'</span></span>)</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">GET</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="keyword">with</span> sqlite3.connect(DB_STRING) <span class="keyword">as</span> c:</span><br><span class="line">            cherrypy.session[<span class="string">'ts'</span>] = time.time()</span><br><span class="line">            r = c.execute(<span class="string">"SELECT value FROM user_string WHERE session_id=?"</span>,</span><br><span class="line">                          [cherrypy.session.<span class="built_in">id</span>])</span><br><span class="line">            <span class="keyword">return</span> r.fetchone()</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">POST</span>(<span class="params">self, length=<span class="number">8</span></span>):</span></span><br><span class="line">        some_string = <span class="string">''</span>.join(random.sample(string.hexdigits, <span class="built_in">int</span>(length)))</span><br><span class="line">        <span class="keyword">with</span> sqlite3.connect(DB_STRING) <span class="keyword">as</span> c:</span><br><span class="line">            cherrypy.session[<span class="string">'ts'</span>] = time.time()</span><br><span class="line">            c.execute(<span class="string">"INSERT INTO user_string VALUES (?, ?)"</span>,</span><br><span class="line">                      [cherrypy.session.<span class="built_in">id</span>, some_string])</span><br><span class="line">        <span class="keyword">return</span> some_string</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">PUT</span>(<span class="params">self, another_string</span>):</span></span><br><span class="line">        <span class="keyword">with</span> sqlite3.connect(DB_STRING) <span class="keyword">as</span> c:</span><br><span class="line">            cherrypy.session[<span class="string">'ts'</span>] = time.time()</span><br><span class="line">            c.execute(<span class="string">"UPDATE user_string SET value=? WHERE session_id=?"</span>,</span><br><span class="line">                      [another_string, cherrypy.session.<span class="built_in">id</span>])</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">DELETE</span>(<span class="params">self</span>):</span></span><br><span class="line">        cherrypy.session.pop(<span class="string">'ts'</span>, <span class="literal">None</span>)</span><br><span class="line">        <span class="keyword">with</span> sqlite3.connect(DB_STRING) <span class="keyword">as</span> c:</span><br><span class="line">            c.execute(<span class="string">"DELETE FROM user_string WHERE session_id=?"</span>,</span><br><span class="line">                      [cherrypy.session.<span class="built_in">id</span>])</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">setup_database</span>():</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    Create the `user_string` table in the database</span></span><br><span class="line"><span class="string">    on server startup</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    <span class="keyword">with</span> sqlite3.connect(DB_STRING) <span class="keyword">as</span> con:</span><br><span class="line">        con.execute(<span class="string">"CREATE TABLE user_string (session_id, value)"</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">cleanup_database</span>():</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    Destroy the `user_string` table from the database</span></span><br><span class="line"><span class="string">    on server shutdown.</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    <span class="keyword">with</span> sqlite3.connect(DB_STRING) <span class="keyword">as</span> con:</span><br><span class="line">        con.execute(<span class="string">"DROP TABLE user_string"</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    conf = {</span><br><span class="line">        <span class="string">'/'</span>: {</span><br><span class="line">            <span class="string">'tools.sessions.on'</span>: <span class="literal">True</span>,</span><br><span class="line">            <span class="string">'tools.staticdir.root'</span>: os.path.abspath(os.getcwd())</span><br><span class="line">        },</span><br><span class="line">        <span class="string">'/generator'</span>: {</span><br><span class="line">            <span class="string">'request.dispatch'</span>: cherrypy.dispatch.MethodDispatcher(),</span><br><span class="line">            <span class="string">'tools.response_headers.on'</span>: <span class="literal">True</span>,</span><br><span class="line">            <span class="string">'tools.response_headers.headers'</span>: [(<span class="string">'Content-Type'</span>, <span class="string">'text/plain'</span>)],</span><br><span class="line">        },</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    cherrypy.engine.subscribe(<span class="string">'start'</span>, setup_database)</span><br><span class="line">    cherrypy.engine.subscribe(<span class="string">'stop'</span>, cleanup_database)</span><br><span class="line"></span><br><span class="line">    webapp = StringGenerator()</span><br><span class="line">    webapp.generator = StringGeneratorWebService()</span><br><span class="line">    cherrypy.quickstart(webapp, <span class="string">'/'</span>, conf)</span><br></pre></td></tr></tbody></table></figure><br>
+运行此程序后，可以使用按钮触发ajax来进行交互。<br>
+大部分功能与上一个例子相同，这里增加了将session中的数据存入数据库的功能。<br>
+其中 <code>cherrypy.engine.subscribe('start', setup_database)</code> 和 <code>cherrypy.engine.subscribe('stop', cleanup_database)</code> 表示setup_database函数和cleanup_database函数被注册到服务器，当服务器启动和停止时调用。<br>
+setup_database函数新建一个名为user_string的表格，cleanup_database函数删除user_string表格。<p></p>
+<h1 id="日志记录">日志记录</h1>
+<p>CherryPy 会记录所有的 requests 和协议错误。<br>
+应用也可以自己配置日志记录功能，调用 <code>cherrypy.log()</code>。<br>
+如果在配置中配置以下内容，则所有的 log 会被记录到文件：<br>
+- <code>log.access_file</code> 记录 requests 情况<br>
+- <code>log.error_file</code> 记录其他的情况</p>
+<p>修改.conf 文件。<br>
+</p><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[/]</span><br><span class="line">log.screen = False, #用于取消console的logging</span><br><span class="line">log.access_file = "access.log",</span><br><span class="line">log.error_file = "error.log",</span><br></pre></td></tr></tbody></table></figure><p></p>
+<h1 id="服务器配置">服务器配置</h1>
+<h2 id="全局配置global">全局配置 (global)</h2>
+<p>HTTP 配置<br>
+</p><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[global]</span><br><span class="line">server.socket_host = "127.0.0.1"</span><br><span class="line">server.socket_port = 8080</span><br><span class="line">server.thread_pool = 10</span><br></pre></td></tr></tbody></table></figure><br>
+HTTPS配置<br>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[global]</span><br><span class="line">server.socket_host = "0.0.0.0"</span><br><span class="line">server.socket_port = 443</span><br><span class="line">server.thread_pool = 10</span><br><span class="line">server.ssl_module = 'builtin'</span><br><span class="line">server.ssl_certificate = "cert.pem"</span><br><span class="line">server.ssl_private_key = "privkey.pem"</span><br></pre></td></tr></tbody></table></figure><br>
+可以用OpenSSL工具生成自签名的证书，方法如下：<p></p>
+<ol type="1">
+<li><code>$ openssl genrsa -out privkey.pem 2048 #用于生成私钥</code></li>
+<li>修改 OpenSSL.cnf 配置文件（最好不修改此目录下的文件，而是拷贝一份至你的生成证书的目录）</li>
+<li>找到 [v3_ca] 在其下方加入并保存：<br>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">subjectAltName = "IP:server的ip"</span><br><span class="line">basicConstraints = CA:FALSE</span><br><span class="line">keyUsage = digitalSignature, keyEncipherment</span><br></pre></td></tr></tbody></table></figure></li>
+<li><code>$ openssl req -new -x509 -days 365 -key privkey.pem -out cert.pem -config openssl.cnf #用于生成证书</code><br>
+有效期为 365 天，按照提示写入个人信息（国、省、市、机构、组织、server 的 ip、邮箱）。</li>
+<li>cert.pem 的后缀改为 cer 就可以作为证书使用了。</li>
+</ol>
+<h2 id="网站gzip">网站 Gzip</h2>
+<p>Gzip 开启以后会将输出到用户浏览器的数据进行压缩的处理，这样就会减小通过网络传输的数据量，提高浏览的速度。<br>
+修改.conf 文件开启压缩功能。<br>
+</p><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[/]</span><br><span class="line">tools.gzip.on: True</span><br></pre></td></tr></tbody></table></figure><p></p>
+<h2 id="其他配置">其他配置</h2>
+<p>也可以将某些字符串存入配置文件，供各种函数访问。<br>
+修改.conf 文件。<br>
+</p><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[abc]</span><br><span class="line">def = "ghi"</span><br></pre></td></tr></tbody></table></figure><br>
+在函数中通过 <code>jklmn = cherrypy.request.app.config['abc']['def']</code> 调用，此时jklmn变量被赋值"ghi"，str类型。<p></p>
+<h1 id="处理json">处理 JSON</h1>
+<p>CherryPy 内置支持了对 JSON 编码的请求或响应的解码支持。</p>
+<h2 id="解码-request">解码 request</h2>
+<p>自动解码 JSON 请求的内容：<br>
+</p><figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@cherrypy.expose</span></span><br><span class="line"><span class="meta">@cherrypy.tools.json_in()</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">index</span>(<span class="params">self</span>):</span></span><br><span class="line">    data = cherrypy.request.json</span><br></pre></td></tr></tbody></table></figure><br>
+附加在请求的JSON属性包含解码内容。<p></p>
+<h2 id="编码response">编码 response</h2>
+<p>使用 JSON 自动编码 response 的内容：<br>
+</p><figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@cherrypy.expose</span></span><br><span class="line"><span class="meta">@cherrypy.tools.json_out()</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">index</span>(<span class="params">self</span>):</span></span><br><span class="line">    <span class="keyword">return</span> {<span class="string">'key'</span>: <span class="string">'value'</span>}</span><br></pre></td></tr></tbody></table></figure><br>
+CherryPy将使用JSON对你的页面处理程序返回的任何内容进行编码，并非所有类型的对象都可以被编码。<p></p>
+<h1 id="认证">认证</h1>
+<p>CherryPy 提供了两种非常简单的身份验证机制。他们最常见的触发方式是触发浏览器弹出窗口向用户询问他们的名字和密码。</p>
+<h2 id="basic">Basic</h2>
+<p>Basic 身份验证是最简单的验证方式，但它不是一个安全的身份验证，因为用户的凭证被嵌入到请求中。不建议使用它，除非你在 SSL 或封闭的网络中运行。<br>
+</p><figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> cherrypy.lib <span class="keyword">import</span> auth_basic</span><br><span class="line"></span><br><span class="line">USERS = {<span class="string">'id'</span>: <span class="string">'password'</span>}</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">validate_password</span>(<span class="params">realm, username, password</span>):</span></span><br><span class="line">    <span class="keyword">if</span> username <span class="keyword">in</span> USERS <span class="keyword">and</span> USERS[username] == password:</span><br><span class="line">       <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line">    <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line"></span><br><span class="line">conf = {</span><br><span class="line">   <span class="string">'/protected/area'</span>: {</span><br><span class="line">       <span class="string">'tools.auth_basic.on'</span>: <span class="literal">True</span>,</span><br><span class="line">       <span class="string">'tools.auth_basic.realm'</span>: <span class="string">'localhost'</span>,</span><br><span class="line">       <span class="string">'tools.auth_basic.checkpassword'</span>: validate_password</span><br><span class="line">    }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line">cherrypy.quickstart(myapp, <span class="string">'/'</span>, conf)</span><br></pre></td></tr></tbody></table></figure><br>
+必须提供一个将有CherryPy调用的函数，解码从请求中传递的用户名和密码。<br>
+该功能可以从任何来源读取数据：文件，数据库，内存等。<p></p>
+<h2 id="digest">Digest</h2>
+<p>Digest 认证的不同之处在于，凭证没有携带在请求中，因此比 Basic 更安全。<br>
+</p><figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> cherrypy.lib <span class="keyword">import</span> auth_digest</span><br><span class="line"></span><br><span class="line">USERS = {<span class="string">'id'</span>: <span class="string">'password'</span>}</span><br><span class="line"></span><br><span class="line">conf = {</span><br><span class="line">   <span class="string">'/protected/area'</span>: {</span><br><span class="line">        <span class="string">'tools.auth_digest.on'</span>: <span class="literal">True</span>,</span><br><span class="line">        <span class="string">'tools.auth_digest.realm'</span>: <span class="string">'localhost'</span>,</span><br><span class="line">        <span class="string">'tools.auth_digest.get_ha1'</span>: auth_digest.get_ha1_dict_plain(USERS),</span><br><span class="line">        <span class="string">'tools.auth_digest.key'</span>: <span class="string">'a565c27146791cfb'</span></span><br><span class="line">   }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line">cherrypy.quickstart(myapp, <span class="string">'/'</span>, conf)</span><br></pre></td></tr></tbody></table></figure><p></p>
+<h1 id="网站图标">网站图标</h1>
+<p>CherryPy 提供自己的红色 cherrypy 作为默认图标。可以用以下方式提供自己的图标：<br>
+</p><figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> cherrypy</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">HelloWorld</span>(<span class="params"><span class="built_in">object</span></span>):</span></span><br><span class="line"><span class="meta">   @cherrypy.expose</span></span><br><span class="line">   <span class="function"><span class="keyword">def</span> <span class="title">index</span>(<span class="params">self</span>):</span></span><br><span class="line">       <span class="keyword">return</span> <span class="string">"Hello World!"</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    cherrypy.quickstart(HelloWorld(), <span class="string">'/'</span>,</span><br><span class="line">        {</span><br><span class="line">            <span class="string">'/favicon.ico'</span>:</span><br><span class="line">            {</span><br><span class="line">                <span class="string">'tools.staticfile.on'</span>: <span class="literal">True</span>,</span><br><span class="line">                <span class="string">'tools.staticfile.filename'</span>: <span class="string">'/path/to/myfavicon.ico'</span></span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line">    )</span><br></pre></td></tr></tbody></table></figure><br>
+也可以使用文件进行配置：<br>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[/favicon.ico]</span><br><span class="line">tools.staticfile.on: True</span><br><span class="line">tools.staticfile.filename: "/path/to/myfavicon.ico"</span><br></pre></td></tr></tbody></table></figure><br>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> cherrypy</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">HelloWorld</span>(<span class="params"><span class="built_in">object</span></span>):</span></span><br><span class="line"><span class="meta">   @cherrypy.expose</span></span><br><span class="line">   <span class="function"><span class="keyword">def</span> <span class="title">index</span>(<span class="params">self</span>):</span></span><br><span class="line">       <span class="keyword">return</span> <span class="string">"Hello World!"</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    cherrypy.quickstart(HelloWorld(), <span class="string">'/'</span>, app.conf)</span><br></pre></td></tr></tbody></table></figure><p></p>
+<h1 id="设置页面别名">设置页面别名</h1>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> random</span><br><span class="line"><span class="keyword">import</span> string</span><br><span class="line"><span class="keyword">import</span> cherrypy</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">StringGenerator</span>(<span class="params"><span class="built_in">object</span></span>):</span></span><br><span class="line"><span class="meta">    @cherrypy.expose(<span class="params">[<span class="string">'generer'</span>, <span class="string">'generar'</span>]</span>)</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">generate</span>(<span class="params">self, length=<span class="number">8</span></span>):</span></span><br><span class="line">        <span class="keyword">return</span> <span class="string">''</span>.join(random.sample(string.hexdigits, <span class="built_in">int</span>(length)))</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    cherrypy.quickstart(StringGenerator())</span><br></pre></td></tr></tbody></table></figure>
+<p>其中 <code>@cherrypy.expose(['generer', 'generar'])</code> 设置了别名，所以下面三个页面效果是一样：/generate；/generer (French)；/generar (Spanish)</p>
+<h1 id="请求超时">请求超时</h1>
+<p>CherryPy 包含 3 个时间相关的属性：<br>
+- response.time：当请求开始的时候，记录 time.time ()<br>
+- response.timeout：请求可以运行的时间，默认 300s<br>
+- response.timed_out：是否激活超时机制 (默认 False)</p>
+<p>可以通过 response.check_timeout 来检查是否超时，在激活超时机制的情况下，一旦超时则触发 TimeoutError 异常。<br>
+默认会通过 cherrypy.engine.timeout_monitor 监控所有请求是否超时，如果要关闭：<br>
+</p><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[global]</span><br><span class="line">engine.timeout_monitor.on: False</span><br></pre></td></tr></tbody></table></figure><br>
+或者<br>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cherrypy.engine.timeout_monitor.unsubscribe()</span><br></pre></td></tr></tbody></table></figure><br>
+默认超时监控是1分钟1次，改成1小时1次：<br>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[global]</span><br><span class="line">engine.timeout_monitor.frequency: 60 * 60</span><br></pre></td></tr></tbody></table></figure><p></p>
+<h1 id="信号处理">信号处理</h1>
+<p>对于信号处理，有一个 cherrypy.engine.signal_handler 插件，它是被 cherrypy.quickstart () 自动调用的。<br>
+如果要手动进行信号处理，则可以调用 <code>tree.mount()</code> 或 <code>engine.start()</code> 或 <code>engine.block()</code>。<br>
+记得启动引擎前调用 <code>engine.signals.subscribe()</code>。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Tutorial/" rel="tag"># Tutorial</a>
+              <a href="/tags/Python/" rel="tag"># Python</a>
+              <a href="/tags/Web-Framework/" rel="tag"># Web Framework</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/contents/%E8%B1%86%E7%93%A3%E7%88%AC%E8%99%AB%E5%AE%9E%E4%BE%8B.html" rel="prev" title="豆瓣爬虫实例">
+                  <i class="fa fa-chevron-left"></i> 豆瓣爬虫实例
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/contents/Python-Matplotlib%E5%BA%93%E5%9F%BA%E7%A1%80.html" rel="next" title="Python Matplotlib 库基础">
+                  Python Matplotlib 库基础 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">LIU, XIMING</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="Symbols count total">192k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="Reading time total">5:49</span>
+  </span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="/js/third-party/search/local-search.js"></script>
+
+  <script class="next-config" data-name="pdf" type="application/json">{"object_url":{"url":"https://cdn.jsdelivr.net/npm/pdfobject@2.2.6/pdfobject.min.js","integrity":"sha256-77geM50MfxCD17eqyJR+Dag1svjJOLN+BJ2F/DMqMEY="},"url":"/lib/pdf/web/viewer.html"}</script>
+  <script src="/js/third-party/tags/pdf.js"></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdn.jsdelivr.net/npm/mathjax@3.2.0/es5/tex-mml-chtml.js","integrity":"sha256-r+3itOMtGGjap0x+10hu6jW/gZCzxHsoKrOd7gyRSGY="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+
+
+</body>
+</html>

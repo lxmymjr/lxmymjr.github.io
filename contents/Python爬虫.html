@@ -1,0 +1,1103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon.ico">
+  <link rel="mask-icon" href="/favicon.ico" color="#222">
+  <meta name="google-site-verification" content="yHqnmkvA-12pculpP0D-q6lLqYStfJAnZCn5OLVFDfQ">
+  <meta name="baidu-site-verification" content="VLW4ITHnBoryM4WZ">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css" integrity="sha256-mUZM63G8m73Mcidfrv5E+Y61y7a12O5mW4ezU3bxqW4=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"lxmymjr.github.io","root":"/","images":"/images","scheme":"Gemini","version":"8.7.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":false,"async":true,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":-1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+<meta name="description" content="网络爬虫是一种按照一定的规则，自动地抓取万维网信息的程序或者脚本。 本文介绍基本的网络爬虫的方法，并给出一个具体实例。 Reference：公开课">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python 爬虫">
+<meta property="og:url" content="https://lxmymjr.github.io/contents/Python%E7%88%AC%E8%99%AB.html">
+<meta property="og:site_name" content="xmliu&#39;s blog">
+<meta property="og:description" content="网络爬虫是一种按照一定的规则，自动地抓取万维网信息的程序或者脚本。 本文介绍基本的网络爬虫的方法，并给出一个具体实例。 Reference：公开课">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://lxmymjr.github.io/images/Python%E7%88%AC%E8%99%AB/HTML.png">
+<meta property="article:published_time" content="2017-09-10T14:13:01.000Z">
+<meta property="article:modified_time" content="2021-09-16T02:56:10.896Z">
+<meta property="article:author" content="LIU, XIMING">
+<meta property="article:tag" content="Tutorial">
+<meta property="article:tag" content="Python">
+<meta property="article:tag" content="Crawler">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://lxmymjr.github.io/images/Python%E7%88%AC%E8%99%AB/HTML.png">
+
+
+<link rel="canonical" href="https://lxmymjr.github.io/contents/Python%E7%88%AC%E8%99%AB.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://lxmymjr.github.io/contents/Python%E7%88%AC%E8%99%AB.html","path":"contents/Python爬虫.html","title":"Python 爬虫"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Python 爬虫 | xmliu's blog</title>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">xmliu's blog</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%88%AC%E8%99%AB%E8%AE%B8%E5%8F%AF"><span class="nav-number">1.</span> <span class="nav-text">爬虫许可</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#requests%E5%BA%93"><span class="nav-number">2.</span> <span class="nav-text">Requests 库</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#requests%E5%BA%93%E7%9A%84%E4%B8%BB%E8%A6%81%E6%96%B9%E6%B3%95"><span class="nav-number">2.1.</span> <span class="nav-text">Requests 库的主要方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#get%E6%96%B9%E6%B3%95"><span class="nav-number">2.2.</span> <span class="nav-text">get 方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86"><span class="nav-number">2.3.</span> <span class="nav-text">异常处理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#requests%E5%BA%93%E4%B8%BB%E8%A6%81%E6%96%B9%E6%B3%95"><span class="nav-number">2.4.</span> <span class="nav-text">Requests 库主要方法</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#beautiful-soup%E5%BA%93"><span class="nav-number">3.</span> <span class="nav-text">Beautiful Soup 库</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#beautiful-soup%E5%BA%93%E7%9A%84%E8%A7%A3%E6%9E%90%E5%99%A8"><span class="nav-number">3.1.</span> <span class="nav-text">Beautiful Soup 库的解析器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#beautiful-soup%E7%B1%BB%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%85%83%E7%B4%A0"><span class="nav-number">3.2.</span> <span class="nav-text">Beautiful Soup 类的基本元素</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#html%E5%86%85%E5%AE%B9%E9%81%8D%E5%8E%86%E6%96%B9%E6%B3%95"><span class="nav-number">3.3.</span> <span class="nav-text">HTML 内容遍历方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#html%E6%A0%BC%E5%BC%8F%E8%BE%93%E5%87%BA"><span class="nav-number">3.4.</span> <span class="nav-text">HTML 格式输出</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#html%E5%86%85%E5%AE%B9%E6%9F%A5%E6%89%BE%E6%96%B9%E6%B3%95"><span class="nav-number">3.5.</span> <span class="nav-text">HTML 内容查找方法</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BF%A1%E6%81%AF%E7%BB%84%E7%BB%87%E4%B8%8E%E6%8F%90%E5%8F%96%E6%96%B9%E6%B3%95"><span class="nav-number">4.</span> <span class="nav-text">信息组织与提取方法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#re%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E5%BA%93"><span class="nav-number">5.</span> <span class="nav-text">Re (正则表达式) 库</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E7%9A%84%E8%AF%AD%E6%B3%95"><span class="nav-number">5.1.</span> <span class="nav-text">正则表达式的语法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%99%AE%E9%80%9A%E5%AD%97%E7%AC%A6"><span class="nav-number">5.1.1.</span> <span class="nav-text">普通字符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9D%9E%E6%89%93%E5%8D%B0%E5%AD%97%E7%AC%A6"><span class="nav-number">5.1.2.</span> <span class="nav-text">非打印字符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%89%B9%E6%AE%8A%E5%AD%97%E7%AC%A6"><span class="nav-number">5.1.3.</span> <span class="nav-text">特殊字符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%8F%E5%85%B8%E5%AE%9E%E4%BE%8B"><span class="nav-number">5.1.4.</span> <span class="nav-text">经典实例</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E7%9B%B8%E5%85%B3%E6%B3%A8%E8%A7%A3"><span class="nav-number">5.2.</span> <span class="nav-text">正则表达式相关注解</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#re%E5%BA%93%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8"><span class="nav-number">5.3.</span> <span class="nav-text">Re 库的基本使用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#re%E5%BA%93%E4%B8%BB%E8%A6%81%E5%8A%9F%E8%83%BD%E5%87%BD%E6%95%B0"><span class="nav-number">5.3.1.</span> <span class="nav-text">Re 库主要功能函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#search%E6%96%B9%E6%B3%95"><span class="nav-number">5.3.2.</span> <span class="nav-text">search 方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#match%E5%AF%B9%E8%B1%A1"><span class="nav-number">5.3.3.</span> <span class="nav-text">Match 对象</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B1%9E%E6%80%A7"><span class="nav-number">5.3.3.1.</span> <span class="nav-text">属性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%96%B9%E6%B3%95"><span class="nav-number">5.3.3.2.</span> <span class="nav-text">方法</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#pattern%E5%AF%B9%E8%B1%A1"><span class="nav-number">5.3.4.</span> <span class="nav-text">Pattern 对象</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#sqlite%E5%BA%93"><span class="nav-number">6.</span> <span class="nav-text">SQLite 库</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#sqlite%E7%AE%80%E4%BB%8B"><span class="nav-number">6.1.</span> <span class="nav-text">SQLite 简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="nav-number">6.2.</span> <span class="nav-text">创建数据库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E6%B8%B8%E6%A0%87%E5%AF%B9%E8%B1%A1"><span class="nav-number">6.3.</span> <span class="nav-text">创建游标对象</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E6%95%B0%E6%8D%AE%E5%BA%93%E8%A1%A8"><span class="nav-number">6.4.</span> <span class="nav-text">创建数据库表</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#insert%E6%93%8D%E4%BD%9C"><span class="nav-number">6.5.</span> <span class="nav-text">INSERT 操作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#update%E6%93%8D%E4%BD%9C"><span class="nav-number">6.6.</span> <span class="nav-text">UPDATE 操作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#select%E6%93%8D%E4%BD%9C"><span class="nav-number">6.7.</span> <span class="nav-text">SELECT 操作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#delete%E6%93%8D%E4%BD%9C"><span class="nav-number">6.8.</span> <span class="nav-text">DELETE 操作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B3%E9%97%AD%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="nav-number">6.9.</span> <span class="nav-text">关闭数据库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B0%86%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E5%AF%BC%E5%87%BA%E4%B8%BAcsv%E6%96%87%E4%BB%B6"><span class="nav-number">6.10.</span> <span class="nav-text">将数据库中的数据导出为 csv 文件：</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-overview">
+            <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="LIU, XIMING"
+      src="/assets/avatar/yuntianhe.jpg">
+  <p class="site-author-name" itemprop="name">LIU, XIMING</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">18</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/lxmymjr?tab=repositories" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;lxmymjr?tab&#x3D;repositories" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:xmliu.2015@smu.edu.sg" title="E-Mail → mailto:xmliu.2015@smu.edu.sg" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://sites.google.com/view/xmliu-smu/home" title="https:&#x2F;&#x2F;sites.google.com&#x2F;view&#x2F;xmliu-smu&#x2F;home" rel="noopener" target="_blank">Personal Homepage</a>
+        </li>
+    </ul>
+  </div>
+
+          </div>
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://lxmymjr.github.io/contents/Python%E7%88%AC%E8%99%AB.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/assets/avatar/yuntianhe.jpg">
+      <meta itemprop="name" content="LIU, XIMING">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xmliu's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Python 爬虫<a href="https://github.com/lxmymjr/Blog/blob/master/source/_posts/Python%E7%88%AC%E8%99%AB.md" class="post-edit-link" title="Edit this post" rel="noopener" target="_blank"><i class="fa fa-pen-nib"></i></a>
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2017-09-10 22:13:01" itemprop="dateCreated datePublished" datetime="2017-09-10T22:13:01+08:00">2017-09-10</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2021-09-16 10:56:10" itemprop="dateModified" datetime="2021-09-16T10:56:10+08:00">2021-09-16</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Python/" itemprop="url" rel="index"><span itemprop="name">Python</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="Symbols count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Symbols count in article: </span>
+      <span>11k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>20 mins.</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>网络爬虫是一种按照一定的规则，自动地抓取万维网信息的程序或者脚本。<br>
+本文介绍基本的网络爬虫的方法，并给出一个具体实例。<br>
+Reference：<a target="_blank" rel="noopener" href="http://www.icourse163.org/course/BIT-1001870001">公开课</a><br>
+<span id="more"></span></p>
+<h1 id="爬虫许可">爬虫许可</h1>
+<p>大部分网站都会在其网站根网址上发布 robots 协议<br>
+如豆瓣网：https://www.douban.com/robots.txt<br>
+</p><figure class="highlight yaml"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">User-agent:</span> <span class="string">*</span></span><br><span class="line"><span class="attr">Disallow:</span> <span class="string">/subject_search</span></span><br><span class="line"><span class="attr">Disallow:</span> <span class="string">/amazon_search</span></span><br><span class="line"><span class="attr">Disallow:</span> <span class="string">/search</span></span><br><span class="line"><span class="attr">Disallow:</span> <span class="string">/group/search</span></span><br><span class="line"><span class="attr">Disallow:</span> <span class="string">/event/search</span></span><br><span class="line"><span class="attr">Disallow:</span> <span class="string">/celebrities/search</span></span><br><span class="line"><span class="attr">Disallow:</span> <span class="string">/location/drama/search</span></span><br><span class="line"><span class="attr">Disallow:</span> <span class="string">/forum/</span></span><br><span class="line"><span class="attr">Disallow:</span> <span class="string">/new_subject</span></span><br><span class="line"><span class="attr">Disallow:</span> <span class="string">/service/iframe</span></span><br><span class="line"><span class="attr">Disallow:</span> <span class="string">/j/</span></span><br><span class="line"><span class="attr">Disallow:</span> <span class="string">/link2/</span></span><br><span class="line"><span class="attr">Disallow:</span> <span class="string">/recommend/</span></span><br><span class="line"><span class="attr">Disallow:</span> <span class="string">/trailer/</span></span><br><span class="line"><span class="attr">Disallow:</span> <span class="string">/doubanapp/card</span></span><br><span class="line"><span class="attr">Sitemap:</span> <span class="string">https://www.douban.com/sitemap_index.xml</span></span><br><span class="line"><span class="attr">Sitemap:</span> <span class="string">https://www.douban.com/sitemap_updated_index.xml</span></span><br><span class="line"><span class="comment"># Crawl-delay: 5</span></span><br><span class="line"></span><br><span class="line"><span class="attr">User-agent:</span> <span class="string">Wandoujia</span> <span class="string">Spider</span></span><br><span class="line"><span class="attr">Disallow:</span> <span class="string">/</span></span><br></pre></td></tr></tbody></table></figure><p></p>
+<h1 id="requests库">Requests 库</h1>
+<p>Reference：<a target="_blank" rel="noopener" href="http://www.jianshu.com/p/c6376d6c753c">Python 网络爬虫与信息提取 (一)：网络爬虫之规则</a><br>
+安装：<code>pip install requests</code>。</p>
+<h2 id="requests库的主要方法">Requests 库的主要方法</h2>
+<table>
+<colgroup>
+<col style="width: 16%">
+<col style="width: 83%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>方法</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>requests.request()</code></td>
+<td>构造一个请求，支撑以下各方法的基础方法</td>
+</tr>
+<tr class="even">
+<td><code>requests.get()</code></td>
+<td>获取 HTML 网页的主要方法，对应于 HTTP 的 GET，请求获取 url 位置的资源</td>
+</tr>
+<tr class="odd">
+<td><code>requests.head()</code></td>
+<td>获取 HTML 网页头信息的方法，对应于 HTTP 的 HEAD，请求获取 url 位置资源的响应消息报告，获得该资源的头部信息</td>
+</tr>
+<tr class="even">
+<td><code>requests.post()</code></td>
+<td>向 HTML 网页提交 post 请求的方法，对应于 HTTP 的 POST，请求向 url 位置的资源后附加新的数据</td>
+</tr>
+<tr class="odd">
+<td><code>requests.put()</code></td>
+<td>向 HTML 网页提交 put 请求的方法，对应于 HTTP 的 PUT，请求向 url 位置存储一个资源，覆盖原 url 位置的资源</td>
+</tr>
+<tr class="even">
+<td><code>requests.patch()</code></td>
+<td>向 HTML 网页提交局部修改请求的方法，对应于 HTTP 的 PATCH，请求局部更新 url 位置的资源，即改变该处资源的部分内容</td>
+</tr>
+<tr class="odd">
+<td><code>requests.delete()</code></td>
+<td>向 HTML 网页提交删除请求的方法，对应于 HTTP 的 DELETE，请求删除 url 位置存储的资源</td>
+</tr>
+</tbody>
+</table>
+<h2 id="get方法">get 方法</h2>
+<p>在爬虫中主要使用 get 方法，其他方法参数与 get 方法类似。<br>
+<code>r = requests.get(url)</code>: 右边构造一个向服务器请求资源的 Requests 对象，左边返回一个包含服务器资源的 Response 对象给 r。<br>
+完整参数:<code>requests.get(url,params=None,**kwargs)</code>, 实则由 request 方法封装。<br>
+Resonse 对象的五个属性：</p>
+<table>
+<thead>
+<tr class="header">
+<th>属性</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td> r.status_code</td>
+<td>HTTP 请求的返回状态，200 表示连接成功，404 表示失败</td>
+</tr>
+<tr class="even">
+<td> r.text</td>
+<td>HTTP 响应内容的字符串形式，即 url 对应的页面内容</td>
+</tr>
+<tr class="odd">
+<td> r.encoding</td>
+<td>HTTP header 中猜测的响应内容编码方式</td>
+</tr>
+<tr class="even">
+<td> r.apparent_encoding</td>
+<td> 从内容中分析出的响应内容编码方式（备选编码方式）</td>
+</tr>
+<tr class="odd">
+<td>r.content</td>
+<td>HTTP 响应内容的二进制形式</td>
+</tr>
+</tbody>
+</table>
+<h2 id="异常处理">异常处理</h2>
+<table>
+<thead>
+<tr class="header">
+<th>异常</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td> requests.ConnectionError</td>
+<td> 网络连接错误异常，如 DNS 查询失败、拒绝连接等</td>
+</tr>
+<tr class="even">
+<td> requests.HTTPError</td>
+<td>HTTP 错误异常</td>
+</tr>
+<tr class="odd">
+<td> requests.URLRequired</td>
+<td>url 缺失异常</td>
+</tr>
+<tr class="even">
+<td> requests.TooManyRedirects</td>
+<td> 超过最大重定向次数，产生重定向异常</td>
+</tr>
+<tr class="odd">
+<td> requests.ConnectTimeout</td>
+<td> 连接远程服务器超时异常</td>
+</tr>
+<tr class="even">
+<td> requests.Timeout</td>
+<td> 请求 url 超时，产生超时异常</td>
+</tr>
+</tbody>
+</table>
+<p>使用 r.raise_for_status () 方法构建通用代码框架：<br>
+</p><figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">getHTMLText</span>(<span class="params">url</span>)</span></span><br><span class="line"><span class="function">	<span class="title">try</span>:</span></span><br><span class="line">		r = requests.get(url,timeout = <span class="number">30</span>)</span><br><span class="line">		r.raise_for_status()</span><br><span class="line">		r.encoding = r.apparent_encoding</span><br><span class="line">		<span class="keyword">return</span> r.text</span><br><span class="line">	<span class="keyword">except</span>:</span><br><span class="line">		<span class="keyword">return</span> <span class="string">"Error"</span></span><br></pre></td></tr></tbody></table></figure><p></p>
+<h2 id="requests库主要方法">Requests 库主要方法</h2>
+<p><code>requests.request(method,url,**kwargs)</code><br>
+- method (请求方式) 包括：GET/HEAD/POST/PUT/PATCH/DELETE/OPTIONS。<br>
+- **kwargs (控制访问参数) 包括:params (添加键值到 url 后)/data (字典 / 字节序列等作为 Request 的内容)/json/headers (HTTP 定制头)/cookies (Request 中的 cookie)/auth (元祖，支持 HTTP 认证)/files (传输文件)/timeout/proxies (设定访问代理服务器)/allow_redirects (重定向开关)/stream (获取内容立即下载开关)/verify (认证 SSL 证书开关)/cert (本地 SSL 证书路径)。</p>
+<h1 id="beautiful-soup库">Beautiful Soup 库</h1>
+<p>Beautiful Soup 库可对 HTML/XML 格式进行解析并提取相关信息。<br>
+Beautiful Soup 库是解析 / 遍历 / 维护 "标签" 的功能库，引用方式：<code>from bs4 import BeautifulSoup</code>。<br>
+Reference：<a target="_blank" rel="noopener" href="http://www.jianshu.com/p/7b950b8a5966">Python 网络爬虫与信息提取 (二)：网络爬虫之提取</a><br>
+安装：<code>pip install beautifulsoup4</code>。</p>
+<h2 id="beautiful-soup库的解析器">Beautiful Soup 库的解析器</h2>
+<table>
+<thead>
+<tr class="header">
+<th>解析器</th>
+<th>使用方法</th>
+<th>条件</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td> HTML 解析器</td>
+<td><code>BeautifulSoup(mk,'html.parser')</code></td>
+<td>安装 bs4 库</td>
+</tr>
+<tr class="even">
+<td> lxml 的 HTML 解析器</td>
+<td><code>BeautifulSoup(mk,'lxml')</code></td>
+<td><code>pip install lxml</code></td>
+</tr>
+<tr class="odd">
+<td>lxml 的 XML 解析器</td>
+<td><code>BeautifulSoup(mk,'xml')</code></td>
+<td><code>pip install lxml</code></td>
+</tr>
+<tr class="even">
+<td>html5lib 的解析器</td>
+<td><code>BeautifulSoup(mk,'html5lib')</code></td>
+<td><code>pip install html5lib</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="beautiful-soup类的基本元素">Beautiful Soup 类的基本元素</h2>
+<table>
+<thead>
+<tr class="header">
+<th>基本元素</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td> Tag</td>
+<td> 标签，最基本的信息组织单元，分别用 <code>&lt;&gt;</code> 和 <code>&lt;/&gt;</code> 标明开头和结尾</td>
+</tr>
+<tr class="even">
+<td> Name</td>
+<td> 标签的名字，<code>&lt;p&gt;...&lt;/p&gt;</code> 的名字是 'p'，格式：<code>&lt;tag&gt;.name</code></td>
+</tr>
+<tr class="odd">
+<td>Attributes</td>
+<td> 标签的属性，字典形式组织，格式：<code>&lt;tag&gt;.attrs</code> 或者 <code>&lt;tag&gt;['attrs']</code></td>
+</tr>
+<tr class="even">
+<td>NavigableString</td>
+<td> 标签内非属性字符串，<code>&lt;&gt;...&lt;/&gt;</code> 中的字符串，格式：<code>&lt;tag&gt;.string</code></td>
+</tr>
+<tr class="odd">
+<td>Comment</td>
+<td> 标签内字符串的注释部分，一种特殊的 Comment 类型</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>任何存在于 HTML 语法中的标签都可用 <code>soup.&lt;tag&gt;</code> 访问获得，存在多个取第一个。</li>
+<li>每个 <code>&lt;tag&gt;</code> 有自己的名字，通过 <code>&lt;tag&gt;.name</code> 获取，字符串类型。</li>
+<li>每个 <code>&lt;tag&gt;</code> 有 0 或多个属性，字典类型。</li>
+<li>每个 <code>&lt;tag&gt;</code> 内有字符串，可以跨越多个标签层次，如果字符串不是注释，则 NavigableString 类型。</li>
+<li>如果 <code>&lt;tag&gt;</code> 内的字符串是注释，则返回 Comment 类型。</li>
+</ul>
+<h2 id="html内容遍历方法">HTML 内容遍历方法</h2>
+<img src="/images/Python%E7%88%AC%E8%99%AB/HTML.png" class="" width="600" height="400">
+<table>
+<thead>
+<tr class="header">
+<th>属性</th>
+<th>说明</th>
+<th>遍历方式</th>
+</tr>
+</thead>
+<tbody>
+</tbody>
+</table>
+.contents |子节点的列表，将 <code>&lt;tag&gt;</code> 所有儿子节点存入列表
+
+下行遍历
+
+.children |子节点的迭代类型，与.contents类似，用于循环遍历儿子节点<br>
+.descendants |子孙节点的迭代类型，用于循环遍历子孙节点<br>
+.parent |节点的父标签
+
+上行遍历
+
+.parents |节点先辈标签的迭代类型，用于循环遍历先辈节点<br>
+.next_sibling |返回按照HTML文本顺序的下一个平行节点标签
+
+平行遍历
+
+<p>.previous_sibling | 返回按照 HTML 文本顺序的上一个平行节点标签<br>
+.next_siblings | 迭代类型，返回按照 HTML 文本顺序的后续所有平行节点标签<br>
+.previous_siblings | 迭代类型，返回按照 HTML 文本顺序的前续所有平行节点标签</p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> child <span class="keyword">in</span> soup.body.children:</span><br><span class="line">	<span class="built_in">print</span>(child) <span class="comment">#遍历儿子节点</span></span><br><span class="line"><span class="keyword">for</span> descendant <span class="keyword">in</span> soup.body.descendants:</span><br><span class="line">	<span class="built_in">print</span>(descendant) <span class="comment">#遍历子孙节点</span></span><br><span class="line"><span class="keyword">for</span> parent <span class="keyword">in</span> soup.body.parents:</span><br><span class="line">	<span class="keyword">if</span> parent <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">		<span class="built_in">print</span>(parent)</span><br><span class="line">	<span class="keyword">else</span>:</span><br><span class="line">		<span class="built_in">print</span>(parent.name)</span><br><span class="line"><span class="keyword">for</span> sibling <span class="keyword">in</span> soup.a.next_siblings:</span><br><span class="line">	<span class="built_in">print</span>(sibling)</span><br><span class="line"><span class="keyword">for</span> sibling <span class="keyword">in</span> soup.a.previous_siblings:</span><br><span class="line">	<span class="built_in">print</span>(sibling)</span><br></pre></td></tr></tbody></table></figure>
+<h2 id="html格式输出">HTML 格式输出</h2>
+<p>使用 <code>prettify()</code> 方法，为 HTML 文本 &lt;&gt; 及其内容增加 '' 并且可用于标签 / 方法。</p>
+<h2 id="html内容查找方法">HTML 内容查找方法</h2>
+<p><code>&lt;&gt;.find_all(name,attrs,recursive,text='',**kwargs)</code><br>
+返回一个列表类型，存储查找的结果<br>
+name: 对标签名称的检索字符串<br>
+attrs: 对标签属性值的检索字符串，可标注属性检索，如果 attrs 是 class，则替换为 class_。<br>
+recursive: 是否对子孙全部搜索，默认 True<br>
+text='': 对字符串域进行检索，其中可以用 re.compile () 来进行正则表达式检索<br>
+由<code>.find_all()</code> 扩展的七个方法:</p>
+<table>
+<thead>
+<tr class="header">
+<th>方法</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>&lt;&gt;.find()</code></td>
+<td>搜索且只返回一个结果，同<code>.find_a11()</code> 参数</td>
+</tr>
+<tr class="even">
+<td><code>&lt;&gt;.find_parents()</code></td>
+<td>在先辈节点中搜索，返回列表类型，同<code>.find_all()</code> 参数</td>
+</tr>
+<tr class="odd">
+<td><code>&lt;&gt;.find_parent()</code></td>
+<td>在先辈节点中返回一个结果，同<code>.find()</code> 参数</td>
+</tr>
+<tr class="even">
+<td><code>&lt;&gt;.find_next_siblings()</code></td>
+<td>在后续平行节点中搜索，返回列表类型，同<code>.find_a11()</code> 参数</td>
+</tr>
+<tr class="odd">
+<td><code>&lt;&gt;.find_next_sibling()</code></td>
+<td>在后续平行节点中返回一个结果，同<code>.find()</code> 参数</td>
+</tr>
+<tr class="even">
+<td><code>&lt;&gt;.find_previous_siblings()</code></td>
+<td>在前续平行节点中搜索，返回列表类型，同<code>.find_a11()</code> 参数</td>
+</tr>
+<tr class="odd">
+<td><code>&lt;&gt;.find_previous_sibling()</code></td>
+<td>在前续平行节点中返回一个结果，同<code>.find()</code> 参数</td>
+</tr>
+</tbody>
+</table>
+<h1 id="信息组织与提取方法">信息组织与提取方法</h1>
+<p>信息标记的三种形式及比较：<br>
+XML (Extensible Markup Language) 是最早的通用信息标记语言，可扩展性好，但繁琐；标签由名字和属性构成，形式有：<br>
+</p><figure class="highlight xml"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">name</span>&gt;</span>...<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">name</span>/&gt;</span></span><br><span class="line"><span class="comment">&lt;!--   --&gt;</span></span><br></pre></td></tr></tbody></table></figure><br>
+JSON(JavaScript Objection Notation)适合程序处理，较XML简洁;有类型的键值对，形式有：<br>
+<figure class="highlight json"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">"key"</span>:<span class="string">"value"</span></span><br><span class="line"><span class="string">"key"</span>:[<span class="string">"value1"</span>,<span class="string">"value2"</span>]</span><br><span class="line"><span class="string">"key"</span>:{<span class="attr">"subkey"</span>:<span class="string">"subvalue"</span>}</span><br></pre></td></tr></tbody></table></figure><br>
+YAML(YAML Ain't Markup Language)文本信息比例最高，可读性好;无类型的键值对，形式有：<br>
+<figure class="highlight yaml"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">key:value</span></span><br><span class="line"><span class="string">key:#Comment</span></span><br><span class="line"><span class="string">-value1</span></span><br><span class="line"><span class="string">-value2</span></span><br><span class="line"><span class="attr">key:</span></span><br><span class="line">  <span class="string">subkey:subvalue</span></span><br></pre></td></tr></tbody></table></figure><p></p>
+<h1 id="re正则表达式库">Re (正则表达式) 库</h1>
+<p>regular expression = regex = RE<br>
+是一种通用的字符串表达框架，用来简洁表达一组字符串的表达式，也可用来判断某字符串的特征归属。<br>
+Reference：<a target="_blank" rel="noopener" href="http://www.jianshu.com/p/98d0139dacac">Python 网络爬虫与信息提取 (三)：网络爬虫之实战</a> ;<a target="_blank" rel="noopener" href="http://www.cnblogs.com/huxi/archive/2010/07/04/1771073.html">Python 正则表达式指南</a></p>
+<h2 id="正则表达式的语法">正则表达式的语法</h2>
+<h3 id="普通字符">普通字符</h3>
+<p>普通字符包括没有显式指定为元字符的所有可打印和不可打印字符。这包括所有大写和小写字母、所有数字、所有标点符号和一些其他符号。</p>
+<h3 id="非打印字符">非打印字符</h3>
+<p>非打印字符也可以是正则表达式的组成部分。下表列出了表示非打印字符的转义序列：</p>
+<table>
+<colgroup>
+<col style="width: 4%">
+<col style="width: 95%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>字符</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>\cx</code></td>
+<td>匹配由 x 指明的控制字符。例如，<code>\cM</code> 匹配一个 Control-M 或回车符。x 的值必须为 A-Z 或 a-z 之一。否则，将 c 视为一个原义的 'c' 字符。</td>
+</tr>
+<tr class="even">
+<td><code>\f</code></td>
+<td>匹配一个换页符。等价于 <code>\x0c</code> 和 <code>\cL</code>。</td>
+</tr>
+<tr class="odd">
+<td><code>\n</code></td>
+<td>匹配一个换行符。等价于 <code>\x0a</code> 和 <code>\cJ</code>。</td>
+</tr>
+<tr class="even">
+<td><code>\r</code></td>
+<td>匹配一个回车符。等价于 <code>\x0d</code> 和 <code>\cM</code>。</td>
+</tr>
+<tr class="odd">
+<td><code>\d</code></td>
+<td>匹配任何数字。等价于 <code>[0-9]</code>。</td>
+</tr>
+<tr class="even">
+<td><code>\D</code></td>
+<td>匹配任何非数字。等价于 <code>[^\d]</code>。</td>
+</tr>
+<tr class="odd">
+<td><code>\w</code></td>
+<td>匹配任何单词字符。等价于 <code>[a-zA-Z0-9_]</code>。</td>
+</tr>
+<tr class="even">
+<td><code>\W</code></td>
+<td>匹配任何非单词字符。等价于 <code>[^\w]</code>。</td>
+</tr>
+<tr class="odd">
+<td><code>\s</code></td>
+<td>匹配任何空白字符，包括空格、制表符、换页符等等。等价于 <code>[\f\n\r\t\v]</code>。</td>
+</tr>
+<tr class="even">
+<td><code>\S</code></td>
+<td>匹配任何非空白字符。等价于 <code>[^\f\n\r\t\v]</code>。</td>
+</tr>
+<tr class="odd">
+<td><code>\t</code></td>
+<td>匹配一个制表符。等价于 <code>\x09</code> 和 <code>\cI</code>。</td>
+</tr>
+<tr class="even">
+<td><code>\v</code></td>
+<td>匹配一个垂直制表符。等价于 <code>\x0b</code> 和 <code>\cK</code>。</td>
+</tr>
+</tbody>
+</table>
+<h3 id="特殊字符">特殊字符</h3>
+<p>所谓特殊字符，就是一些有特殊含义的字符。<br>
+若要匹配这些特殊字符，必须首先使字符 "转义"，即，将反斜杠字符。下表列出了正则表达式中的特殊字符：</p>
+<table>
+<colgroup>
+<col style="width: 19%">
+<col style="width: 80%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>特别字符</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>^</code></td>
+<td>匹配输入字符串的开始位置，在多行模式中匹配每一行的结尾。<br>除非在方括号表达式中使用，此时它表示不接受该字符集合。</td>
+</tr>
+<tr class="even">
+<td><code>$</code></td>
+<td>匹配输入字符串的结尾位置，在多行模式中匹配每一行的结尾。</td>
+</tr>
+<tr class="odd">
+<td><code>(...)</code></td>
+<td>标记一个子表达式的开始和结束位置。子表达式可以获取供以后使用。从表达式左边开始每遇到一个分组，则编号 + 1。分组表达式作为一个整体可以后接数量词。表达式中的 <code>|</code> 仅在分组中有效。</td>
+</tr>
+<tr class="even">
+<td><code>(?P&lt;name&gt;...)</code></td>
+<td>分组，除了原有编号外再指定额外别名。</td>
+</tr>
+<tr class="odd">
+<td><code>\&lt;number&gt;</code><br><code>(&lt;?P=name)</code></td>
+<td>引用编号为 number 或者别名为 name 的分组。</td>
+</tr>
+<tr class="even">
+<td><code>[...]</code></td>
+<td>字符集，对应的位置可以是字符集中任意字符。 字符集中的字符可以逐个列出，也可以给出范围，如 <code>[abc]</code> 或 <code>[a-c]</code>。第一个字符如果是 ^ 则表示取反，如 [^abc] 表示不是 a 或 b 或 c 的其他字符。<br>所有的特殊字符在字符集中都失去其原有的特殊含义。在字符集中如果要使用<code>]</code> 或 <code>-</code> 或 <code>^</code>，可以在前面加上反斜杠，或者把<code>]</code> 或 <code>-</code> 放在第一位，把 <code>^</code> 放在非第一位。</td>
+</tr>
+<tr class="odd">
+<td><code>{n}</code></td>
+<td>n 是一个非负整数。匹配确定的 n 次。</td>
+</tr>
+<tr class="even">
+<td><code>{n,}</code></td>
+<td>n 是一个非负整数。至少匹配 n 次。<code>{1,}</code> 等价于 <code>+</code>。<code>{0,}</code> 则等价于 <code>*</code>。</td>
+</tr>
+<tr class="odd">
+<td><code>{n,m}</code></td>
+<td>m 和 n 均为非负整数，其中 n&lt;=m。最少匹配 n 次且最多匹配 m 次。<code>{0,1}</code> 等价于 <code>?</code>。<br>请注意在逗号和两个数之间不能有空格。</td>
+</tr>
+<tr class="even">
+<td><code>*</code></td>
+<td>匹配前面的子表达式零次或多次。</td>
+</tr>
+<tr class="odd">
+<td><code>+</code></td>
+<td>匹配前面的子表达式一次或多次。</td>
+</tr>
+<tr class="even">
+<td><code>.</code></td>
+<td>匹配除换行符 <code>\n</code> 之外的任何单字符。在 DOTALL 模式中也能匹配换行符。</td>
+</tr>
+<tr class="odd">
+<td><code>?</code></td>
+<td>匹配前面的子表达式零次或一次，或指明一个非贪婪限定符。</td>
+</tr>
+<tr class="even">
+<td><code>\</code></td>
+<td>将下一个字符标记为或特殊字符、或原义字符、或向后引用、或八进制转义符。</td>
+</tr>
+<tr class="odd">
+<td><code>|</code></td>
+<td>左右表达式任意一个。</td>
+</tr>
+</tbody>
+</table>
+<h3 id="经典实例">经典实例</h3>
+<table>
+<thead>
+<tr class="header">
+<th>正则表达式</th>
+<th>匹配字符串</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>^[A-Za-z]+$</code></td>
+<td>由 26 个字母组成的字符串</td>
+</tr>
+<tr class="even">
+<td><code>^[A-Za-z0-9]+$</code></td>
+<td>由 26 个字母和数字组成的字符串</td>
+</tr>
+<tr class="odd">
+<td><code>^-?\d+$</code></td>
+<td>整数形式的字符串</td>
+</tr>
+<tr class="even">
+<td><code>^[1-9][0-9]*$</code></td>
+<td>正整数形式的字符串</td>
+</tr>
+<tr class="odd">
+<td><code>[\u4e00-\u9fa5]</code></td>
+<td>匹配中文字符</td>
+</tr>
+</tbody>
+</table>
+<h2 id="正则表达式相关注解">正则表达式相关注解</h2>
+<ol type="1">
+<li>数量词的贪婪模式与非贪婪模式<br>
+正则表达式通常用于在文本中查找匹配的字符串。Python 里数量词默认是贪婪的（在少数语言里也可能是默认非贪婪），总是尝试匹配尽可能多的字符；非贪婪的则相反，总是尝试匹配尽可能少的字符。实际我们一般使用非贪婪模式来提取。</li>
+<li>反斜杠问题<br>
+与大多数编程语言相同，正则表达式里使用 <code>\</code> 作为转义字符，这就可能造成反斜杠困扰。假如你需要匹配文本中的字符 <code>\</code>，那么使用编程语言表示的正则表达式里将需要 4 个反斜杠 <code>\\\\</code>：前两个和后两个分别用于在编程语言里转义成反斜杠，转换成两个反斜杠后再在正则表达式里转义成一个反斜杠。<br>
+Python 里的原生字符串很好地解决了这个问题，这个例子中的正则表达式可以使用 <code>r'\\'</code> 表示。同样，匹配一个数字的 <code>\\d</code> 可以写成 <code>r'\d'</code>。使用原生字符串，就不用担心漏写了反斜杠，写出来的表达式也更直观。</li>
+</ol>
+<h2 id="re库的基本使用">Re 库的基本使用</h2>
+<p>正则表达式的表示类型为 raw string 类型 (原生字符串类型), 表示为 <code>r'text'</code>。</p>
+<h3 id="re库主要功能函数">Re 库主要功能函数</h3>
+<table>
+<thead>
+<tr class="header">
+<th>函数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td> re.search()</td>
+<td> 在一个字符串中搜索匹配正则表达式的第一个位置，返回 match 对象</td>
+</tr>
+<tr class="even">
+<td> re.match()</td>
+<td> 从一个字符串的开始位置起匹配正则表达式，返回 match 对象</td>
+</tr>
+<tr class="odd">
+<td> re.findall()</td>
+<td> 搜索字符串，以列表类型返回全部能匹配的子串</td>
+</tr>
+<tr class="even">
+<td> re.split()</td>
+<td> 将一个字符串按照正则表达式匹配结果进行分割，返回列表类型</td>
+</tr>
+<tr class="odd">
+<td> re.finditer()</td>
+<td> 搜索字符串，返回一个匹配结果的迭代类型，每个迭代元素是 match 对象</td>
+</tr>
+<tr class="even">
+<td> re.sub()</td>
+<td> 在一个字符串中替换所有匹配正则表达式的子串，返回替换后的字符串</td>
+</tr>
+</tbody>
+</table>
+<h3 id="search方法">search 方法</h3>
+<p><code>re.search(pattern, string, flags = 0)</code><br>
+参数 flag 是匹配模式，取值可以使用按位或运算符’|’表示同时生效。<br>
+其他方法的参数与 search 类似。sub 方法多一个参数 repl，<code>re.sub(pattern, repl, string, flags = 0)</code>。</p>
+<table>
+<thead>
+<tr class="header">
+<th>flag</th>
+<th> 说明</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td> re.I(IGNORECASE)</td>
+<td> 忽略大小写</td>
+</tr>
+<tr class="even">
+<td> re.M(MULTILINE)</td>
+<td> 多行模式，改变 '^' 和 '$' 的行为</td>
+</tr>
+<tr class="odd">
+<td> re.S(DOTALL)</td>
+<td> 点任意匹配模式，改变 '.' 的行为</td>
+</tr>
+<tr class="even">
+<td> re.L(LOCALE)</td>
+<td> 使预定字符类</td>
+</tr>
+<tr class="odd">
+<td> re.U(UNICODE)</td>
+<td> 使预定字符类</td>
+</tr>
+<tr class="even">
+<td> re.X(VERBOSE)</td>
+<td> 详细模式。这个模式下正则表达式可以是多行，忽略空白字符，并可以加入注释。</td>
+</tr>
+</tbody>
+</table>
+<h3 id="match对象">Match 对象</h3>
+<p>一次匹配的结果，包含了很多关于此次匹配的信息，可以使用 Match 提供的可读属性或方法来获取这些信息。</p>
+<h4 id="属性">属性</h4>
+<table>
+<thead>
+<tr class="header">
+<th>属性</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td> string</td>
+<td> 匹配时使用的文本。</td>
+</tr>
+<tr class="even">
+<td>re</td>
+<td> 匹配时使用的 Pattern 对象。</td>
+</tr>
+<tr class="odd">
+<td>pos</td>
+<td> 文本中正则表达式开始搜索的索引。值与 Pattern.match () 和 Pattern.seach () 方法的同名参数相同。</td>
+</tr>
+<tr class="even">
+<td>endpos</td>
+<td> 文本中正则表达式结束搜索的索引。值与 Pattern.match () 和 Pattern.seach () 方法的同名参数相同。</td>
+</tr>
+<tr class="odd">
+<td>lastindex</td>
+<td> 最后一个被捕获的分组在文本中的索引。如果没有被捕获的分组，将为 None。</td>
+</tr>
+<tr class="even">
+<td>lastgroup</td>
+<td> 最后一个被捕获的分组的别名。如果这个分组没有别名或者没有被捕获的分组，将为 None。</td>
+</tr>
+</tbody>
+</table>
+<h4 id="方法">方法</h4>
+<table>
+<colgroup>
+<col style="width: 19%">
+<col style="width: 80%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>方法</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>group([group1, …])</code></td>
+<td>获得一个或多个分组截获的字符串；指定多个参数时将以元组形式返回。可以使用编号也可以使用别名。<br>编号 0 代表整个匹配的子串，不填写参数时，返回 <code>group(0)</code>，没有截获字符串的组返回 None，截获了多次的组返回最后一次截获的子串。</td>
+</tr>
+<tr class="even">
+<td><code>groups([default])</code></td>
+<td>以元组形式返回全部分组截获的字符串。相当于调用 <code>group(1,2,…last)</code>。<br>default 表示没有截获字符串的组以这个值替代，默认为 None。</td>
+</tr>
+<tr class="odd">
+<td><code>groupdict([default])</code></td>
+<td>返回以有别名的组的别名为键、以该组截获的子串为值的字典，没有别名的组不包含在内。default 含义同上。</td>
+</tr>
+<tr class="even">
+<td><code>start([group])</code></td>
+<td>返回指定的组截获的子串在 string 中的起始索引（子串第一个字符的索引）。group 默认值为 0。</td>
+</tr>
+<tr class="odd">
+<td><code>end([group])</code></td>
+<td>返回指定的组截获的子串在 string 中的结束索引（子串最后一个字符的索引 + 1）。group 默认值为 0。</td>
+</tr>
+<tr class="even">
+<td><code>span([group])</code></td>
+<td>返回 <code>(start(group), end(group))</code>。</td>
+</tr>
+<tr class="odd">
+<td><code>expand(template)</code></td>
+<td>将匹配到的分组代入 template 中然后返回。template 中可以使用 <code>\id</code> 或 <code>\g&lt;id&gt;</code> 或 <code>\g&lt;name&gt;</code> 引用分组，但不能使用编号 0。<code>\id</code> 与 <code>\g&lt;id&gt;</code> 是等价的，但 <code>\10</code> 将被认为是第 10 个分组，如果你想表达 <code>\1</code> 之后是字符<code>'0'</code>，只能使用 <code>\g&lt;1&gt;0</code>。</td>
+</tr>
+</tbody>
+</table>
+<h3 id="pattern对象">Pattern 对象</h3>
+<p>Pattern 对象是一个编译好的正则表达式，通过 Pattern 提供的一系列方法可以对文本进行匹配查找。<br>
+Pattern 不能直接实例化，必须使用 re.compile () 进行构造。<br>
+Pattern 提供了几个可读属性用于获取表达式的相关信息：</p>
+<table>
+<thead>
+<tr class="header">
+<th>属性</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td> pattern</td>
+<td> 编译时用的表达式字符串。</td>
+</tr>
+<tr class="even">
+<td>flags</td>
+<td> 编译时用的匹配模式。数字形式。</td>
+</tr>
+<tr class="odd">
+<td>groups</td>
+<td> 表达式中分组的数量。</td>
+</tr>
+<tr class="even">
+<td>groupindex</td>
+<td> 以表达式中有别名的组的别名为键、以该组对应的编号为值的字典，没有别名的组不包含在内。</td>
+</tr>
+</tbody>
+</table>
+<p>所以 <code>re.xxx(pattern, string, flags = 0)</code> 可以写做 <code>pattern.xxx(string, flag)</code>。</p>
+<h1 id="sqlite库">SQLite 库</h1>
+<h2 id="sqlite简介">SQLite 简介</h2>
+<ul>
+<li>轻量级</li>
+<li>速度快</li>
+<li>无需部署</li>
+<li>没有服务器</li>
+<li>很少或不需要进行管理</li>
+<li>由于 SQLite 数据库的驱动已经在 Python 里面了，可以直接使用 <code>import sqlite3</code></li>
+</ul>
+<h2 id="创建数据库">创建数据库</h2>
+<p><code>conn = sqlite3.connect("数据库名称.db")</code><br>
+如果数据库不存在，那么它就会被创建，最后将返回一个数据库对象。</p>
+<h2 id="创建游标对象">创建游标对象</h2>
+<p><code>cur = conn.cursor()</code></p>
+<h2 id="创建数据库表">创建数据库表</h2>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span>:</span><br><span class="line">	cursor.execute(<span class="string">'CREATE TABLE 表名称 (键1 键类型 PRIMARY KEY, 键2 键类型, 键3 键类型, ...)'</span>)</span><br><span class="line">	<span class="built_in">print</span>(<span class="string">"Table created successfully"</span>)</span><br><span class="line"><span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">	<span class="built_in">print</span>(e)</span><br></pre></td></tr></tbody></table></figure>
+<p>这里 ' 键 i' 为键的名称，其中键 1 为主键，键类型有 TEXT（文本字符串，使用数据库编码 UTF-8、UTF-16BE 或 UTF-16LE 存储），REAL（浮点值，存储为 8 字节的 IEEE 浮点数字），INT（带符号的整数，根据值的大小存储在 1、2、3、4、6 或 8 字节中），NULL（空值）。</p>
+<h2 id="insert操作">INSERT 操作</h2>
+<p>单个插入<br>
+</p><figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span>:</span><br><span class="line">	cursor.execute(<span class="string">'INSERT INTO 表名称 (键1, 键2, 键3, ...) VALUES (值1, 值2, 值3, ...)'</span>)</span><br><span class="line">	<span class="built_in">print</span>(<span class="string">'data insert successfully'</span>)</span><br><span class="line"><span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">	<span class="built_in">print</span>(e)</span><br></pre></td></tr></tbody></table></figure><br>
+批量插入<br>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span>:</span><br><span class="line">	data = [(<span class="string">"值11"</span>, <span class="string">"值12"</span>, <span class="string">"值13"</span>, ...), (<span class="string">"值21"</span>, <span class="string">"值22"</span>, <span class="string">"值23"</span>, ...), (<span class="string">"值31"</span>, <span class="string">"值32"</span>, <span class="string">"值33"</span>, ...)]</span><br><span class="line">	cursor.execute(<span class="string">'INSERT INTO 表名称 (?, ?, ?, ...)'</span>, data)</span><br><span class="line">	<span class="built_in">print</span>(<span class="string">'data insert successfully'</span>)</span><br><span class="line"><span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">	<span class="built_in">print</span>(e)</span><br></pre></td></tr></tbody></table></figure><p></p>
+<h2 id="update操作">UPDATE 操作</h2>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span>:</span><br><span class="line">	cursor.execute(<span class="string">'UPDATE 表名称 SET 键1 = 值1, 键2 = 值2, 键3 = 值3, ... WHERE 键1 = 值1, 键2 = 值2, 键3 = 值3, ...'</span>)</span><br><span class="line">	<span class="built_in">print</span>(<span class="string">'data update successfully'</span>)</span><br><span class="line"><span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">	<span class="built_in">print</span>(e)</span><br></pre></td></tr></tbody></table></figure>
+<h2 id="select操作">SELECT 操作</h2>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span>:</span><br><span class="line">	cursor.execute(<span class="string">'SELECT 键1, 键2, 键3, ... FROM 表名称 WHERE 键1 = 值1, 键2 = 值2, 键3 = 值3, ...'</span>)</span><br><span class="line">	<span class="keyword">for</span> row <span class="keyword">in</span> cursor:</span><br><span class="line">		<span class="built_in">print</span>(row)</span><br><span class="line"><span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">	<span class="built_in">print</span>(e)</span><br></pre></td></tr></tbody></table></figure>
+<h2 id="delete操作">DELETE 操作</h2>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span>:</span><br><span class="line">	c.execute(<span class="string">"DELETE FROM 表名称 WHERE 键1 = 值1, 键2 = 值2, 键3 = 值3, ..."</span>)</span><br><span class="line">	<span class="keyword">for</span> row <span class="keyword">in</span> cursor:</span><br><span class="line">		<span class="built_in">print</span>(row)</span><br><span class="line"><span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">	<span class="built_in">print</span>(e)</span><br></pre></td></tr></tbody></table></figure>
+<h2 id="关闭数据库">关闭数据库</h2>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cursor.close() <span class="comment"># 关闭Cursor</span></span><br><span class="line">conn.commit() <span class="comment"># 提交事务</span></span><br><span class="line">conn.close() <span class="comment"># 关闭Connection</span></span><br></pre></td></tr></tbody></table></figure>
+<h2 id="将数据库中的数据导出为csv文件">将数据库中的数据导出为 csv 文件：</h2>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">conn = sqlite3.connect(<span class="string">'文件名.db'</span>)</span><br><span class="line">cursor = conn.cursor()</span><br><span class="line">cursor.execute(<span class="string">"SELECT name FROM sqlite_master WHERE type = 'table'"</span>)</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> cursor.fetchall():</span><br><span class="line">    tablename = i[<span class="number">0</span>]</span><br><span class="line">    cursor.execute(<span class="string">"SELECT * FROM '{}'"</span>.<span class="built_in">format</span>(tablename))</span><br><span class="line">    <span class="keyword">with</span> <span class="built_in">open</span>(tablename + <span class="string">'.csv'</span>, <span class="string">'w'</span>, newline=<span class="string">''</span>, encoding=<span class="string">'utf_8_sig'</span>) <span class="keyword">as</span> csv_file: </span><br><span class="line">        csv_writer = csv.writer(csv_file)</span><br><span class="line">        csv_writer.writerow([j[<span class="number">0</span>] <span class="keyword">for</span> j <span class="keyword">in</span> cursor.description])</span><br><span class="line">        csv_writer.writerows(cursor)</span><br></pre></td></tr></tbody></table></figure>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Tutorial/" rel="tag"># Tutorial</a>
+              <a href="/tags/Python/" rel="tag"># Python</a>
+              <a href="/tags/Crawler/" rel="tag"># Crawler</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/contents/Backpropagation.html" rel="prev" title="Backpropagation">
+                  <i class="fa fa-chevron-left"></i> Backpropagation
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/contents/Python-NumPy%E5%BA%93%E5%9F%BA%E7%A1%80.html" rel="next" title="Python NumPy 库基础">
+                  Python NumPy 库基础 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">LIU, XIMING</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="Symbols count total">192k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="Reading time total">5:49</span>
+  </span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="/js/third-party/search/local-search.js"></script>
+
+  <script class="next-config" data-name="pdf" type="application/json">{"object_url":{"url":"https://cdn.jsdelivr.net/npm/pdfobject@2.2.6/pdfobject.min.js","integrity":"sha256-77geM50MfxCD17eqyJR+Dag1svjJOLN+BJ2F/DMqMEY="},"url":"/lib/pdf/web/viewer.html"}</script>
+  <script src="/js/third-party/tags/pdf.js"></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdn.jsdelivr.net/npm/mathjax@3.2.0/es5/tex-mml-chtml.js","integrity":"sha256-r+3itOMtGGjap0x+10hu6jW/gZCzxHsoKrOd7gyRSGY="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+
+
+</body>
+</html>

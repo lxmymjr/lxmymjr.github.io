@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon.ico">
+  <link rel="mask-icon" href="/favicon.ico" color="#222">
+  <meta name="google-site-verification" content="yHqnmkvA-12pculpP0D-q6lLqYStfJAnZCn5OLVFDfQ">
+  <meta name="baidu-site-verification" content="VLW4ITHnBoryM4WZ">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css" integrity="sha256-mUZM63G8m73Mcidfrv5E+Y61y7a12O5mW4ezU3bxqW4=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"lxmymjr.github.io","root":"/","images":"/images","scheme":"Gemini","version":"8.7.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":false,"async":true,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":-1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+<meta name="description" content="PySpark 和 Pandas 中都有 DataFrame 这个数据结构，但是他们的使用方法大有不同。 Reference：pyspark 系列 --pandas 与 pyspark 对比 ;Pandas 和 PySpark 中的 DataFrame 比较 ;PySpark API;Pandas API">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PySpark 的 DataFrame 与 Pandas 的 DataFrame 的比较">
+<meta property="og:url" content="https://lxmymjr.github.io/contents/PySpark%E7%9A%84DataFrame%E4%B8%8EPandas%E7%9A%84DataFrame%E7%9A%84%E6%AF%94%E8%BE%83.html">
+<meta property="og:site_name" content="xmliu&#39;s blog">
+<meta property="og:description" content="PySpark 和 Pandas 中都有 DataFrame 这个数据结构，但是他们的使用方法大有不同。 Reference：pyspark 系列 --pandas 与 pyspark 对比 ;Pandas 和 PySpark 中的 DataFrame 比较 ;PySpark API;Pandas API">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-10-29T09:59:28.000Z">
+<meta property="article:modified_time" content="2021-09-16T02:56:10.894Z">
+<meta property="article:author" content="LIU, XIMING">
+<meta property="article:tag" content="Tutorial">
+<meta property="article:tag" content="Python">
+<meta property="article:tag" content="Data Analysis">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://lxmymjr.github.io/contents/PySpark%E7%9A%84DataFrame%E4%B8%8EPandas%E7%9A%84DataFrame%E7%9A%84%E6%AF%94%E8%BE%83.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://lxmymjr.github.io/contents/PySpark%E7%9A%84DataFrame%E4%B8%8EPandas%E7%9A%84DataFrame%E7%9A%84%E6%AF%94%E8%BE%83.html","path":"contents/PySpark的DataFrame与Pandas的DataFrame的比较.html","title":"PySpark 的 DataFrame 与 Pandas 的 DataFrame 的比较"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>PySpark 的 DataFrame 与 Pandas 的 DataFrame 的比较 | xmliu's blog</title>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">xmliu's blog</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%B7%A5%E4%BD%9C%E6%96%B9%E5%BC%8F"><span class="nav-number">1.</span> <span class="nav-text">工作方式</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BB%B6%E8%BF%9F%E6%9C%BA%E5%88%B6"><span class="nav-number">2.</span> <span class="nav-text">延迟机制</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%86%85%E5%AD%98%E7%BC%93%E5%AD%98"><span class="nav-number">3.</span> <span class="nav-text">内存缓存</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#dataframe%E5%8F%AF%E5%8F%98%E6%80%A7"><span class="nav-number">4.</span> <span class="nav-text">DataFrame 可变性</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA"><span class="nav-number">5.</span> <span class="nav-text">创建</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#index%E7%B4%A2%E5%BC%95"><span class="nav-number">6.</span> <span class="nav-text">index 索引</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%A1%8C%E7%BB%93%E6%9E%84"><span class="nav-number">7.</span> <span class="nav-text">行结构</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%88%97%E7%BB%93%E6%9E%84"><span class="nav-number">8.</span> <span class="nav-text">列结构</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%88%97%E5%90%8D%E7%A7%B0"><span class="nav-number">9.</span> <span class="nav-text">列名称</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%88%97%E4%BF%AE%E6%94%B9"><span class="nav-number">10.</span> <span class="nav-text">列修改</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%98%BE%E7%A4%BA"><span class="nav-number">11.</span> <span class="nav-text">显示</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8E%92%E5%BA%8F"><span class="nav-number">12.</span> <span class="nav-text">排序</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%80%89%E6%8B%A9%E6%88%96%E5%88%87%E7%89%87"><span class="nav-number">13.</span> <span class="nav-text">选择或切片</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%BF%87%E6%BB%A4"><span class="nav-number">14.</span> <span class="nav-text">过滤</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%88%86%E7%BB%84%E8%81%9A%E5%90%88"><span class="nav-number">15.</span> <span class="nav-text">分组聚合</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BB%9F%E8%AE%A1"><span class="nav-number">16.</span> <span class="nav-text">统计</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%90%88%E5%B9%B6"><span class="nav-number">17.</span> <span class="nav-text">合并</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%88%A0%E9%99%A4"><span class="nav-number">18.</span> <span class="nav-text">删除</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9B%B4%E6%94%B9%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B"><span class="nav-number">19.</span> <span class="nav-text">更改数据类型</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%A4%B1%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86"><span class="nav-number">20.</span> <span class="nav-text">失数据处理</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#sql%E8%AF%AD%E5%8F%A5"><span class="nav-number">21.</span> <span class="nav-text">SQL 语句</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%A4%E8%80%85%E4%BA%92%E7%9B%B8%E8%BD%AC%E6%8D%A2"><span class="nav-number">22.</span> <span class="nav-text">两者互相转换</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8"><span class="nav-number">23.</span> <span class="nav-text">函数应用</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#map-reduce%E6%93%8D%E4%BD%9C"><span class="nav-number">24.</span> <span class="nav-text">map-reduce 操作</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#diff%E6%93%8D%E4%BD%9C"><span class="nav-number">25.</span> <span class="nav-text">diff 操作</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#most-common%E8%AE%A1%E6%95%B0"><span class="nav-number">26.</span> <span class="nav-text">Most Common 计数</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-overview">
+            <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="LIU, XIMING"
+      src="/assets/avatar/yuntianhe.jpg">
+  <p class="site-author-name" itemprop="name">LIU, XIMING</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">18</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/lxmymjr?tab=repositories" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;lxmymjr?tab&#x3D;repositories" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:xmliu.2015@smu.edu.sg" title="E-Mail → mailto:xmliu.2015@smu.edu.sg" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://sites.google.com/view/xmliu-smu/home" title="https:&#x2F;&#x2F;sites.google.com&#x2F;view&#x2F;xmliu-smu&#x2F;home" rel="noopener" target="_blank">Personal Homepage</a>
+        </li>
+    </ul>
+  </div>
+
+          </div>
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://lxmymjr.github.io/contents/PySpark%E7%9A%84DataFrame%E4%B8%8EPandas%E7%9A%84DataFrame%E7%9A%84%E6%AF%94%E8%BE%83.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/assets/avatar/yuntianhe.jpg">
+      <meta itemprop="name" content="LIU, XIMING">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xmliu's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          PySpark 的 DataFrame 与 Pandas 的 DataFrame 的比较<a href="https://github.com/lxmymjr/Blog/blob/master/source/_posts/PySpark%E7%9A%84DataFrame%E4%B8%8EPandas%E7%9A%84DataFrame%E7%9A%84%E6%AF%94%E8%BE%83.md" class="post-edit-link" title="Edit this post" rel="noopener" target="_blank"><i class="fa fa-pen-nib"></i></a>
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2020-10-29 17:59:28" itemprop="dateCreated datePublished" datetime="2020-10-29T17:59:28+08:00">2020-10-29</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2021-09-16 10:56:10" itemprop="dateModified" datetime="2021-09-16T10:56:10+08:00">2021-09-16</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Python/" itemprop="url" rel="index"><span itemprop="name">Python</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="Symbols count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Symbols count in article: </span>
+      <span>5.2k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>9 mins.</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>PySpark 和 Pandas 中都有 DataFrame 这个数据结构，但是他们的使用方法大有不同。<br>
+Reference：<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/34901585">pyspark 系列 --pandas 与 pyspark 对比</a> ;<a target="_blank" rel="noopener" href="http://moverzp.com/2018/03/17/Pandas%E5%92%8CPySpark%E4%B8%AD%E7%9A%84DataFrame%E6%AF%94%E8%BE%83/">Pandas 和 PySpark 中的 DataFrame 比较</a> ;<a target="_blank" rel="noopener" href="https://spark.apache.org/docs/latest/api/python/pyspark.sql.html">PySpark API</a>;<a target="_blank" rel="noopener" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html">Pandas API</a><br>
+<span id="more"></span></p>
+<h1 id="工作方式">工作方式</h1>
+<ul>
+<li><p>PySpark<br>
+分布式并行计算框架，内建并行机制 parallelism，所有的数据和操作自动并行分布在各个集群结点上。以处理 in-memory 数据的方式处理 distributed 数据。支持 Hadoop，能处理大量数据。</p></li>
+<li><p>Pandas<br>
+单机 single machine tool，没有并行机制 parallelism，不支持 Hadoop，处理大量数据有瓶颈</p></li>
+</ul>
+<h1 id="延迟机制">延迟机制</h1>
+<ul>
+<li><p>PySpark<br>
+lazy-evaluated</p></li>
+<li><p>Pandas<br>
+not lazy-evaluated</p></li>
+</ul>
+<p>注：在程式语言理论中，<strong>惰性求值</strong>（英语：Lazy Evaluation），又译为<strong>惰性计算</strong>、<strong>懒惰求值</strong>，也称为<strong>传需求调用</strong>（call-by-need），是一个计算机编程中的一个概念，目的是要最小化计算机要做的工作。它有两个相关而又有区别的含意，可以表示为 “延迟求值” 和 “最小化求值”。在使用延迟求值的时候，表达式不在它被绑定到变量之后就立即求值，而是在该值被取用的时候求值</p>
+<h1 id="内存缓存">内存缓存</h1>
+<ul>
+<li><p>PySpark<br>
+persist () or cache () 将转换的 RDDs 保存在内存</p></li>
+<li><p> Pandas<br>
+单机缓存</p></li>
+</ul>
+<h1 id="dataframe可变性">DataFrame 可变性</h1>
+<ul>
+<li><p>PySpark<br>
+Spark 中 RDDs 是不可变的，因此 DataFrame 也是不可变的</p></li>
+<li><p> Pandas<br>
+Pandas 中 DataFrame 是可变的</p></li>
+</ul>
+<h1 id="创建">创建</h1>
+<ul>
+<li><p>PySpark<br>
+直接创建： <code>spark_df = sc.parallelize([(1, 2), (3, 4)]).toDF(['xx',  'yy']</code><br>
+从 pandas_df 转换：<code>spark_df = SQLContext.createDataFrame(pandas_df)</code><br>
+另外，createDataFrame 支持从 list 转换 spark_df，其中 list 元素可以为 tuple，dict，rdd<br>
+读取 CSV 文件：<code>spark_df = spark.read.csv(csv_path, header=True)</code> 如果 CSV 文件有 header，则将其读取为列名<br>
+读取 parquet 文件：<code>spark_df = spark.read.parquet(parquet_path)</code><br>
+读取 json 文件：<code>spark_df = spark.read.json(json_path)</code><br>
+读取 txt 文件：<code>spark_df = sc.textFile(txt_path).toDF()</code><br>
+注：这些 path 均为 HDFS 路径</p></li>
+<li><p> Pandas<br>
+直接创建： <code>pandas_df = pd.DataFrame({'xx': {0: 1, 1: 3}, 'yy':  {0: 2, 1: 4}})</code><br>
+从 spark_df 转换：<code>pandas_df = spark_df.toPandas()</code>，或读取其他数据</p></li>
+</ul>
+<h1 id="index索引">index 索引</h1>
+<ul>
+<li><p>PySpark<br>
+没有 index 索引，若需要则要额外创建该列<br>
+<code>df.withColumn('index', F.row_number().over(Window.orderBy(F.monotonically_increasing_id())))</code><br>
+<code>df.rdd.zipWithIndex().toDF().select(F.col('_1').getItem('col_name_1').alias('col_name_1'), F.col('_2').getItem('col_name_2').alias('col_name_2'), ..., F.col('_n').getItem('col_name_n').alias('col_name_n'), F.col('_(n+1)').alias('row_index'))</code> 此方法更快。</p></li>
+<li><p>Pandas<br>
+自动创建</p></li>
+</ul>
+<p>注：当将 pandas_df 转换为 spark_df 时如需保留索引，则可用 <code>spark_df = SQLContext.createDataFrame(pandas_df.reset_index())</code>。</p>
+<h1 id="行结构">行结构</h1>
+<ul>
+<li><p>PySpark<br>
+Row 结构，属于 Spark DataFrame 结构</p></li>
+<li><p> Pandas<br>
+Series 结构，属于 Pandas DataFrame 结构</p></li>
+</ul>
+<h1 id="列结构">列结构</h1>
+<ul>
+<li><p>PySpark<br>
+Column 结构，属于 Spark DataFrame 结构，如：<code>DataFrame[name: string]</code></p></li>
+<li><p>Pandas<br>
+Series 结构，属于 Pandas DataFrame 结构</p></li>
+</ul>
+<h1 id="列名称">列名称</h1>
+<ul>
+<li><p>PySpark<br>
+允许重名，修改列名采用 alias 方法<br>
+修改列名：<code>df.withColumnRenamed('old_name', 'new_name')</code></p></li>
+<li><p>Pandas<br>
+不允许重名<br>
+修改列名：<code>df.rename(columns={'old_name': 'new_name'})</code></p></li>
+</ul>
+<h1 id="列修改">列修改</h1>
+<ul>
+<li><p>PySpark<br>
+原来有 <code>df['xx']</code> 列，<code>df.withColumn('xx', 1)</code></p></li>
+<li><p>Pandas<br>
+原来有 <code>df['xx']</code> 列，<code>df['xx'] = 1</code></p></li>
+</ul>
+<h1 id="显示">显示</h1>
+<ul>
+<li>PySpark
+<ol type="1">
+<li>df 不输出具体内容，输出具体内容用 show 方法。<code>df.show(5)</code></li>
+<li>输出形式：<code>DataFrame[age: bigint, name: string]</code></li>
+<li>以树的形式打印概要：<code>df.printSchema()</code></li>
+<li><code>df.columns</code> 输出列的名字</li>
+</ol></li>
+<li> Pandas<br>
+df 输出具体内容</li>
+</ul>
+<h1 id="排序">排序</h1>
+<ul>
+<li><p>PySpark<br>
+<code>df.sort(df.xx.asc(),df.yy.desc())</code><br>
+<code>df.sort(F.asc('xx'),F.desc('yy'))</code><br>
+<code>df.sort(F.col("xx").asc(), F.col("yy").desc())</code><br>
+<code>df.orderBy(F.col("xx").asc(), F.col("yy").desc())</code><br>
+在列中按值依次进行排序，指定先升序后降序</p></li>
+<li><p> Pandas<br>
+<code>df.sort_index()</code> 按轴进行升序排序<br>
+<code>df.sort_values(['xx', 'yy'], ascending=[True, False])</code> 在列中按值依次进行排序，指定先升序后降序<br>
+<code>df.sort_values(['xx', 'yy'], axis=0)</code>，<code>df.sort_values([1, 2], axis=1)</code> 在列、行中按值进行升序排序</p></li>
+</ul>
+<h1 id="选择或切片">选择或切片</h1>
+<ul>
+<li>PySpark
+<ol type="1">
+<li><code>df.select('xx', 'yy')</code> 选择一列或多列</li>
+<li><code>df.first()</code> 以行的形式返回第一行。（注：行的形式为 <code>Row(col_name1=value1, col_name2=value2, ...)</code>）</li>
+<li><code>df.head(n)</code>，<code>df.take(n)</code> 以行的形式返回前 n 行；<code>df.tail(n)</code> 以行的形式返回最后 n 行</li>
+<li>用 <code>df.collect()</code> 以行的形式返回所有行</li>
+</ol></li>
+<li> Pandas
+<ol type="1">
+<li><code>df.xx</code>，<code>df['xx']</code> 选择列名为 xx 的列，df [k] 选择行名为 k 的行</li>
+<li><code>df.iat[:, k]</code>，<code>df.iloc[:, k]</code> 选择第 k 列，<code>df.iat[k]</code>，<code>df.iloc[k]</code> 选择第 k 行</li>
+</ol></li>
+</ul>
+<h1 id="过滤">过滤</h1>
+<ul>
+<li><p>PySpark<br>
+<code>df.filter(df['xx']&gt;k)</code> 或者 <code>df.where(df['xx']&gt;k)</code></p></li>
+<li><p>Pandas<br>
+<code>df[df['xx']&gt;k]</code> 或者 <code>s[s&gt;k]</code></p></li>
+</ul>
+<h1 id="分组聚合">分组聚合</h1>
+<ul>
+<li><p>PySpark<br>
+<code>df.groupBy('xx')</code> 或者 <code>df.groupBy('xx').avg('yy').show()</code> 应用单个函数<br>
+<code>from pyspark.sql import functions</code> 导入内置函数库<br>
+<code>df.groupBy('xx').agg(functions.avg('yy'), functions.min('yy'), functions.max('yy')).show()</code> 应用多个函数</p></li>
+<li><p> Pandas<br>
+<code>df.groupby('xx')</code><br>
+<code>df.groupby('xx').avg('yy')</code></p></li>
+</ul>
+<h1 id="统计">统计</h1>
+<ul>
+<li><p>PySpark<br>
+<code>df.count()</code> 输出总行数<br>
+<code>df.describe()</code> 描述某些列的 count, mean, stddev, min, max</p></li>
+<li><p>Pandas<br>
+<code>df.count()</code> 输出每一列的非空行数<br>
+<code>df.shape</code> 输出行数✖️列数<br>
+<code>df.describe()</code> 描述某些列的 count, mean, std, min, 25%, 50%, 75%, max</p></li>
+</ul>
+<h1 id="合并">合并</h1>
+<ul>
+<li><p>PySpark<br>
+扩充列 <code>df.join()</code><br>
+同名列不自动添加后缀，只有键值完全匹配才保留一份副本</p>
+<p>扩充行<br>
+<code>df.union()</code>：两个 df 合并，按位置进行合并，列名以前表为准（a.union (b) 列名顺序以 a 为准）<br>
+<code>df.unoinAll()</code>：同 union 方法<br>
+<code>df.unionByName()</code>：两个 df 合并，按列名进行合并</p></li>
+<li><p> Pandas<br>
+Pandas 下有 <code>concat</code> 方法，支持轴向合并<br>
+Pandas 下有 <code>merge</code> 方法，支持多列合并<br>
+同名列自动添加后缀，对应键仅保留一份副本<br>
+<code>df.join()</code> 支持多列合并<br>
+<code>df.append()</code> 支持多行合并</p></li>
+</ul>
+<h1 id="删除">删除</h1>
+<ul>
+<li>PySpark
+<ol type="1">
+<li>删除一列：<code>df.drop('xx')</code> 或者 <code>df.drop(F.col('xx'))</code></li>
+<li>删除多列：<code>df.drop(*['xx', 'yy', ...])</code></li>
+<li>删除某（些）行：使用 filter 方法</li>
+</ol></li>
+<li> Pandas
+<ol type="1">
+<li>删除某（些）列：<code>df.drop(['xx', 'xx'], axis=1)</code> 或者 <code>df.drop(columns=['xx', 'yy'])</code></li>
+<li>删除某（些）行：<code>df.drop([0, 1])</code> 其中 0，1 为 index 名字</li>
+</ol></li>
+</ul>
+<h1 id="更改数据类型">更改数据类型</h1>
+<ul>
+<li>PySpark
+<ol type="1">
+<li>更改指定列的数据类型：<code>df = df.withColumn('xx', F.col('xx').cast(Type()))</code></li>
+</ol></li>
+<li>Pandas
+<ol type="1">
+<li>更改所有列的数据类型：<code>df.astype('type')</code></li>
+<li>更改指定列的数据类型：<code>df.astype({'xx': 'int32'})</code></li>
+</ol></li>
+</ul>
+<h1 id="失数据处理">失数据处理</h1>
+<ul>
+<li>PySpark
+<ol type="1">
+<li>不自动添加 NaNs，且不抛出错误</li>
+<li> fillna 函数：<code>df.na.fill()</code></li>
+<li>dropna 函数：<code>df.na.drop()</code></li>
+</ol></li>
+<li>Pandas
+<ol type="1">
+<li>对缺失数据自动添加 NaNs</li>
+<li>fillna 函数：<code>df.fillna()</code></li>
+<li>dropna 函数：<code>df.dropna()</code></li>
+</ol></li>
+</ul>
+<h1 id="sql语句">SQL 语句</h1>
+<ul>
+<li>PySpark
+<ol type="1">
+<li>表格注册：把 DataFrame 结构注册成 SQL 语句使用类型<br>
+<code>df.registerTempTable('tt')</code> 或者 <code>sqlContext.registerDataFrameAsTable(df, 'tt')</code><br>
+<code>spark.sql('SELECT xx, yy FROM tt WHERE xx &gt;= m AND yy &lt;= n')</code></li>
+<li>功能注册：把函数注册成 SQL 语句使用类型<br>
+<code>spark.registerFunction('stringLengthString', lambda x: len(x))</code><br>
+<code>spark.sql("SELECT stringLengthString('test')")</code></li>
+</ol></li>
+<li>Pandas<br>
+<code>import sqlite3</code><br>
+<code>pd.read_sql('SELECT xx, yy FROM tt WHERE xx &gt;= m AND yy &lt;= n')</code></li>
+</ul>
+<h1 id="两者互相转换">两者互相转换</h1>
+<ul>
+<li><p>PySpark<br>
+<code>pandas_df = spark_df.toPandas()</code></p></li>
+<li><p>Pandas<br>
+<code>spark_df = spark.createDataFrame(pandas_df)</code><br>
+转换过程中可能会遇到报错： TypeError: field XXX: Can not merge type A and B<br>
+原因是该列存在空值。解决方法是转换成 String<br>
+<code>pandas_df.XXX = pandas_df.XXX.astype(str)</code></p></li>
+</ul>
+<h1 id="函数应用">函数应用</h1>
+<ul>
+<li><p>Pandas<br>
+<code>df.apply(f)</code> 将 df 的每一列应用函数 f</p></li>
+<li><p>PySpark<br>
+<code>df.foreach(f)</code> 或者 <code>df.rdd.foreach(f)</code> 将 df 的每一列应用函数 f<br>
+<code>df.foreachPartition(f)</code> 或者 <code>df.rdd.foreachPartition(f)</code> 将 df 的每一块应用函数 f</p></li>
+</ul>
+<h1 id="map-reduce操作">map-reduce 操作</h1>
+<ul>
+<li>Pandas<br>
+<code>map-reduce操作map(func, list)</code>，<code>reduce(func, list)</code> 返回类型 seq</li>
+<li>PySpark<br>
+<code>df.map(func)</code>，<code>df.reduce(func)</code> 返回类型 seqRDDs</li>
+</ul>
+<h1 id="diff操作">diff 操作</h1>
+<ul>
+<li>Pandas<br>
+有 diff 操作，处理时间序列数据（Pandas 会对比当前行与上一行）</li>
+<li>PySpark<br>
+没有 diff 操作（Spark 的上下行是相互独立，分布式存储的）</li>
+</ul>
+<h1 id="most-common计数">Most Common 计数</h1>
+<ul>
+<li>Pandas<br>
+<code>df.value_counts(ascending=False)</code></li>
+<li>PySpark<br>
+<code>df.cube(column_name).count().sort('count', ascending=False).show(5)</code></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Tutorial/" rel="tag"># Tutorial</a>
+              <a href="/tags/Python/" rel="tag"># Python</a>
+              <a href="/tags/Data-Analysis/" rel="tag"># Data Analysis</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/contents/Linux-%E5%AE%9E%E7%94%A8%E5%B7%A5%E5%85%B7.html" rel="prev" title="Linux 实用工具">
+                  <i class="fa fa-chevron-left"></i> Linux 实用工具
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">LIU, XIMING</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="Symbols count total">192k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="Reading time total">5:49</span>
+  </span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="/js/third-party/search/local-search.js"></script>
+
+  <script class="next-config" data-name="pdf" type="application/json">{"object_url":{"url":"https://cdn.jsdelivr.net/npm/pdfobject@2.2.6/pdfobject.min.js","integrity":"sha256-77geM50MfxCD17eqyJR+Dag1svjJOLN+BJ2F/DMqMEY="},"url":"/lib/pdf/web/viewer.html"}</script>
+  <script src="/js/third-party/tags/pdf.js"></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdn.jsdelivr.net/npm/mathjax@3.2.0/es5/tex-mml-chtml.js","integrity":"sha256-r+3itOMtGGjap0x+10hu6jW/gZCzxHsoKrOd7gyRSGY="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+
+
+</body>
+</html>

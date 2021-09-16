@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon.ico">
+  <link rel="mask-icon" href="/favicon.ico" color="#222">
+  <meta name="google-site-verification" content="yHqnmkvA-12pculpP0D-q6lLqYStfJAnZCn5OLVFDfQ">
+  <meta name="baidu-site-verification" content="VLW4ITHnBoryM4WZ">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css" integrity="sha256-mUZM63G8m73Mcidfrv5E+Y61y7a12O5mW4ezU3bxqW4=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"lxmymjr.github.io","root":"/","images":"/images","scheme":"Gemini","version":"8.7.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":false,"async":true,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":-1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+<meta name="description" content="NumPy 是 Python 语言的一个扩充程序库。支持高级大量的维度数组与矩阵运算，此外也针对数组运算提供大量的数学函数函数库。 Reference：【MOOC】Python 数据分析与展示 - 北京理工大学 -【第一周】数据分析之表示 ; 公开课 ;Document;GitHub">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python NumPy 库基础">
+<meta property="og:url" content="https://lxmymjr.github.io/contents/Python-NumPy%E5%BA%93%E5%9F%BA%E7%A1%80.html">
+<meta property="og:site_name" content="xmliu&#39;s blog">
+<meta property="og:description" content="NumPy 是 Python 语言的一个扩充程序库。支持高级大量的维度数组与矩阵运算，此外也针对数组运算提供大量的数学函数函数库。 Reference：【MOOC】Python 数据分析与展示 - 北京理工大学 -【第一周】数据分析之表示 ; 公开课 ;Document;GitHub">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2017-09-16T14:08:57.000Z">
+<meta property="article:modified_time" content="2021-09-16T02:56:10.895Z">
+<meta property="article:author" content="LIU, XIMING">
+<meta property="article:tag" content="Tutorial">
+<meta property="article:tag" content="Python">
+<meta property="article:tag" content="Data Analysis">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://lxmymjr.github.io/contents/Python-NumPy%E5%BA%93%E5%9F%BA%E7%A1%80.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://lxmymjr.github.io/contents/Python-NumPy%E5%BA%93%E5%9F%BA%E7%A1%80.html","path":"contents/Python-NumPy库基础.html","title":"Python NumPy 库基础"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Python NumPy 库基础 | xmliu's blog</title>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">xmliu's blog</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E7%9A%84%E7%BB%B4%E5%BA%A6"><span class="nav-number">1.</span> <span class="nav-text">数据的维度</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#numpy%E7%9A%84%E6%95%B0%E7%BB%84%E5%AF%B9%E8%B1%A1ndarray"><span class="nav-number">2.</span> <span class="nav-text">NumPy 的数组对象：ndarray</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#ndarray%E7%9A%84%E5%A5%BD%E5%A4%84"><span class="nav-number">2.1.</span> <span class="nav-text">ndarray 的好处</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ndarray%E7%94%B1%E4%B8%A4%E9%83%A8%E5%88%86%E6%9E%84%E6%88%90"><span class="nav-number">2.2.</span> <span class="nav-text">ndarray 由两部分构成</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ndarray%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%B1%9E%E6%80%A7"><span class="nav-number">2.3.</span> <span class="nav-text">ndarray 对象的属性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ndarray%E6%95%B0%E7%BB%84%E7%9A%84%E5%85%83%E7%B4%A0%E7%B1%BB%E5%9E%8B"><span class="nav-number">2.4.</span> <span class="nav-text">ndarray 数组的元素类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8Epython%E5%AF%B9%E6%AF%94"><span class="nav-number">2.5.</span> <span class="nav-text">与 Python 对比</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9D%9E%E5%90%8C%E8%B4%A8%E7%9A%84ndarray%E5%AF%B9%E8%B1%A1"><span class="nav-number">2.6.</span> <span class="nav-text">非同质的 ndarray 对象</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ndarray%E6%95%B0%E7%BB%84%E7%9A%84%E5%88%9B%E5%BB%BA"><span class="nav-number">2.7.</span> <span class="nav-text">ndarray 数组的创建</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ndarray%E6%95%B0%E7%BB%84%E7%9A%84%E5%8F%98%E6%8D%A2"><span class="nav-number">2.8.</span> <span class="nav-text">ndarray 数组的变换</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ndarray%E6%95%B0%E7%BB%84%E7%9A%84%E6%93%8D%E4%BD%9C"><span class="nav-number">2.9.</span> <span class="nav-text">ndarray 数组的操作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ndarray%E6%95%B0%E7%BB%84%E7%9A%84%E8%BF%90%E7%AE%97"><span class="nav-number">2.10.</span> <span class="nav-text">ndarray 数组的运算</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#numpy%E4%B8%80%E5%85%83%E5%87%BD%E6%95%B0"><span class="nav-number">2.10.1.</span> <span class="nav-text">NumPy 一元函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#numpy%E4%BA%8C%E5%85%83%E5%87%BD%E6%95%B0"><span class="nav-number">2.10.2.</span> <span class="nav-text">NumPy 二元函数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#numpy%E6%95%B0%E6%8D%AE%E7%9A%84%E5%AD%98%E5%8F%96"><span class="nav-number">2.11.</span> <span class="nav-text">Numpy 数据的存取</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80%E7%BB%B4%E4%BA%8C%E7%BB%B4%E6%95%B0%E6%8D%AE%E7%9A%84csv%E5%AD%98%E5%8F%96"><span class="nav-number">2.11.1.</span> <span class="nav-text">一维、二维数据的 CSV 存取</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%9A%E7%BB%B4%E6%95%B0%E6%8D%AE%E7%9A%84dat%E5%AD%98%E5%8F%96"><span class="nav-number">2.11.2.</span> <span class="nav-text">多维数据的 dat 存取</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#numpy%E4%BE%BF%E6%8D%B7%E6%96%87%E4%BB%B6%E7%9A%84%E5%AD%98%E5%8F%96"><span class="nav-number">2.11.3.</span> <span class="nav-text">NumPy 便捷文件的存取</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#numpy%E7%9A%84%E9%9A%8F%E6%9C%BA%E6%95%B0%E5%87%BD%E6%95%B0"><span class="nav-number">2.12.</span> <span class="nav-text">NumPy 的随机数函数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9A%8F%E6%9C%BA%E6%95%B0%E7%BB%84%E7%94%9F%E6%88%90"><span class="nav-number">2.12.1.</span> <span class="nav-text">随机数组生成</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E7%BB%84%E7%9A%84%E9%9A%8F%E6%9C%BA%E5%8F%98%E6%8D%A2"><span class="nav-number">2.12.2.</span> <span class="nav-text">数组的随机变换</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#numpy%E7%9A%84%E7%BB%9F%E8%AE%A1%E5%87%BD%E6%95%B0"><span class="nav-number">2.13.</span> <span class="nav-text">NumPy 的统计函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#numpy%E7%9A%84%E6%A2%AF%E5%BA%A6%E5%87%BD%E6%95%B0"><span class="nav-number">2.14.</span> <span class="nav-text">NumPy 的梯度函数</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9B%BE%E5%83%8F%E7%9A%84%E6%95%B0%E6%8D%AE%E8%A1%A8%E7%A4%BA"><span class="nav-number">3.</span> <span class="nav-text">图像的数据表示</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#pil%E5%BA%93"><span class="nav-number">3.1.</span> <span class="nav-text">PIL 库</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-overview">
+            <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="LIU, XIMING"
+      src="/assets/avatar/yuntianhe.jpg">
+  <p class="site-author-name" itemprop="name">LIU, XIMING</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">18</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/lxmymjr?tab=repositories" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;lxmymjr?tab&#x3D;repositories" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:xmliu.2015@smu.edu.sg" title="E-Mail → mailto:xmliu.2015@smu.edu.sg" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://sites.google.com/view/xmliu-smu/home" title="https:&#x2F;&#x2F;sites.google.com&#x2F;view&#x2F;xmliu-smu&#x2F;home" rel="noopener" target="_blank">Personal Homepage</a>
+        </li>
+    </ul>
+  </div>
+
+          </div>
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://lxmymjr.github.io/contents/Python-NumPy%E5%BA%93%E5%9F%BA%E7%A1%80.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/assets/avatar/yuntianhe.jpg">
+      <meta itemprop="name" content="LIU, XIMING">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xmliu's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Python NumPy 库基础<a href="https://github.com/lxmymjr/Blog/blob/master/source/_posts/Python-NumPy%E5%BA%93%E5%9F%BA%E7%A1%80.md" class="post-edit-link" title="Edit this post" rel="noopener" target="_blank"><i class="fa fa-pen-nib"></i></a>
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2017-09-16 22:08:57" itemprop="dateCreated datePublished" datetime="2017-09-16T22:08:57+08:00">2017-09-16</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2021-09-16 10:56:10" itemprop="dateModified" datetime="2021-09-16T10:56:10+08:00">2021-09-16</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Python/" itemprop="url" rel="index"><span itemprop="name">Python</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="Symbols count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Symbols count in article: </span>
+      <span>6.1k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>11 mins.</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>NumPy 是 Python 语言的一个扩充程序库。支持高级大量的维度数组与矩阵运算，此外也针对数组运算提供大量的数学函数函数库。<br>
+Reference：<a target="_blank" rel="noopener" href="http://blog.csdn.net/linzch3/article/details/70992906">【MOOC】Python 数据分析与展示 - 北京理工大学 -【第一周】数据分析之表示</a> ; <a target="_blank" rel="noopener" href="http://www.icourse163.org/course/BIT-1001870002">公开课</a> ;<a target="_blank" rel="noopener" href="http://www.numpy.org">Document</a>;<a target="_blank" rel="noopener" href="https://github.com/numpy/numpy">GitHub</a><br>
+<span id="more"></span></p>
+<h1 id="数据的维度">数据的维度</h1>
+<ol type="1">
+<li><p>一维数据<br>
+一维数据由对等关系的有序或无序数据构成，采用线性方式组织，对应列表、数组和集合等概念。<br>
+列表和数组的区别是：</p>
+<ul>
+<li>列表中元素的数据类型可以不同。</li>
+<li>数组中元素的数据类型相同。<br>
+一维数据的 Python 表示：列表（有序）或者集合（无序）。</li>
+</ul></li>
+<li><p>二维数据<br>
+二维数据由多个一维数据构成，是一维数据的组合形式，表格是典型的二维数据，其中，表头是二维数据的一部分。<br>
+二维数据的 Python 表示：列表。</p></li>
+<li><p>多维数据<br>
+多维数据由一维或二维数据在新维度上扩展形成。<br>
+多维数据的 Python 表示：列表。</p></li>
+<li><p>高维数据<br>
+高维数据仅利用最基本的二元关系展示数据间的复杂结构。<br>
+高维数据的 Python 表示：字典类型或者 JSON、XML、YAML 格式。</p></li>
+</ol>
+<h1 id="numpy的数组对象ndarray">NumPy 的数组对象：ndarray</h1>
+<p>NumPy 是一个开源的 Python 科学计算基础库，包含：<br>
+- 一个强大的 N 维数组对象 ndarray<br>
+- 广播功能函数<br>
+- 整合 C/C++/Fortran 代码的工具<br>
+- 线性代数、傅里叶变换、随机数生成等功能<br>
+NumPy 是 SciPy、 Pandas 等数据处理或科学计算库的基础。<br>
+一般使用 <code>import numpy as np</code> 来引用 numpy 库。<br>
+ndarray 意为：N 维数组对象。</p>
+<h2 id="ndarray的好处">ndarray 的好处</h2>
+<ul>
+<li>数组对象可以去掉元素间运算所需的循环，使一维向量更像单个数据。</li>
+<li>设置专门的数组对象，经过优化，可以提升这类应用的运算速度。<br>
+注：科学计算中，一个维度所有数据的类型往往相同。</li>
+<li>数组对象采用相同的数据类型，有助于节省运算和存储空间。</li>
+</ul>
+<h2 id="ndarray由两部分构成">ndarray 由两部分构成</h2>
+<ul>
+<li>实际的数据</li>
+<li>描述这些数据的元数据（数据维度、数据类型等）</li>
+</ul>
+<p>ndarray 数组一般要求所有元素类型相同（同质），数组下标从 0 开始。<br>
+ndarray 在程序中的别名是 array，所以用 np.array () 生成一个 ndarray 数组。<br>
+<code>np.array()</code> 输出成 [] 格式，元素由空格分割。<br>
+轴（axis）保存数据的维度；秩（rank）轴的数量。</p>
+<h2 id="ndarray对象的属性">ndarray 对象的属性</h2>
+<table>
+<colgroup>
+<col style="width: 8%">
+<col style="width: 91%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>属性</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>.ndim</td>
+<td> 秩，即轴的数量或维度的数量</td>
+</tr>
+<tr class="even">
+<td>.shape</td>
+<td>ndarray 对象的尺度，对于矩阵：n 行 m 列</td>
+</tr>
+<tr class="odd">
+<td>.size</td>
+<td>ndarray 对象元素的个数，即 n*m 的值</td>
+</tr>
+<tr class="even">
+<td>.dtype</td>
+<td>ndarray 对象的元素类型</td>
+</tr>
+<tr class="odd">
+<td>.itemsize</td>
+<td>ndarray 对象中每个元素的大小，以字节为单位<br>如果元素均为整数，则缺省为 int32，如果元素中有浮点数，则缺省为 float64。</td>
+</tr>
+</tbody>
+</table>
+<h2 id="ndarray数组的元素类型">ndarray 数组的元素类型</h2>
+<table>
+<thead>
+<tr class="header">
+<th>数据类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td> bool</td>
+<td> 布尔类型，True 或者 False。</td>
+</tr>
+<tr class="even">
+<td>intc</td>
+<td> 与 C 语言的 int 类型一致，一般是 int32 或者 int64</td>
+</tr>
+<tr class="odd">
+<td>intp</td>
+<td> 用于索引的整数，与 C 预言中的 ssize_t 一致，int32 或者 int64</td>
+</tr>
+<tr class="even">
+<td>int8</td>
+<td> 字节长度的整数，取值：[-128, 127]</td>
+</tr>
+<tr class="odd">
+<td>int16</td>
+<td>16 位长度的整数，取值：[-32768, 32767]</td>
+</tr>
+<tr class="even">
+<td>int32</td>
+<td>32 位长度的整数，取值：[-2<sup>31</sup>, 2<sup>31</sup>-1]</td>
+</tr>
+<tr class="odd">
+<td>int64</td>
+<td>64 位长度的整数，取值：[-2<sup>63</sup>, 2<sup>63</sup>-1]</td>
+</tr>
+<tr class="even">
+<td>uint8</td>
+<td>8 位无符号整数，取值：[0, 255]</td>
+</tr>
+<tr class="odd">
+<td>uint16</td>
+<td>16 位无符号整数，取值：[0, 65535]</td>
+</tr>
+<tr class="even">
+<td>uint32</td>
+<td>32 位无符号整数，取值：[0, 2<sup>32</sup>-1]</td>
+</tr>
+<tr class="odd">
+<td>uint64</td>
+<td>64 位无符号整数，取值：[0, 2<sup>64</sup>-1]</td>
+</tr>
+<tr class="even">
+<td>float16</td>
+<td>16 位半精度浮点数：1 位符号位，5 位指数，10 位尾数</td>
+</tr>
+<tr class="odd">
+<td> float32</td>
+<td>32 位半精度浮点数：1 位符号位，8 位指数，23 位尾数</td>
+</tr>
+<tr class="even">
+<td> float64</td>
+<td>64 位半精度浮点数：1 位符号位，11 位指数，52 位尾数</td>
+</tr>
+<tr class="odd">
+<td> complex64</td>
+<td> 复数类型，实部和虚部都是 32 位浮点数</td>
+</tr>
+<tr class="even">
+<td> complex128</td>
+<td> 复数类型，实部和虚部都是 64 位浮点数</td>
+</tr>
+</tbody>
+</table>
+<p>浮点数：（符号）尾数 * 10<sup> 指数</sup><br>
+复数：实部 (.real)+ 虚部 i（.imag）</p>
+<h2 id="与python对比">与 Python 对比</h2>
+<ul>
+<li>Python 语法仅支持整数、浮点数和复数 3 种类型。</li>
+<li>科学计算涉及数据较多，对存储和性能都有较高要求。</li>
+<li>对元素类型精细定义，有助于 NumPy 合理使用存储空间并优化性能。</li>
+<li>对元素类型精细定义，有助于程序员对程序规模有合理评估。</li>
+</ul>
+<h2 id="非同质的ndarray对象">非同质的 ndarray 对象</h2>
+<p>ndarray 数组可以由非同质的对象构成。<br>
+非同质的 ndarray 元素类型为 object 类型。</p>
+<h2 id="ndarray数组的创建">ndarray 数组的创建</h2>
+<p>ndarray 数组的创建方法</p>
+<ol type="1">
+<li>从 Python 中的列表、元组、列表元祖混合等类型创建 ndarray 数组：<br>
+<code>np.array(list,tuple)</code></li>
+<li>从字节流（raw bytes）中创建 ndarray 数组。</li>
+<li>从文件中读取特定格式中创建 ndarray 数组。</li>
+<li>使用 NumPy 中函数创建 ndarray 数组：</li>
+</ol>
+<table>
+<colgroup>
+<col style="width: 30%">
+<col style="width: 70%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>函数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>np.arange(n,m,k)</code></td>
+<td>类似 <code>range()</code> 函数，返回 ndarray 类型，元素从 n 到 m-k，间隔 k</td>
+</tr>
+<tr class="even">
+<td><code>np.ones(shape)</code></td>
+<td>根据 shape 生成一个全 1 数组，shape 是元组类型</td>
+</tr>
+<tr class="odd">
+<td><code>np.zeros(shape)</code></td>
+<td>根据 shape 生成一个全 0 数组，shape 是元组类型</td>
+</tr>
+<tr class="even">
+<td><code>np.full(shape,val)</code></td>
+<td>根据 shape 生成一个数组，shape 是元组类型，每个元素的值都是 val</td>
+</tr>
+<tr class="odd">
+<td><code>np.eye(n)</code></td>
+<td>创建一个正方的 n*n 单位矩阵，对角线为 1，其余为 0</td>
+</tr>
+<tr class="even">
+<td><code>np.ones_like(a)</code></td>
+<td>根据数组 a 的形状生成一个全 1 数组</td>
+</tr>
+<tr class="odd">
+<td><code>np.zero_like(a)</code></td>
+<td>根据数组 a 的形状生成一个全 0 数组</td>
+</tr>
+<tr class="even">
+<td><code>np.full_like(a,val)</code></td>
+<td>根据数组 a 的形状生成一个全 1 数组</td>
+</tr>
+<tr class="odd">
+<td><code>np.linspace(n,m,k)</code></td>
+<td>根据起止数据等间距地填充数据，形成数据，元素从 n 到 m，间隔 (m-n)/(k-1)，元素个数为 k</td>
+</tr>
+<tr class="even">
+<td><code>np.linspace(n,m,k,endpoint=False)</code></td>
+<td>根据起止数据等间距地填充数据，形成数据，元素从 n 到 m-(m-n)/k，间隔 (m-n)/k，元素个数为 k</td>
+</tr>
+<tr class="odd">
+<td><code>np.linspace(a,b,c,...)</code></td>
+<td>将两个或者多个数组合并成一个新的数组，原数组不变</td>
+</tr>
+</tbody>
+</table>
+<p>当 <code>np.array()</code> 不指定 dtype 时，NumPy 将根据数据情况关联一个 dtype 类型。</p>
+<h2 id="ndarray数组的变换">ndarray 数组的变换</h2>
+<p>对于创建后的 ndarray 数组，可以对其进行维度变换和元素类型变换。<br>
+维度变换：</p>
+<table>
+<thead>
+<tr class="header">
+<th>方法</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>.reshape(shape)</code></td>
+<td>不改变数组元素，返回一个 shape 形状的新数组，原数组不变</td>
+</tr>
+<tr class="even">
+<td><code>.resize(shape)</code></td>
+<td>与<code>.reshape(shape)</code> 功能一致，但修改原数组</td>
+</tr>
+<tr class="odd">
+<td><code>.swapaxes(ax1,ax2)</code></td>
+<td>将数组的其中两个维度进行顺序调换</td>
+</tr>
+<tr class="even">
+<td><code>.flatten()</code></td>
+<td>对数组进行降维，返回折叠后的新的一维数组，原数组不变</td>
+</tr>
+<tr class="odd">
+<td><code>.astype(new_type)</code></td>
+<td>对数组中的元素进行类型变化，返回一个新数组，原数组不变</td>
+</tr>
+<tr class="even">
+<td><code>.tolist()</code></td>
+<td>ndarray 数组向列表转换</td>
+</tr>
+</tbody>
+</table>
+<h2 id="ndarray数组的操作">ndarray 数组的操作</h2>
+<p>数组的索引和切片：<br>
+- 索引：获取数组中特定位置元素的过程。<br>
+- 切片：获取数组元素子集的过程。</p>
+<ol type="1">
+<li>一维数组的索引和切片：与 Python 的列表类似
+<ul>
+<li><code>a[n]</code>：返回第 n+1 个元素。如果 n 为负数，则返回倒着数第 n 个元素。</li>
+<li><code>a[n:m:k]</code>：起始编号 n，终止编号 m，步长 k，用冒号分割。如果 n 为空，即 <code>n = 0</code>；如果 m 为空，即 <code>m = len(a)</code>。</li>
+</ul></li>
+<li>多维数组的索引和切片：
+<ul>
+<li><code>a[n,m,k,...]</code>：每个维度一个索引值，最外 list 中第 n 个元素，倒数第二外 list 中第 m 个元素，以此类推。如果 n 为负数，则返回倒着数第 n 个元素。</li>
+<li><code>a[n1:m1:k1,n2:m2:k2,n3:m3:k3,...]</code>：每个维度的切片方法与一维数组相同。顺序为从外到内。</li>
+</ul></li>
+</ol>
+<h2 id="ndarray数组的运算">ndarray 数组的运算</h2>
+<p>数组与标量之间的运算作用于数组的每一个元素。</p>
+<h3 id="numpy一元函数">NumPy 一元函数</h3>
+<p>对 ndarray 中的数据执行元素级运算的函数：</p>
+<table>
+<colgroup>
+<col style="width: 62%">
+<col style="width: 37%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>函数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>np.abs(x)</code> or <code>np.fabs(x)</code></td>
+<td>计算数组各元素的绝对值</td>
+</tr>
+<tr class="even">
+<td><code>np.sqrt(x)</code></td>
+<td>计算数组各元素的平方根</td>
+</tr>
+<tr class="odd">
+<td><code>np.sqare(x)</code></td>
+<td>计算数组各元素的平方</td>
+</tr>
+<tr class="even">
+<td><code>np.log(x)</code> or <code>np.log10(x)</code>or<code>np.log2(x)</code></td>
+<td>计算数组各元素的自然对数、10 为底的对数、2 为底的对数</td>
+</tr>
+<tr class="odd">
+<td><code>np.ceil(x)</code> or <code>np.floor(x)</code></td>
+<td>计算数组各元素的向上取整、向下取整</td>
+</tr>
+<tr class="even">
+<td><code>np.rint(x)</code></td>
+<td>计算数组各元素的四舍五入</td>
+</tr>
+<tr class="odd">
+<td><code>np.modf(x)</code></td>
+<td>将数组各元素的小数部分和整数部分以两个独立数组形式返回</td>
+</tr>
+<tr class="even">
+<td><code>np.cos(x)</code> or <code>np.cosh(x)</code><br><code>np.cos(x)</code> or <code>np.cosh(x)</code><br><code>np.cos(x)</code> or <code>np.cosh(x)</code></td>
+<td>计算数组各元素的普通型和双曲型三角函数</td>
+</tr>
+<tr class="odd">
+<td><code>np.exp(x)</code></td>
+<td>计算数组各元素的指数值</td>
+</tr>
+<tr class="even">
+<td><code>np.sign(x)</code></td>
+<td>计算数组各元素的符号值：1 (+),0,-1 (-)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="numpy二元函数">NumPy 二元函数</h3>
+<table>
+<colgroup>
+<col style="width: 61%">
+<col style="width: 38%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>函数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td> + - * / **</td>
+<td> 两个数组各元素进行对应运算</td>
+</tr>
+<tr class="even">
+<td><code>np.maximum(x,y)</code> or <code>np.fmax(x,y)</code>or<code>np.minimum(x,y)</code> or <code>np.fmin(x,y)</code></td>
+<td>两个数组元素级的最大值、最小值计算</td>
+</tr>
+<tr class="odd">
+<td><code>np.mod(x,y)</code></td>
+<td>两个数组元素级的模运算</td>
+</tr>
+<tr class="even">
+<td><code>np.copysign(x,y)</code></td>
+<td>将数组 y 中的各元素值的符号赋值给数组 x 的对应元素</td>
+</tr>
+<tr class="odd">
+<td> &gt; &lt; &gt;= &lt;= == !=</td>
+<td> 算术比较两个数组各元素，产生布尔型数组</td>
+</tr>
+</tbody>
+</table>
+<h2 id="numpy数据的存取">Numpy 数据的存取</h2>
+<h3 id="一维二维数据的csv存取">一维、二维数据的 CSV 存取</h3>
+<p>CSV (Comma‐Separated Value，逗号分隔值)，CSV 是一种常见的文件格式，用来存储批量数据。<br>
+<strong>写入 CSV 文件：</strong><code>np.savetxt(fname, array, fmt, delimiter)</code>，其中 fname 指的是文件、字符串或者产生器，可以是.gz 或.bz2 压缩文件（NumPy 支持直接存入压缩文件以节省空间）；array 指的是需要存入的数组；fmt 指的是写入文件的格式，例如：% d (十进制整数) %.2f (保留 2 位小数的浮点数) %.18e (保留 18 位小数点的科学计数法)；delimiter 指的是分割字符串，默认是空格。<br>
+<strong>读取 CSV 文件：</strong><code>np.loadtxt(fname, dtype, fmt, delimiter)</code>，其中 fname 指的是文件、字符串或者产生器，可以是.gz 或.bz2 压缩文件（NumPy 支持直接读取压缩文件）；dtype 指的是读取数据的类型，默认为浮点类型；delimiter 指的是分割字符串，默认是空格；uppack 指的是如果 True，读入属性将写入不同变量。<br>
+CSV 文件的局限性：<br>
+- CSV 只能有效存储一维和二维数组。<br>
+- <code>np.savetxt()</code>；<code>np.loadtxt()</code> 只能有效存取一维和二维数组。</p>
+<h3 id="多维数据的dat存取">多维数据的 dat 存取</h3>
+<p>使用 tofile 函数保存多维数据：<br>
+<strong>写入 dat 文件：</strong><code>a.tofile(fname, sep, format)</code>，其中 a 指的是需要存入的数组；fname 指的是文件、字符串；sep 指的是数据分割字符串，如果是空格，写入文件为二进制。<br>
+<strong>读取 dat 文件：</strong><code>np.fromfile(fname, dtype, count, sep)</code>，其中 fname 指的是文件、字符串；dtype 指的是读取数据的类型；count 指的是读取数据的个数，如果 count=-1 则表示读入整个文件；sep 指的是数据分割字符串，如果是空格，以二进制读取文件。<br>
+注意：该方法需要读取时知道存入文件时数组的维度和元素类型，a.tofile () 和 np.fromfile () 需要配合使用，可以通过元数据文件来存储额外信息。</p>
+<h3 id="numpy便捷文件的存取">NumPy 便捷文件的存取</h3>
+<p><strong>写入文件：</strong><code>np.save(fname, array)</code>，其中 fname 指的是文件名，以.npy 或者.npz 为扩展名，后者为压缩文件；array 指的是需要存入的数组。<br>
+<strong>读取文件：</strong><code>np.load(fname)</code>，其中 fname 指的是文件名，以.npy 或者.npz 为扩展名，后者为压缩文件。</p>
+<h2 id="numpy的随机数函数">NumPy 的随机数函数</h2>
+<p>NumPy 的随机函数子库：<code>np.random.*</code> 包含有关随机数的函数。</p>
+<h3 id="随机数组生成">随机数组生成</h3>
+<table>
+<thead>
+<tr class="header">
+<th>函数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>rand(d0, d1, ..., dn)</code></td>
+<td>根据 d0-dn 创建随机数数组，浮点数，[0, 1)，均匀分布</td>
+</tr>
+<tr class="even">
+<td><code>randn(d0, d1, ..., dn)</code></td>
+<td>根据 d0-dn 创建随机数数组，标准正太分布</td>
+</tr>
+<tr class="odd">
+<td><code>randint(low[,high,shape])</code></td>
+<td>根据 shape 创建随机整数数组 范围是 [1ow, high)，均匀分布</td>
+</tr>
+<tr class="even">
+<td><code>seed(s)</code></td>
+<td>随机数种子 s 是给定的种子值，相同的种子值产生相同的随机数组</td>
+</tr>
+<tr class="odd">
+<td><code>uniform(low,high,size)</code></td>
+<td>产生具有均匀分布的数组，low 为起始值，high 为结束值，size 为形状</td>
+</tr>
+<tr class="even">
+<td><code>normal(loc,scale,size)</code></td>
+<td>产生具有正太分布的数组，loc 为均值，scale 为标准差，size 为形状</td>
+</tr>
+<tr class="odd">
+<td><code>poisson(lam,size)</code></td>
+<td>产生具有泊松分布的数组，lam 为随机事件发生率，size 为形状</td>
+</tr>
+</tbody>
+</table>
+<h3 id="数组的随机变换">数组的随机变换</h3>
+<table>
+<colgroup>
+<col style="width: 26%">
+<col style="width: 73%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>函数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>shuffle(a)</code></td>
+<td>根据数组 a 的第 1 轴进行随机排列，改变数组 x</td>
+</tr>
+<tr class="even">
+<td><code>permutation(a)</code></td>
+<td>根据数组 a 的第 1 轴产生一个新的乱序数组，不改变数组 x</td>
+</tr>
+<tr class="odd">
+<td><code>choice(a[, size, replace, p])</code></td>
+<td>从一维数组 a 中以概率 p 抽取元素，形成 size 形状新数组<br>replace 表示是否可以重用元素，默认为 True</td>
+</tr>
+</tbody>
+</table>
+<h2 id="numpy的统计函数">NumPy 的统计函数</h2>
+<table>
+<thead>
+<tr class="header">
+<th>函数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>sum(a, axis = None)</code></td>
+<td>根据给定轴 axis 计算数组 a 相关元素之和</td>
+</tr>
+<tr class="even">
+<td><code>mean(a, axis = None)</code></td>
+<td>根据给定轴 axis 计算数组 a 相关元素的期望</td>
+</tr>
+<tr class="odd">
+<td><code>average(a, axis = None, weights = None)</code></td>
+<td>根据给定轴 axis 计算数组 a 相关元素的加权平均值</td>
+</tr>
+<tr class="even">
+<td><code>std(a, axis = None)</code></td>
+<td>根据给定轴 axis 计算数组 a 相关元素的标准差</td>
+</tr>
+<tr class="odd">
+<td><code>var(a, axis = None)</code></td>
+<td>根据给定轴 axis 计算数组 a 相关元素的方差</td>
+</tr>
+<tr class="even">
+<td><code>min(a) max(a)</code></td>
+<td>计算数组 a 中元素的最小值、最大值</td>
+</tr>
+<tr class="odd">
+<td><code>argmin(a) argmax(a)</code></td>
+<td>计算数组 a 中元素最小值、最大值的降一维后下标</td>
+</tr>
+<tr class="even">
+<td><code>unravel_index(index, shape)</code></td>
+<td>根据 shape 将一维下标 index 转换成多维下标</td>
+</tr>
+<tr class="odd">
+<td><code>ptp(a)</code></td>
+<td>计算数组 a 中元素最大值与最小值的差</td>
+</tr>
+<tr class="even">
+<td><code>median(a)</code></td>
+<td>计算数组 a 中元素的中位数（中值），结果为浮点数</td>
+</tr>
+</tbody>
+</table>
+<p>・axis = None 是统计函数的标配参数，axis 为整数或元组。</p>
+<h2 id="numpy的梯度函数">NumPy 的梯度函数</h2>
+<p><code>np.gradient(f)</code>：计算数组 f 中元素的梯度，当 f 为多维时，返回每个维度的梯度。<br>
+梯度：连续值之间的变化率，即斜率。例如：XY 坐标轴连续三个 X 坐标对应的 Y 轴值：a, b, c，其中，b 的梯度是 (c-a)/2。</p>
+<h1 id="图像的数据表示">图像的数据表示</h1>
+<p>图像一般使用 RGB 色彩模式，即每个像素点的颜色由红 (R)、绿 (G)、蓝 (B) 组成。<br>
+RGB 三个颜色通道的变化和叠加得到各种颜色，其中<br>
+・R 红色，取值范围：0‐255<br>
+・G 绿色，取值范围：0‐255<br>
+・B 蓝色，取值范围：0‐255<br>
+RGB 形成的颜色包括了人类视力所能感知的所有颜色。</p>
+<h2 id="pil库">PIL 库</h2>
+<p>Python Image Library：<br>
+安装：<code>pip install pillow</code><br>
+调用：<code>from PIL import Image</code><br>
+Image 是 PIL 库中代表一个图像的类（对象）。<br>
+图像是一个三维数组，维度分别是高度、宽度和像素 RGB 值。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Tutorial/" rel="tag"># Tutorial</a>
+              <a href="/tags/Python/" rel="tag"># Python</a>
+              <a href="/tags/Data-Analysis/" rel="tag"># Data Analysis</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/contents/Python%E7%88%AC%E8%99%AB.html" rel="prev" title="Python 爬虫">
+                  <i class="fa fa-chevron-left"></i> Python 爬虫
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/contents/%E8%B1%86%E7%93%A3%E7%88%AC%E8%99%AB%E5%AE%9E%E4%BE%8B.html" rel="next" title="豆瓣爬虫实例">
+                  豆瓣爬虫实例 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">LIU, XIMING</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="Symbols count total">192k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="Reading time total">5:49</span>
+  </span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="/js/third-party/search/local-search.js"></script>
+
+  <script class="next-config" data-name="pdf" type="application/json">{"object_url":{"url":"https://cdn.jsdelivr.net/npm/pdfobject@2.2.6/pdfobject.min.js","integrity":"sha256-77geM50MfxCD17eqyJR+Dag1svjJOLN+BJ2F/DMqMEY="},"url":"/lib/pdf/web/viewer.html"}</script>
+  <script src="/js/third-party/tags/pdf.js"></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdn.jsdelivr.net/npm/mathjax@3.2.0/es5/tex-mml-chtml.js","integrity":"sha256-r+3itOMtGGjap0x+10hu6jW/gZCzxHsoKrOd7gyRSGY="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+
+
+</body>
+</html>

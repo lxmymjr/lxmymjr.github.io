@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon.ico">
+  <link rel="mask-icon" href="/favicon.ico" color="#222">
+  <meta name="google-site-verification" content="yHqnmkvA-12pculpP0D-q6lLqYStfJAnZCn5OLVFDfQ">
+  <meta name="baidu-site-verification" content="VLW4ITHnBoryM4WZ">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css" integrity="sha256-mUZM63G8m73Mcidfrv5E+Y61y7a12O5mW4ezU3bxqW4=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"lxmymjr.github.io","root":"/","images":"/images","scheme":"Gemini","version":"8.7.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":false,"async":true,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":-1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+<meta name="description" content="本文提供 3 个例子来说明如何利用 Python 爬取豆瓣的数据。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="豆瓣爬虫实例">
+<meta property="og:url" content="https://lxmymjr.github.io/contents/%E8%B1%86%E7%93%A3%E7%88%AC%E8%99%AB%E5%AE%9E%E4%BE%8B.html">
+<meta property="og:site_name" content="xmliu&#39;s blog">
+<meta property="og:description" content="本文提供 3 个例子来说明如何利用 Python 爬取豆瓣的数据。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://lxmymjr.github.io/images/Python%E7%88%AC%E8%99%AB/%E8%B1%86%E7%93%A3%E7%94%B5%E8%A7%86%E5%89%A7.png">
+<meta property="og:image" content="https://lxmymjr.github.io/images/Python%E7%88%AC%E8%99%AB/%E6%BA%90%E7%A0%811.png">
+<meta property="og:image" content="https://lxmymjr.github.io/images/Python%E7%88%AC%E8%99%AB/%E6%8E%A7%E5%88%B6%E5%8F%B01.png">
+<meta property="og:image" content="https://lxmymjr.github.io/images/Python%E7%88%AC%E8%99%AB/%E6%8E%A7%E5%88%B6%E5%8F%B02.png">
+<meta property="og:image" content="https://lxmymjr.github.io/images/Python%E7%88%AC%E8%99%AB/%E8%AF%A6%E6%83%85%E9%A1%B5.png">
+<meta property="og:image" content="https://lxmymjr.github.io/images/Python%E7%88%AC%E8%99%AB/%E6%BA%90%E7%A0%812.png">
+<meta property="og:image" content="https://lxmymjr.github.io/images/Python%E7%88%AC%E8%99%AB/%E6%95%B0%E6%8D%AE%E5%BA%931.png">
+<meta property="og:image" content="https://lxmymjr.github.io/images/Python%E7%88%AC%E8%99%AB/%E8%B1%86%E7%93%A3%E6%AD%A3%E5%9C%A8%E4%B8%8A%E6%98%A0%E7%94%B5%E5%BD%B1.png">
+<meta property="og:image" content="https://lxmymjr.github.io/images/Python%E7%88%AC%E8%99%AB/%E6%BA%90%E7%A0%813.png">
+<meta property="og:image" content="https://lxmymjr.github.io/images/Python%E7%88%AC%E8%99%AB/%E6%95%B0%E6%8D%AE%E5%BA%932.png">
+<meta property="og:image" content="https://lxmymjr.github.io/images/Python%E7%88%AC%E8%99%AB/%E8%B1%86%E7%93%A3%E7%94%B5%E5%BD%B1Top250.png">
+<meta property="og:image" content="https://lxmymjr.github.io/images/Python%E7%88%AC%E8%99%AB/%E6%BA%90%E7%A0%814.png">
+<meta property="og:image" content="https://lxmymjr.github.io/images/Python%E7%88%AC%E8%99%AB/%E6%95%B0%E6%8D%AE%E5%BA%933.png">
+<meta property="article:published_time" content="2017-09-18T13:21:07.000Z">
+<meta property="article:modified_time" content="2021-09-16T02:56:10.897Z">
+<meta property="article:author" content="LIU, XIMING">
+<meta property="article:tag" content="Python">
+<meta property="article:tag" content="Crawler">
+<meta property="article:tag" content="Examples">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://lxmymjr.github.io/images/Python%E7%88%AC%E8%99%AB/%E8%B1%86%E7%93%A3%E7%94%B5%E8%A7%86%E5%89%A7.png">
+
+
+<link rel="canonical" href="https://lxmymjr.github.io/contents/%E8%B1%86%E7%93%A3%E7%88%AC%E8%99%AB%E5%AE%9E%E4%BE%8B.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://lxmymjr.github.io/contents/%E8%B1%86%E7%93%A3%E7%88%AC%E8%99%AB%E5%AE%9E%E4%BE%8B.html","path":"contents/豆瓣爬虫实例.html","title":"豆瓣爬虫实例"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>豆瓣爬虫实例 | xmliu's blog</title>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">xmliu's blog</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%94%A8requests%E8%8E%B7%E5%8F%96%E9%A1%B5%E9%9D%A2"><span class="nav-number">1.</span> <span class="nav-text">用 requests 获取页面</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%9E%E4%BE%8B%E4%B8%80%E8%B1%86%E7%93%A3%E5%9B%BD%E4%BA%A7%E7%94%B5%E8%A7%86%E5%89%A7%E7%88%AC%E8%99%AB"><span class="nav-number">2.</span> <span class="nav-text">实例一：豆瓣国产电视剧爬虫</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%82%E5%AF%9F%E6%89%80%E9%9C%80%E7%88%AC%E5%8F%96%E7%9A%84%E9%A1%B5%E9%9D%A2"><span class="nav-number">2.1.</span> <span class="nav-text">观察所需爬取的页面</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%8E%B7%E5%8F%96%E7%94%B5%E8%A7%86%E5%89%A7%E8%B1%86%E7%93%A3%E5%9C%B0%E5%9D%80%E5%88%97%E8%A1%A8"><span class="nav-number">2.2.</span> <span class="nav-text">获取电视剧豆瓣地址列表</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%86%E6%9E%90%E7%94%B5%E8%A7%86%E5%89%A7%E8%AF%A6%E6%83%85%E9%A1%B5"><span class="nav-number">2.3.</span> <span class="nav-text">分析电视剧详情页</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AD%98%E5%82%A8%E6%89%80%E7%88%AC%E4%BF%A1%E6%81%AF%E5%88%B0%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="nav-number">2.4.</span> <span class="nav-text">存储所爬信息到数据库</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%9E%E4%BE%8B%E4%BA%8C%E8%B1%86%E7%93%A3%E6%AD%A3%E5%9C%A8%E4%B8%8A%E6%98%A0%E7%94%B5%E5%BD%B1%E7%88%AC%E8%99%AB"><span class="nav-number">3.</span> <span class="nav-text">实例二：豆瓣正在上映电影爬虫</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%82%E5%AF%9F%E6%89%80%E9%9C%80%E7%88%AC%E5%8F%96%E7%9A%84%E9%A1%B5%E9%9D%A2-1"><span class="nav-number">3.1.</span> <span class="nav-text">观察所需爬取的页面</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%8E%B7%E5%8F%96%E7%94%B5%E5%BD%B1%E4%BF%A1%E6%81%AF"><span class="nav-number">3.2.</span> <span class="nav-text">获取电影信息</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AD%98%E5%82%A8%E6%89%80%E7%88%AC%E4%BF%A1%E6%81%AF%E5%88%B0%E6%95%B0%E6%8D%AE%E5%BA%93-1"><span class="nav-number">3.3.</span> <span class="nav-text">存储所爬信息到数据库</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%9E%E4%BE%8B%E4%B8%89%E8%B1%86%E7%93%A3%E7%94%B5%E5%BD%B1top250%E7%88%AC%E8%99%AB"><span class="nav-number">4.</span> <span class="nav-text">实例三：豆瓣电影 TOP250 爬虫</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%82%E5%AF%9F%E6%89%80%E9%9C%80%E7%88%AC%E5%8F%96%E7%9A%84%E9%A1%B5%E9%9D%A2-2"><span class="nav-number">4.1.</span> <span class="nav-text">观察所需爬取的页面</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%8E%B7%E5%8F%96%E7%94%B5%E5%BD%B1%E4%BF%A1%E6%81%AF-1"><span class="nav-number">4.2.</span> <span class="nav-text">获取电影信息</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AD%98%E5%82%A8%E6%89%80%E7%88%AC%E4%BF%A1%E6%81%AF%E5%88%B0%E6%95%B0%E6%8D%AE%E5%BA%93-2"><span class="nav-number">4.3.</span> <span class="nav-text">存储所爬信息到数据库</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%85%B6%E4%BB%96"><span class="nav-number">5.</span> <span class="nav-text">其他</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-overview">
+            <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="LIU, XIMING"
+      src="/assets/avatar/yuntianhe.jpg">
+  <p class="site-author-name" itemprop="name">LIU, XIMING</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">18</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/lxmymjr?tab=repositories" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;lxmymjr?tab&#x3D;repositories" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:xmliu.2015@smu.edu.sg" title="E-Mail → mailto:xmliu.2015@smu.edu.sg" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://sites.google.com/view/xmliu-smu/home" title="https:&#x2F;&#x2F;sites.google.com&#x2F;view&#x2F;xmliu-smu&#x2F;home" rel="noopener" target="_blank">Personal Homepage</a>
+        </li>
+    </ul>
+  </div>
+
+          </div>
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://lxmymjr.github.io/contents/%E8%B1%86%E7%93%A3%E7%88%AC%E8%99%AB%E5%AE%9E%E4%BE%8B.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/assets/avatar/yuntianhe.jpg">
+      <meta itemprop="name" content="LIU, XIMING">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xmliu's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          豆瓣爬虫实例<a href="https://github.com/lxmymjr/Blog/blob/master/source/_posts/%E8%B1%86%E7%93%A3%E7%88%AC%E8%99%AB%E5%AE%9E%E4%BE%8B.md" class="post-edit-link" title="Edit this post" rel="noopener" target="_blank"><i class="fa fa-pen-nib"></i></a>
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2017-09-18 21:21:07" itemprop="dateCreated datePublished" datetime="2017-09-18T21:21:07+08:00">2017-09-18</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2021-09-16 10:56:10" itemprop="dateModified" datetime="2021-09-16T10:56:10+08:00">2021-09-16</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Python/" itemprop="url" rel="index"><span itemprop="name">Python</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="Symbols count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Symbols count in article: </span>
+      <span>11k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>19 mins.</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>本文提供 3 个例子来说明如何利用 Python 爬取豆瓣的数据。<br>
+<span id="more"></span></p>
+<h1 id="用requests获取页面">用 requests 获取页面</h1>
+<p>三个实例都要用到 request 库来获取页面资源。<br>
+</p><figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">getHTMLText</span>(<span class="params">url</span>):</span> <span class="comment"># 获取网页的HTML源码</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        <span class="comment"># 设置响应等待时间为30秒</span></span><br><span class="line">        r = requests.get(url, timeout=<span class="number">30</span>)</span><br><span class="line">        <span class="comment"># 检查状态码是否为200，否则抛出异常。</span></span><br><span class="line">        r.raise_for_status()</span><br><span class="line">        <span class="comment"># 返回请求的相应内容。</span></span><br><span class="line">        <span class="keyword">return</span> r.text</span><br><span class="line">    <span class="keyword">except</span>:</span><br><span class="line">        <span class="comment"># 抛出异常则重试</span></span><br><span class="line">        <span class="keyword">return</span> getHTMLText(url)</span><br></pre></td></tr></tbody></table></figure><p></p>
+<h1 id="实例一豆瓣国产电视剧爬虫">实例一：豆瓣国产电视剧爬虫</h1>
+<h2 id="观察所需爬取的页面">观察所需爬取的页面</h2>
+<p>所需爬取的页面为<a target="_blank" rel="noopener" href="https://movie.douban.com/tv/#!type=tv&amp;tag=%E5%9B%BD%E4%BA%A7%E5%89%A7&amp;sort=time&amp;page_limit=20&amp;page_start=0">按时间排序的国产电视剧评分等信息</a>。<br>
+<img src="/images/Python%E7%88%AC%E8%99%AB/%E8%B1%86%E7%93%A3%E7%94%B5%E8%A7%86%E5%89%A7.png" class=""><br>
+查看其源代码发现电视剧列表内容是由 js 加载的。<br>
+<img src="/images/Python%E7%88%AC%E8%99%AB/%E6%BA%90%E7%A0%811.png" class=""></p>
+<h2 id="获取电视剧豆瓣地址列表">获取电视剧豆瓣地址列表</h2>
+<p>打开控制台，观察一下 network 中往返的数据。<br>
+<img src="/images/Python%E7%88%AC%E8%99%AB/%E6%8E%A7%E5%88%B6%E5%8F%B01.png" class=""><br>
+<img src="/images/Python%E7%88%AC%E8%99%AB/%E6%8E%A7%E5%88%B6%E5%8F%B02.png" class=""><br>
+观察到网页通过查询 <code>https://movie.douban.com/j/search_subjects?type=tv&amp;tag=国产剧&amp;sort=time&amp;page_limit=20&amp;page_start=0</code><br>
+其中 type 是分类（movie，tv）；tag 是小分类（热门，美剧，英剧，韩剧，日剧，国产剧，港剧，日本动画，综艺）；sort 是排序（recommend，time，rank）；page_limit 是每页展示的电视剧数量（不可修改）；page_start 是起始页面，为 20 的倍数（例如，第一页是 0，第二页是 20 等等）。<br>
+返回的是 json 数据，直接读取其 url 字段即可。<br>
+</p><figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">getTVdramalist</span>(<span class="params">url, Numofpage</span>):</span></span><br><span class="line">    <span class="comment"># 电视剧豆瓣地址列表</span></span><br><span class="line">    TVdramalist = []</span><br><span class="line">    <span class="comment"># Numofpage为爬取页面数</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">int</span>(Numofpage)):</span><br><span class="line">        <span class="comment"># 获取第i页网页的资源，20为每页的电视剧记录数</span></span><br><span class="line">        text = getHTMLText(url+<span class="built_in">str</span>(i*<span class="number">20</span>))</span><br><span class="line">        <span class="comment"># 由于此url返回json对象，所以将获取到的资源转换为json格式</span></span><br><span class="line">        json_text = json.loads(text)</span><br><span class="line">        <span class="comment"># 获取json中的url字段，存入TVdramalist列表</span></span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">20</span>):</span><br><span class="line">            dic = json_text[<span class="string">'subjects'</span>][j]</span><br><span class="line">            TVdramalist.append(dic[<span class="string">'url'</span>])</span><br><span class="line">    <span class="keyword">return</span> TVdramalist</span><br><span class="line"></span><br><span class="line">moivelist_url = <span class="string">'https://movie.douban.com/j/search_subjects?type=tv&amp;tag=国产剧&amp;sort=time&amp;page_limit=20&amp;page_start='</span></span><br><span class="line">Numofpage = <span class="number">5</span></span><br><span class="line"><span class="comment"># 获取最新5*20条电视剧的详情页链接</span></span><br><span class="line">moivelist = getTVdramalist(moivelist_url, Numofpage)</span><br></pre></td></tr></tbody></table></figure><p></p>
+<h2 id="分析电视剧详情页">分析电视剧详情页</h2>
+<p>对于上面获取的每一个 url 对应一个电视剧详情页。<br>
+<img src="/images/Python%E7%88%AC%E8%99%AB/%E8%AF%A6%E6%83%85%E9%A1%B5.png" class=""><br>
+查看其源代码发现电视剧详情内容是由 HTML 加载的。<br>
+<img src="/images/Python%E7%88%AC%E8%99%AB/%E6%BA%90%E7%A0%812.png" class=""><br>
+则用 beautifulsoup 库结合正则表达式 re 库分析并获取所需字段。<br>
+</p><figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">getTVdramainfo</span>(<span class="params">url, writer</span>):</span></span><br><span class="line">    text = getHTMLText(url)</span><br><span class="line">    <span class="comment"># 将获取到的资源转换为soup对象</span></span><br><span class="line">    soup = BeautifulSoup(text)</span><br><span class="line">    <span class="comment"># 找到所需字段</span></span><br><span class="line">    name = soup.find(<span class="built_in">property</span>=<span class="string">"v:itemreviewed"</span>).string</span><br><span class="line">    rating = <span class="built_in">float</span>(soup.find(<span class="built_in">property</span>=<span class="string">"v:average"</span>).string)</span><br><span class="line">    votes = <span class="built_in">int</span>(soup.find(<span class="built_in">property</span>=<span class="string">"v:votes"</span>).string)</span><br><span class="line">    episode = <span class="built_in">int</span>(re.search(<span class="string">u'集数:&lt;/span&gt; (\d+)&lt;br/&gt;'</span>, text).group(<span class="number">1</span>))</span><br><span class="line">    duration = <span class="built_in">int</span>(re.search(<span class="string">u'单集片长:&lt;/span&gt; (\d+)分钟&lt;br/&gt;'</span>, text).group(<span class="number">1</span>))</span><br></pre></td></tr></tbody></table></figure><br>
+从property为v:itemreviewed的标签可以得到电视剧名。<br>
+从property为v:average的标签可以得到评分。<br>
+从property为v:votes的标签可以得到评分人数。<br>
+<code>&lt;span class="pl"&gt;集数:&lt;/span&gt; 12&lt;br/&gt;</code> 和 <code>&lt;span class="pl"&gt;单集片长:&lt;/span&gt; 55分钟&lt;br/&gt;</code> 的标签属性和其他标签的属性都一样，这里直接用正则表达式进行查找反而更方便。<p></p>
+<h2 id="存储所爬信息到数据库">存储所爬信息到数据库</h2>
+<p>这里使用 sqlite3 库实现<br>
+</p><figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">dbtablecreate</span>():</span></span><br><span class="line">    <span class="comment"># 执行一条SQL语句，创建ChineseTVdrama表</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        cursor.execute(<span class="string">'CREATE TABLE ChineseTVdrama (name TEXT PRIMARY KEY, rating REAL, votes INT, episode INT, duration INT)'</span>)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">'Table created successfully'</span>)</span><br><span class="line">    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">        <span class="built_in">print</span>(e)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">dbinsertorupdate</span>(<span class="params">name, rating, votes, episode, duration</span>):</span></span><br><span class="line">    <span class="comment"># 执行一条SQL语句，插入一条记录</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        cursor.execute(<span class="string">'INSERT INTO ChineseTVdrama (name, rating, votes, episode, duration) VALUES (?, ?, ?, ?, ?)'</span>, (name, rating, votes, episode, duration))</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">'data insert successfully'</span>)</span><br><span class="line">    <span class="keyword">except</span>:</span><br><span class="line">        <span class="comment"># 如果该数据已经存在，则插入异常，改用更新数据</span></span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            cursor.execute(<span class="string">'UPDATE ChineseTVdrama SET rating = ?, votes = ?, episode = ?, duration = ? WHERE name = ?'</span>, (rating, votes, episode, duration, name))</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">'data update successfully'</span>)</span><br><span class="line">        <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">'update: '</span> + <span class="built_in">str</span>(e))</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">dbquery</span>(<span class="params">name</span>):</span></span><br><span class="line">    <span class="comment"># 以电视剧名称为关键词查询数据库</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        cursor.execute(<span class="string">'SELECT name, rating, votes, episode, duration FROM ChineseTVdrama WHERE name = ?'</span>, (name))</span><br><span class="line">        <span class="keyword">for</span> row <span class="keyword">in</span> cursor:</span><br><span class="line">            <span class="keyword">return</span> row</span><br><span class="line">    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">'query: '</span> + <span class="built_in">str</span>(e))</span><br><span class="line"></span><br><span class="line">moivelist_url = <span class="string">'https://movie.douban.com/j/search_subjects?type=tv&amp;tag=国产剧&amp;sort=time&amp;page_limit=20&amp;page_start='</span></span><br><span class="line">Numofpage = <span class="number">5</span></span><br><span class="line"><span class="comment"># 获取最新5*20条电视剧的详情页链接</span></span><br><span class="line">moivelist = getTVdramalist(moivelist_url, Numofpage)</span><br><span class="line"><span class="comment"># 连接到SQLite数据库</span></span><br><span class="line"><span class="comment"># 如果文件不存在，会自动在当前目录创建</span></span><br><span class="line">doubandatabase = sqlite3.connect(<span class="string">'豆瓣.db'</span>)</span><br><span class="line"><span class="comment"># 创建一个Cursor</span></span><br><span class="line">cursor = doubandatabase.cursor()</span><br><span class="line"><span class="comment"># 创建一个数据库表</span></span><br><span class="line">dbtablecreate()</span><br><span class="line"><span class="comment"># 从每个电视剧的详情页中获取所需字段存入数据库</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> moivelist:</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        getTVdramainfo(i, cursor)</span><br><span class="line">    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">        <span class="built_in">print</span>(e)</span><br><span class="line">        <span class="keyword">continue</span></span><br><span class="line"><span class="comment"># 关闭Cursor</span></span><br><span class="line">cursor.close()</span><br><span class="line"><span class="comment"># 提交事务</span></span><br><span class="line">doubandatabase.commit()</span><br><span class="line"><span class="comment"># 关闭Connection</span></span><br><span class="line">doubandatabase.close()</span><br><span class="line"></span><br><span class="line">conn = sqlite3.connect(<span class="string">'豆瓣.db'</span>)</span><br><span class="line">cursor = conn.cursor()</span><br><span class="line">cursor.execute(<span class="string">"SELECT name FROM sqlite_master WHERE type = 'table'"</span>)</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> cursor.fetchall():</span><br><span class="line">    tablename = i[<span class="number">0</span>]</span><br><span class="line">    cursor.execute(<span class="string">"SELECT * FROM '{}'"</span>.<span class="built_in">format</span>(tablename))</span><br><span class="line">    <span class="keyword">with</span> <span class="built_in">open</span>(tablename + <span class="string">'.csv'</span>, <span class="string">'w'</span>, newline=<span class="string">''</span>, encoding=<span class="string">'utf_8_sig'</span>) <span class="keyword">as</span> csv_file: </span><br><span class="line">        csv_writer = csv.writer(csv_file)</span><br><span class="line">        csv_writer.writerow([j[<span class="number">0</span>] <span class="keyword">for</span> j <span class="keyword">in</span> cursor.description])</span><br><span class="line">        csv_writer.writerows(cursor)</span><br></pre></td></tr></tbody></table></figure><br>
+可以用SQLiteSpy.exe查看数据库。<br>
+<img src="/images/Python%E7%88%AC%E8%99%AB/%E6%95%B0%E6%8D%AE%E5%BA%931.png" class=""><p></p>
+<h1 id="实例二豆瓣正在上映电影爬虫">实例二：豆瓣正在上映电影爬虫</h1>
+<h2 id="观察所需爬取的页面-1">观察所需爬取的页面</h2>
+<p>所需爬取的页面为<a target="_blank" rel="noopener" href="https://movie.douban.com/cinema/nowplaying/wuhan/">正在上映电影</a>。<br>
+<img src="/images/Python%E7%88%AC%E8%99%AB/%E8%B1%86%E7%93%A3%E6%AD%A3%E5%9C%A8%E4%B8%8A%E6%98%A0%E7%94%B5%E5%BD%B1.png" class=""><br>
+查看其源代码。<br>
+<img src="/images/Python%E7%88%AC%E8%99%AB/%E6%BA%90%E7%A0%813.png" class=""></p>
+<h2 id="获取电影信息">获取电影信息</h2>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">getnowshowing</span>(<span class="params">url, city</span>):</span></span><br><span class="line">    text = getHTMLText(url + city)</span><br><span class="line">    <span class="comment"># 将获取到的资源转换为soup对象</span></span><br><span class="line">    soup = BeautifulSoup(text)</span><br><span class="line">    <span class="comment"># 找到所有样式为lists的标签</span></span><br><span class="line">    lists = soup.find(class_=<span class="string">"lists"</span>)</span><br><span class="line">    <span class="comment"># 遍历其儿子节点</span></span><br><span class="line">    <span class="keyword">for</span> eachmoive <span class="keyword">in</span> lists.children:</span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">type</span>(eachmoive) == bs4.element.Tag:</span><br><span class="line">            <span class="comment"># 找到所需字段</span></span><br><span class="line">            name = eachmoive[<span class="string">'data-title'</span>]</span><br><span class="line">            rating = <span class="built_in">float</span>(eachmoive[<span class="string">'data-score'</span>])</span><br><span class="line">            votes = <span class="built_in">int</span>(eachmoive[<span class="string">'data-votecount'</span>])</span><br><span class="line">            <span class="keyword">if</span> eachmoive[<span class="string">'data-duration'</span>].encode(<span class="string">'utf-8'</span>) == <span class="string">''</span>:</span><br><span class="line">                duration = <span class="number">0</span></span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                duration = <span class="built_in">int</span>(<span class="built_in">str</span>(eachmoive[<span class="string">'data-duration'</span>].encode(<span class="string">'utf-8'</span>)).split(<span class="string">'\\'</span>)[<span class="number">0</span>].split(<span class="string">'\''</span>)[<span class="number">1</span>])</span><br></pre></td></tr></tbody></table></figure>
+<p>从源码发现电影列表内容分为正在上映和即将上映两块，<code>soup.find(class_="lists")</code> 只返回第一个符合条件的标签。<br>
+其每一个孩子节点包含每一个电影信息。所有信息都存在孩子节点的 <code>&lt;li&gt;</code> 标签内，所以只取 Tag 对象，Tag 对象的属性访问与字典一样。<br>
+注意 data-duration 的值有可能为空，所以要单独判断。<br>
+eachmoive ['data-duration'] 返回 'xxx 分钟 ' 的 Unicode 对象，<code>.encode('utf-8')</code> 将 Unicode 对象转换成 string 对象。<code>filter(str.isdigit, str)</code> 提取 str 中数字。</p>
+<h2 id="存储所爬信息到数据库-1">存储所爬信息到数据库</h2>
+<p>这里使用 sqlite3 库实现<br>
+</p><figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">dbtablecreate</span>():</span></span><br><span class="line">    <span class="comment"># 执行一条SQL语句，创建NowShowingMoive表</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        cursor.execute(<span class="string">'CREATE TABLE NowShowingMoive (name TEXT PRIMARY KEY, rating REAL, votes INT, duration INT)'</span>)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">'Table created successfully'</span>)</span><br><span class="line">    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">        <span class="built_in">print</span>(e)</span><br><span class="line">    </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">dbinsert</span>(<span class="params">name, rating, votes, duration</span>):</span></span><br><span class="line">    <span class="comment"># 执行一条SQL语句，插入一条记录</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        cursor.execute(<span class="string">'INSERT INTO NowShowingMoive (name, rating, votes, duration) VALUES (?, ?, ?, ?)'</span>, (name, rating, votes, duration))</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">'data insert successfully'</span>)</span><br><span class="line">    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">'insert: '</span> + <span class="built_in">str</span>(e))</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">dbquery</span>(<span class="params">name</span>):</span></span><br><span class="line">    <span class="comment"># 以电影名称为关键词查询数据库</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        cursor.execute(<span class="string">'SELECT name, rating, votes, duration FROM NowShowingMoive WHERE name = ?'</span>, (name))</span><br><span class="line">        <span class="keyword">for</span> row <span class="keyword">in</span> cursor:</span><br><span class="line">            <span class="keyword">return</span> row</span><br><span class="line">    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">'query: '</span> + <span class="built_in">str</span>(e))</span><br><span class="line"></span><br><span class="line"><span class="comment"># 连接到SQLite数据库</span></span><br><span class="line"><span class="comment"># 如果文件不存在，会自动在当前目录创建</span></span><br><span class="line">doubandatabase = sqlite3.connect(<span class="string">'豆瓣.db'</span>)</span><br><span class="line"><span class="comment"># 创建一个Cursor</span></span><br><span class="line">cursor = doubandatabase.cursor()</span><br><span class="line"><span class="comment"># 如果数据库表已经存在，则删除</span></span><br><span class="line">cursor.execute(<span class="string">'DROP TABLE IF EXISTS NowShowingMoive'</span>)</span><br><span class="line"><span class="comment"># 创建一个数据库表</span></span><br><span class="line">dbtablecreate()</span><br><span class="line">nowshowing_url = <span class="string">'https://movie.douban.com/cinema/nowplaying/'</span></span><br><span class="line">city = <span class="string">'wuhan'</span></span><br><span class="line">nowshowing = getnowshowing(nowshowing_url, city)</span><br><span class="line"><span class="comment"># 关闭Cursor</span></span><br><span class="line">cursor.close()</span><br><span class="line"><span class="comment"># 提交事务</span></span><br><span class="line">doubandatabase.commit()</span><br><span class="line"><span class="comment"># 关闭Connection</span></span><br><span class="line">doubandatabase.close()</span><br><span class="line"></span><br><span class="line">conn = sqlite3.connect(<span class="string">'豆瓣.db'</span>)</span><br><span class="line">cursor = conn.cursor()</span><br><span class="line">cursor.execute(<span class="string">"SELECT name FROM sqlite_master WHERE type = 'table'"</span>)</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> cursor.fetchall():</span><br><span class="line">    tablename = i[<span class="number">0</span>]</span><br><span class="line">    cursor.execute(<span class="string">"SELECT * FROM '{}'"</span>.<span class="built_in">format</span>(tablename))</span><br><span class="line">    <span class="keyword">with</span> <span class="built_in">open</span>(tablename + <span class="string">'.csv'</span>, <span class="string">'w'</span>, newline=<span class="string">''</span>, encoding=<span class="string">'utf_8_sig'</span>) <span class="keyword">as</span> csv_file: </span><br><span class="line">        csv_writer = csv.writer(csv_file)</span><br><span class="line">        csv_writer.writerow([j[<span class="number">0</span>] <span class="keyword">for</span> j <span class="keyword">in</span> cursor.description])</span><br><span class="line">        csv_writer.writerows(cursor)</span><br></pre></td></tr></tbody></table></figure><br>
+可以用SQLiteSpy.exe查看数据库。<br>
+<img src="/images/Python%E7%88%AC%E8%99%AB/%E6%95%B0%E6%8D%AE%E5%BA%932.png" class=""><p></p>
+<h1 id="实例三豆瓣电影top250爬虫">实例三：豆瓣电影 TOP250 爬虫</h1>
+<h2 id="观察所需爬取的页面-2">观察所需爬取的页面</h2>
+<p>所需爬取的页面为<a target="_blank" rel="noopener" href="https://movie.douban.com/top250?start=0">豆瓣电影 Top250</a>。<br>
+<img src="/images/Python%E7%88%AC%E8%99%AB/%E8%B1%86%E7%93%A3%E7%94%B5%E5%BD%B1Top250.png" class=""><br>
+查看其源代码。<br>
+<img src="/images/Python%E7%88%AC%E8%99%AB/%E6%BA%90%E7%A0%814.png" class=""></p>
+<h2 id="获取电影信息-1">获取电影信息</h2>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">getTop250moive</span>(<span class="params">url, Numofpage</span>):</span></span><br><span class="line">    <span class="comment"># Numofpage为爬取页面数</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(Numofpage):</span><br><span class="line">        <span class="comment"># 获取第i页网页的资源，25为每页的电影记录数</span></span><br><span class="line">        text = getHTMLText(url+<span class="built_in">str</span>(i*<span class="number">25</span>))</span><br><span class="line">        <span class="comment"># 将获取到的资源转换为soup对象</span></span><br><span class="line">        soup = BeautifulSoup(text)</span><br><span class="line">        <span class="comment"># 找到所有样式为info的标签</span></span><br><span class="line">        lists = soup.find_all(class_=<span class="string">"info"</span>)</span><br><span class="line">        <span class="comment"># 找到所需字段</span></span><br><span class="line">        <span class="keyword">for</span> eachmoive <span class="keyword">in</span> lists:</span><br><span class="line">            name = eachmoive.find(class_=<span class="string">"title"</span>).string</span><br><span class="line">            year = <span class="built_in">int</span>(eachmoive.find(<span class="string">'p'</span>).get_text().split(<span class="string">'\n'</span>)[<span class="number">2</span>].strip()[<span class="number">0</span>:<span class="number">4</span>])</span><br><span class="line">            country = eachmoive.find(<span class="string">'p'</span>).get_text().split(<span class="string">'\n'</span>)[<span class="number">2</span>].split(<span class="string">'/'</span>)[<span class="number">1</span>].strip()</span><br><span class="line">            rating = <span class="built_in">float</span>(eachmoive.find(<span class="built_in">property</span>=<span class="string">"v:average"</span>).string)</span><br><span class="line">            <span class="comment"># 两种方法都可以</span></span><br><span class="line">            votes = <span class="built_in">int</span>(<span class="built_in">str</span>(eachmoive.find(<span class="built_in">property</span>=<span class="string">"v:best"</span>).next_sibling.next_sibling.string.encode(<span class="string">'utf-8'</span>)).split(<span class="string">'\\'</span>)[<span class="number">0</span>].split(<span class="string">'\''</span>)[<span class="number">1</span>])</span><br><span class="line">            votes = <span class="built_in">int</span>(<span class="built_in">str</span>(eachmoive.find(text=re.<span class="built_in">compile</span>(<span class="string">u"人评价"</span>)).encode(<span class="string">'utf-8'</span>)).split(<span class="string">'\\'</span>)[<span class="number">0</span>].split(<span class="string">'\''</span>)[<span class="number">1</span>])</span><br><span class="line">            <span class="keyword">if</span> eachmoive.find(class_=<span class="string">"inq"</span>) == <span class="literal">None</span>:</span><br><span class="line">                comment = <span class="string">''</span></span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                comment = eachmoive.find(class_=<span class="string">"inq"</span>).string</span><br></pre></td></tr></tbody></table></figure>
+<p>从网址发现，Top250 的电影分别展示在 10 个页面，每个页面展示 25 条电影信息，所以 url 的 start 参数为 25 的倍数，值为 0-9。<br>
+从源码发现 <code>soup.find(class_="info")</code> 返回每一个电影的信息所在的标签如图。<br>
+从样式为 title 的标签可以得到电影名。<br>
+从第一个 p 标签可以返回导演、主演、上映年份、国家、类型等信息，并且是分列 2 行，<br>
+用<code>.split('\n')[2]</code> 得到第 2 行的字符串，<code>.strip()[0:4])</code> 去掉空格并取前 4 个字符作为年份。<br>
+<code>.split('/')[1].strip()</code> 以斜线分隔符分割字符串并取出第二段字符串并去掉前后空格，即国家信息。<br>
+从 property 为 v:average 的标签可以得到评分。<br>
+由于评分人数从 <code>&lt;span&gt;878960人评价&lt;/span&gt;</code> 标签中获取，但是 span 标签没有任何属性。<br>
+所以有两种方法：<br>
+1. 通过 <code>find(property="v:best")</code> 找到上一个平行节点，然后通过<code>.next_sibling.next_sibling.string</code> 访问。<br>
+2. 通过 <code>eachmoive.find(text=re.compile(u"人评价"))</code> 直接用正则表达式查找相应的字符串。<br>
+最后通过 <code>filter(str.isdigit, str)</code> 提取 str 中数字。<br>
+从样式为 inq 的标签可以得到电影评论，注意电影可能没有评论，所以要单独判断。</p>
+<h2 id="存储所爬信息到数据库-2">存储所爬信息到数据库</h2>
+<p>这里使用 sqlite3 库实现<br>
+</p><figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">dbtablecreate</span>():</span></span><br><span class="line">    <span class="comment"># 执行一条SQL语句，创建Top250movie表</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        cursor.execute(<span class="string">'CREATE TABLE Top250movie (name TEXT PRIMARY KEY, year INT, country TEXT, rating REAL, votes INT, comment TEXT)'</span>)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">'Table created successfully'</span>)</span><br><span class="line">    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">        <span class="built_in">print</span>(e)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">dbinsert</span>(<span class="params">name, year, country, rating, votes, comment</span>):</span></span><br><span class="line">    <span class="comment"># 执行一条SQL语句，插入一条记录</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        cursor.execute(<span class="string">'INSERT INTO Top250movie (name, year, country, rating, votes, comment) VALUES (?, ?, ?, ?, ?, ?)'</span>, (name, year, country, rating, votes, comment))</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">'data insert successfully'</span>)</span><br><span class="line">    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">'insert: '</span> + <span class="built_in">str</span>(e))</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">dbquery</span>(<span class="params">name</span>):</span></span><br><span class="line">    <span class="comment"># 以电影名称为关键词查询数据库</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        cursor.execute(<span class="string">'SELECT name, year, country, rating, votes, comment FROM Top250movie WHERE name = ?'</span>, (name))</span><br><span class="line">        <span class="keyword">for</span> row <span class="keyword">in</span> cursor:</span><br><span class="line">            <span class="keyword">return</span> row</span><br><span class="line">    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">'query: '</span> + <span class="built_in">str</span>(e))</span><br><span class="line"></span><br><span class="line"><span class="comment"># 连接到SQLite数据库</span></span><br><span class="line"><span class="comment"># 如果文件不存在，会自动在当前目录创建</span></span><br><span class="line">doubandatabase = sqlite3.connect(<span class="string">'豆瓣.db'</span>)</span><br><span class="line"><span class="comment"># 创建一个Cursor</span></span><br><span class="line">cursor = doubandatabase.cursor()</span><br><span class="line"><span class="comment"># 如果数据库表已经存在，则删除</span></span><br><span class="line">cursor.execute(<span class="string">'DROP TABLE IF EXISTS Top250movie'</span>)</span><br><span class="line"><span class="comment"># 创建一个数据库表</span></span><br><span class="line">dbtablecreate()</span><br><span class="line">moivelist_url = <span class="string">'https://movie.douban.com/top250?start='</span></span><br><span class="line">Numofpage = <span class="number">10</span></span><br><span class="line"><span class="comment"># 获取最新10*25条电影信息</span></span><br><span class="line">getTop250moive(moivelist_url, Numofpage)</span><br><span class="line"><span class="comment"># 关闭Cursor</span></span><br><span class="line">cursor.close()</span><br><span class="line"><span class="comment"># 提交事务</span></span><br><span class="line">doubandatabase.commit()</span><br><span class="line"><span class="comment"># 关闭Connection</span></span><br><span class="line">doubandatabase.close()</span><br><span class="line"></span><br><span class="line">conn = sqlite3.connect(<span class="string">'豆瓣.db'</span>)</span><br><span class="line">cursor = conn.cursor()</span><br><span class="line">cursor.execute(<span class="string">"SELECT name FROM sqlite_master WHERE type = 'table'"</span>)</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> cursor.fetchall():</span><br><span class="line">    tablename = i[<span class="number">0</span>]</span><br><span class="line">    cursor.execute(<span class="string">"SELECT * FROM '{}'"</span>.<span class="built_in">format</span>(tablename))</span><br><span class="line">    <span class="keyword">with</span> <span class="built_in">open</span>(tablename + <span class="string">'.csv'</span>, <span class="string">'w'</span>, newline=<span class="string">''</span>, encoding=<span class="string">'utf_8_sig'</span>) <span class="keyword">as</span> csv_file: </span><br><span class="line">        csv_writer = csv.writer(csv_file)</span><br><span class="line">        csv_writer.writerow([j[<span class="number">0</span>] <span class="keyword">for</span> j <span class="keyword">in</span> cursor.description])</span><br><span class="line">        csv_writer.writerows(cursor)</span><br></pre></td></tr></tbody></table></figure><br>
+可以用SQLiteSpy.exe查看数据库。<br>
+<img src="/images/Python%E7%88%AC%E8%99%AB/%E6%95%B0%E6%8D%AE%E5%BA%933.png" class=""><p></p>
+<h1 id="其他">其他</h1>
+<p><a href="/assets/codes/豆瓣/douban_TV_drama.py">实例一源码</a><br>
+<a href="/assets/codes/豆瓣/douban_nowshowing_movie.py">实例二源码</a><br>
+<a href="/assets/codes/豆瓣/douban_top250_movie.py">实例三源码</a><br>
+<a href="/assets/codes/豆瓣/SQLiteSpy.zip">SQLiteSpy 数据库查看器下载</a><br>
+<a href="/assets/codes/豆瓣/豆瓣.db">豆瓣爬虫结果下载</a></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Python/" rel="tag"># Python</a>
+              <a href="/tags/Crawler/" rel="tag"># Crawler</a>
+              <a href="/tags/Examples/" rel="tag"># Examples</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/contents/Python-NumPy%E5%BA%93%E5%9F%BA%E7%A1%80.html" rel="prev" title="Python NumPy 库基础">
+                  <i class="fa fa-chevron-left"></i> Python NumPy 库基础
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/contents/Python-Web%E6%A1%86%E6%9E%B6-CherryPy.html" rel="next" title="Python Web 框架 - CherryPy">
+                  Python Web 框架 - CherryPy <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">LIU, XIMING</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="Symbols count total">192k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="Reading time total">5:49</span>
+  </span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="/js/third-party/search/local-search.js"></script>
+
+  <script class="next-config" data-name="pdf" type="application/json">{"object_url":{"url":"https://cdn.jsdelivr.net/npm/pdfobject@2.2.6/pdfobject.min.js","integrity":"sha256-77geM50MfxCD17eqyJR+Dag1svjJOLN+BJ2F/DMqMEY="},"url":"/lib/pdf/web/viewer.html"}</script>
+  <script src="/js/third-party/tags/pdf.js"></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdn.jsdelivr.net/npm/mathjax@3.2.0/es5/tex-mml-chtml.js","integrity":"sha256-r+3itOMtGGjap0x+10hu6jW/gZCzxHsoKrOd7gyRSGY="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+
+
+</body>
+</html>

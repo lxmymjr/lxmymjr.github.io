@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon.ico">
+  <link rel="mask-icon" href="/favicon.ico" color="#222">
+  <meta name="google-site-verification" content="yHqnmkvA-12pculpP0D-q6lLqYStfJAnZCn5OLVFDfQ">
+  <meta name="baidu-site-verification" content="VLW4ITHnBoryM4WZ">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css" integrity="sha256-mUZM63G8m73Mcidfrv5E+Y61y7a12O5mW4ezU3bxqW4=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"lxmymjr.github.io","root":"/","images":"/images","scheme":"Gemini","version":"8.7.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":false,"async":true,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":-1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+<meta name="description" content="现在很多 Android 或者 iOS 应用都需要服务器推送，有很多第三方应用可以实现此功能，如 Firebase Cloud Messaging (原 Google Cloud Messaging) 和 Apple Push Notifications。由于 Google 官方的推送服务 Firebase Cloud Messaging 不能再中国使用，所以在此介绍极光推送的使用。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="极光推送 JPush 教程">
+<meta property="og:url" content="https://lxmymjr.github.io/contents/%E6%9E%81%E5%85%89%E6%8E%A8%E9%80%81JPush%E6%95%99%E7%A8%8B.html">
+<meta property="og:site_name" content="xmliu&#39;s blog">
+<meta property="og:description" content="现在很多 Android 或者 iOS 应用都需要服务器推送，有很多第三方应用可以实现此功能，如 Firebase Cloud Messaging (原 Google Cloud Messaging) 和 Apple Push Notifications。由于 Google 官方的推送服务 Firebase Cloud Messaging 不能再中国使用，所以在此介绍极光推送的使用。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2017-03-10T05:37:06.000Z">
+<meta property="article:modified_time" content="2021-09-16T02:56:10.897Z">
+<meta property="article:author" content="LIU, XIMING">
+<meta property="article:tag" content="Tutorial">
+<meta property="article:tag" content="Android">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://lxmymjr.github.io/contents/%E6%9E%81%E5%85%89%E6%8E%A8%E9%80%81JPush%E6%95%99%E7%A8%8B.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://lxmymjr.github.io/contents/%E6%9E%81%E5%85%89%E6%8E%A8%E9%80%81JPush%E6%95%99%E7%A8%8B.html","path":"contents/极光推送JPush教程.html","title":"极光推送 JPush 教程"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>极光推送 JPush 教程 | xmliu's blog</title>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">xmliu's blog</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%87%86%E5%A4%87%E5%B7%A5%E4%BD%9C"><span class="nav-number">1.</span> <span class="nav-text">准备工作</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%AB%AF"><span class="nav-number">2.</span> <span class="nav-text">服务器端</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE"><span class="nav-number">2.1.</span> <span class="nav-text">环境配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%AE%BE%E7%BD%AE"><span class="nav-number">2.2.</span> <span class="nav-text">服务器设置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%8D%E5%8A%A1%E7%AB%AF%E4%B8%BB%E5%87%BD%E6%95%B0"><span class="nav-number">2.3.</span> <span class="nav-text">服务端主函数</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#android%E5%AE%A2%E6%88%B7%E7%AB%AF"><span class="nav-number">3.</span> <span class="nav-text">Android 客户端</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#jcenter%E8%87%AA%E5%8A%A8%E9%9B%86%E6%88%90%E6%AD%A5%E9%AA%A4"><span class="nav-number">3.1.</span> <span class="nav-text">jcenter 自动集成步骤</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96sdk"><span class="nav-number">3.2.</span> <span class="nav-text">初始化 SDK</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8E%A5%E6%94%B6%E6%8E%A8%E9%80%81%E6%B6%88%E6%81%AFreceiver"><span class="nav-number">3.3.</span> <span class="nav-text">接收推送消息 Receiver</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-overview">
+            <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="LIU, XIMING"
+      src="/assets/avatar/yuntianhe.jpg">
+  <p class="site-author-name" itemprop="name">LIU, XIMING</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">18</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/lxmymjr?tab=repositories" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;lxmymjr?tab&#x3D;repositories" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:xmliu.2015@smu.edu.sg" title="E-Mail → mailto:xmliu.2015@smu.edu.sg" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://sites.google.com/view/xmliu-smu/home" title="https:&#x2F;&#x2F;sites.google.com&#x2F;view&#x2F;xmliu-smu&#x2F;home" rel="noopener" target="_blank">Personal Homepage</a>
+        </li>
+    </ul>
+  </div>
+
+          </div>
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://lxmymjr.github.io/contents/%E6%9E%81%E5%85%89%E6%8E%A8%E9%80%81JPush%E6%95%99%E7%A8%8B.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/assets/avatar/yuntianhe.jpg">
+      <meta itemprop="name" content="LIU, XIMING">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xmliu's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          极光推送 JPush 教程<a href="https://github.com/lxmymjr/Blog/blob/master/source/_posts/%E6%9E%81%E5%85%89%E6%8E%A8%E9%80%81JPush%E6%95%99%E7%A8%8B.md" class="post-edit-link" title="Edit this post" rel="noopener" target="_blank"><i class="fa fa-pen-nib"></i></a>
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2017-03-10 13:37:06" itemprop="dateCreated datePublished" datetime="2017-03-10T13:37:06+08:00">2017-03-10</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2021-09-16 10:56:10" itemprop="dateModified" datetime="2021-09-16T10:56:10+08:00">2021-09-16</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Android/" itemprop="url" rel="index"><span itemprop="name">Android</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="Symbols count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Symbols count in article: </span>
+      <span>6.9k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>13 mins.</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>现在很多 Android 或者 iOS 应用都需要服务器推送，有很多第三方应用可以实现此功能，如 Firebase Cloud Messaging (原 Google Cloud Messaging) 和 Apple Push Notifications。由于 Google 官方的推送服务 Firebase Cloud Messaging 不能再中国使用，所以在此介绍极光推送的使用。<br>
+<span id="more"></span></p>
+<h1 id="准备工作">准备工作</h1>
+<ol type="1">
+<li>注册成为 JPush 开发者<br>
+在 <a target="_blank" rel="noopener" href="https://www.jiguang.cn/accounts/login/form">JPush 开发者服务</a>注册账号并登陆。</li>
+<li>创建应用<br>
+点击 “应用管理” 页面的 “创建应用” 按钮。填写应用名称，应用图标，Android 应用包名（不可更改），iOS 开发证书及密码，iOS 生产证书及密码。</li>
+<li>记录 APPKey 和 Master Secret<br>
+点击刚创建的应用详情页面，记录 APPKey 和 Master Secret</li>
+</ol>
+<h1 id="服务器端">服务器端</h1>
+<p>本文使用 Python 作为服务器脚本语言。<br>
+官方文档：<a target="_blank" rel="noopener" href="https://docs.jiguang.cn/jpush/server/3rd/python_sdk/">Python SDK</a><br>
+SDK 下载：<a target="_blank" rel="noopener" href="https://sdkfiledl.jiguang.cn/jpush-api-python-client-3.2.4.zip">Python SDK v3.2.4</a><br>
+官方源码：<a target="_blank" rel="noopener" href="https://github.com/jpush/jpush-api-python-client">jpush-api-python-client</a><br>
+官方 API：<a target="_blank" rel="noopener" href="https://github.com/jpush/jpush-api-python-client/blob/master/docs/push/push.md">jpush python api</a><br>
+官方 API：<a target="_blank" rel="noopener" href="https://docs.jiguang.cn/jpush/server/push/rest_api_v3_push/">REST Push API</a></p>
+<h2 id="环境配置">环境配置</h2>
+<p>pip 方式：<code>pip install jpush</code><br>
+easy_install 方式：<code>easy_install jpush</code><br>
+使用源码方式：<code>python setup.py install</code></p>
+<h2 id="服务器设置">服务器设置</h2>
+<p>新建 conf.py 文件：<br>
+</p><figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># please put your app_key and master_secret here</span></span><br><span class="line">app_key = <span class="string">u'your app_key'</span></span><br><span class="line">master_secret = <span class="string">u'your master_secret'</span></span><br></pre></td></tr></tbody></table></figure><p></p>
+<h2 id="服务端主函数">服务端主函数</h2>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> conf <span class="keyword">import</span> app_key, master_secret</span><br><span class="line">_jpush = jpush.JPush(app_key, master_secret) <span class="comment">#初始化jpush</span></span><br><span class="line">_jpush.set_logging(<span class="string">"DEBUG"</span>) <span class="comment">#设置日志</span></span><br><span class="line">push = _jpush.create_push() <span class="comment">#初始化push</span></span><br><span class="line">push.platform = jpush.all_ <span class="comment">#设置推送所有平台</span></span><br><span class="line">push.platform = jpush.platform(*types) <span class="comment">#设置推送指定平台，关键字为"android", "ios","winphone"</span></span><br><span class="line">push.audience = jpush.registration_id(*reg_ids) <span class="comment">#根据注册id指定推送设备</span></span><br><span class="line">push.audience = jpush.alias(*alias) <span class="comment">#根据别名指定推送设备，别名在开发者服务平台中设置</span></span><br><span class="line">push.audience = jpush.tag(*tag) <span class="comment">#根据标签指定推送设备，标签在开发者服务平台中设置，多个标签之间是 OR 的关系，即取并集。</span></span><br><span class="line">push.audience = jpush.tag_and(*tag_ands) <span class="comment">#根据标签指定推送设备，标签在开发者服务平台中设置，多个标签之间是 AND 关系，即取交集。</span></span><br><span class="line">push.notification = jpush.notification(alert=<span class="literal">None</span>, ios=<span class="literal">None</span>, android=<span class="literal">None</span>, winphone=<span class="literal">None</span>) <span class="comment">#指定通知内容，如果下方各平台定义了alert，则覆盖这里的定义</span></span><br><span class="line">ios = jpush.ios(alert=<span class="literal">None</span>, badge=<span class="literal">None</span>, sound=<span class="literal">None</span>, content_available=<span class="literal">False</span>, extras=<span class="literal">None</span>, sound_disable=<span class="literal">False</span>) <span class="comment">#指定通知内容，声音，角标，唤醒，扩展字段</span></span><br><span class="line">android = jpush.android(alert, title=<span class="literal">None</span>, builder_id=<span class="literal">None</span>, extras=<span class="literal">None</span>) <span class="comment">#指定通知内容，标题，样式，扩展字段</span></span><br><span class="line">push.message = jpush.message(msg_content, title=<span class="literal">None</span>, content_type=<span class="literal">None</span>, extras=<span class="literal">None</span>) <span class="comment">#指定消息内容</span></span><br><span class="line">push.smsmessage = jpush.smsmessage(content,delay_time) <span class="comment">#指定短信内容和延迟时间（单位为秒，不能超过24小时。设置为0，表示立即发送短信。该参数仅对android平台有效，iOS 和 Winphone平台则会立即发送短信）</span></span><br><span class="line">result = push.send() <span class="comment">#执行推送</span></span><br></pre></td></tr></tbody></table></figure>
+<h1 id="android客户端">Android 客户端</h1>
+<p>官方集成文档：<a target="_blank" rel="noopener" href="https://docs.jiguang.cn/jpush/client/Android/android_guide/">Android SDK 集成指南</a><br>
+官方 API：<a target="_blank" rel="noopener" href="https://docs.jiguang.cn/jpush/client/Android/android_api/">Android SDK API</a><br>
+SDK 下载：<a target="_blank" rel="noopener" href="https://www.jiguang.cn/downloads/sdk/android/">Android SDK</a><br>
+目前 SDK 只支持 Android 2.3 或以上版本的手机系统。富媒体信息流功能则需 Android3.0 或以上版本的系统。</p>
+<h2 id="jcenter自动集成步骤">jcenter 自动集成步骤</h2>
+<p>说明：使用 jcenter 自动集成的开发者，不需要在项目中添加 jar 和 so，jcenter 会自动完成依赖；在 AndroidManifest.xml 中不需要添加任何 JPush SDK 相关的配置，jcenter 会自动导入。</p>
+<ol type="1">
+<li>确认 android studio 的 Project 根目录的主 gradle 中配置了 jcenter 支持。（新建 project 默认配置就支持）<br>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">buildscript {</span><br><span class="line">    repositories {</span><br><span class="line">        jcenter()</span><br><span class="line">    }</span><br><span class="line">    ......</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line">allprojects {</span><br><span class="line">    repositories {</span><br><span class="line">        jcenter()</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure></li>
+<li>在 module 的 gradle 中添加依赖和 AndroidManifest 的替换变量。<br>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">android {</span><br><span class="line">    ......</span><br><span class="line">    defaultConfig {</span><br><span class="line">        applicationId "com.xxx.xxx" //JPush上注册的包名.</span><br><span class="line">        ......</span><br><span class="line"></span><br><span class="line">        ndk {</span><br><span class="line">            //选择要添加的对应cpu类型的.so库。</span><br><span class="line">            abiFilters 'armeabi', 'armeabi-v7a', 'arm64-v8a'</span><br><span class="line">            // 还可以添加 'x86', 'x86_64', 'mips', 'mips64'</span><br><span class="line">        }</span><br><span class="line"></span><br><span class="line">        manifestPlaceholders = [</span><br><span class="line">            JPUSH_PKGNAME : applicationId,</span><br><span class="line">            JPUSH_APPKEY : "你的appkey", //JPush上注册的包名对应的appkey.</span><br><span class="line">            JPUSH_CHANNEL : "自定义渠道名称", //用户渠道统计的渠道名称</span><br><span class="line">        ]</span><br><span class="line">        ......</span><br><span class="line">    }</span><br><span class="line">    ......</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line">dependencies {</span><br><span class="line">    ......</span><br><span class="line"></span><br><span class="line">    compile 'cn.jiguang.sdk:jpush:x.x.x'  // 此处为JPush的版本号</span><br><span class="line">    compile 'cn.jiguang.sdk:jcore:x.x.x'  // 此处为JCore的版本号</span><br><span class="line">    ......</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure><br>
+注：如果在添加以上 abiFilter 配置之后 android Studio 出现以下提示：<br>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">NDK integration is deprecated in the current plugin. Consider trying the new experimental plugin.</span><br></pre></td></tr></tbody></table></figure><br>
+则在 Project 根目录的 gradle.properties 文件中添加：<br>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">android.useDeprecatedNdk=true</span><br></pre></td></tr></tbody></table></figure><br>
+说明：若没有 res/drawable-xxxx/jpush_notification_icon 这个资源默认使用应用图标作为通知 icon，在 5.0 以上系统将应用图标作为 statusbar icon 可能显示不正常，用户可定义没有阴影和渐变色的 icon 替换这个文件，文件名不要变。</li>
+</ol>
+<h2 id="初始化sdk">初始化 SDK</h2>
+<p>在主 activity 中：</p>
+<ol type="1">
+<li>import cn.jpush.android.api.JPushInterface;</li>
+<li> 在 onCreate 函数中<br>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">JPushInterface.setDebugMode(<span class="keyword">true</span>); <span class="comment">//开启调试</span></span><br><span class="line">JPushInterface.init(<span class="keyword">this</span>); <span class="comment">//初始化</span></span><br><span class="line">rid = JPushInterface.getRegistrationID(getApplicationContext()); <span class="comment">//获取Registration ID</span></span><br></pre></td></tr></tbody></table></figure></li>
+</ol>
+<h2 id="接收推送消息receiver">接收推送消息 Receiver</h2>
+<p>JPush SDK 收到推送，通过广播的方式，转发给开发者 App，这样开发者就可以灵活地进行处理。<br>
+这个动作不是必须的。用户有需要才定义 Receiver 类来处理 SDK 过来的广播。<br>
+如果不做这个动作，即不写自定义 Receiver，也不在 AndroidManifest.xml 里配置这个 Receiver，则默认的行为是：</p>
+<ol type="1">
+<li>接收到推送的自定义消息，则没有被处理</li>
+<li>可以正常收到通知，用户点击打开应用主界面<br>
+### 接受广播<br>
+如果全部类型的广播都接收，则需要在 AndroidManifest.xml 里添加如下的配置信息：<br>
+<figure class="highlight xml"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">receiver</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:name</span>=<span class="string">"Your Receiver"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:enabled</span>=<span class="string">"true"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">intent-filter</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">action</span> <span class="attr">android:name</span>=<span class="string">"cn.jpush.android.intent.REGISTRATION"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">action</span> <span class="attr">android:name</span>=<span class="string">"cn.jpush.android.intent.MESSAGE_RECEIVED"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">action</span> <span class="attr">android:name</span>=<span class="string">"cn.jpush.android.intent.NOTIFICATION_RECEIVED"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">action</span> <span class="attr">android:name</span>=<span class="string">"cn.jpush.android.intent.NOTIFICATION_OPENED"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">action</span> <span class="attr">android:name</span>=<span class="string">"cn.jpush.android.intent.NOTIFICATION_CLICK_ACTION"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">action</span> <span class="attr">android:name</span>=<span class="string">"cn.jpush.android.intent.CONNECTION"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">category</span> <span class="attr">android:name</span>=<span class="string">"You package Name"</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">intent-filter</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">receiver</span>&gt;</span></span><br></pre></td></tr></tbody></table></figure><br>
+### 开发者自定义 Receiver 代码示例<br>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> name;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> android.content.BroadcastReceiver;</span><br><span class="line"><span class="keyword">import</span> android.content.Context;</span><br><span class="line"><span class="keyword">import</span> android.content.Intent;</span><br><span class="line"><span class="keyword">import</span> android.os.Bundle;</span><br><span class="line"><span class="keyword">import</span> android.util.Log;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> cn.jpush.android.api.JPushInterface;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyReceiver</span> <span class="keyword">extends</span> <span class="title">BroadcastReceiver</span> </span>{</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String TAG = <span class="string">"JPush"</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onReceive</span><span class="params">(Context context, Intent intent)</span> </span>{</span><br><span class="line">        Bundle bundle = intent.getExtras();</span><br><span class="line">        Log.d(TAG, <span class="string">"[MyReceiver] onReceive - "</span> + intent.getAction());</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (JPushInterface.ACTION_REGISTRATION_ID.equals(intent.getAction())) {</span><br><span class="line">            String regId = bundle.getString(JPushInterface.EXTRA_REGISTRATION_ID);</span><br><span class="line">            Log.d(TAG, <span class="string">"[MyReceiver] 接收Registration Id : "</span> + regId);</span><br><span class="line">            <span class="comment">//send the Registration Id to your server...</span></span><br><span class="line"></span><br><span class="line">        } <span class="keyword">else</span> <span class="keyword">if</span> (JPushInterface.ACTION_MESSAGE_RECEIVED.equals(intent.getAction())) {</span><br><span class="line">            Log.d(TAG, <span class="string">"[MyReceiver] 接收到推送下来的自定义消息: "</span> + bundle.getString(JPushInterface.EXTRA_MESSAGE));</span><br><span class="line"></span><br><span class="line">        } <span class="keyword">else</span> <span class="keyword">if</span> (JPushInterface.ACTION_NOTIFICATION_RECEIVED.equals(intent.getAction())) {</span><br><span class="line">            Log.d(TAG, <span class="string">"[MyReceiver] 接收到推送下来的通知: "</span> + bundle.getString(JPushInterface.EXTRA_ALERT) +</span><br><span class="line">                    <span class="string">", extras: "</span> + bundle.getString(JPushInterface.EXTRA_EXTRA));</span><br><span class="line">            <span class="keyword">int</span> notifactionId = bundle.getInt(JPushInterface.EXTRA_NOTIFICATION_ID);</span><br><span class="line">            Log.d(TAG, <span class="string">"[MyReceiver] 接收到推送下来的通知的ID: "</span> + notifactionId);</span><br><span class="line"></span><br><span class="line">        } <span class="keyword">else</span> <span class="keyword">if</span> (JPushInterface.ACTION_NOTIFICATION_OPENED.equals(intent.getAction())) {</span><br><span class="line">            Log.d(TAG, <span class="string">"[MyReceiver] 用户点击打开了通知"</span>);</span><br><span class="line"></span><br><span class="line">            <span class="comment">//打开自定义的Activity</span></span><br><span class="line">            Intent i = <span class="keyword">new</span> Intent(context, 需要跳转的activity名称.class);</span><br><span class="line">            i.putExtras(bundle);</span><br><span class="line">            <span class="comment">//i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);</span></span><br><span class="line">            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP );</span><br><span class="line">            context.startActivity(i);</span><br><span class="line"></span><br><span class="line">        } <span class="keyword">else</span> <span class="keyword">if</span> (JPushInterface.ACTION_RICHPUSH_CALLBACK.equals(intent.getAction())) {</span><br><span class="line">            Log.d(TAG, <span class="string">"[MyReceiver] 用户收到到RICH PUSH CALLBACK: "</span> + bundle.getString(JPushInterface.EXTRA_EXTRA));</span><br><span class="line">            <span class="comment">//在这里根据 JPushInterface.EXTRA_EXTRA 的内容处理代码，比如打开新的Activity， 打开一个网页等..</span></span><br><span class="line"></span><br><span class="line">        } <span class="keyword">else</span> <span class="keyword">if</span>(JPushInterface.ACTION_CONNECTION_CHANGE.equals(intent.getAction())) {</span><br><span class="line">            <span class="keyword">boolean</span> connected = intent.getBooleanExtra(JPushInterface.EXTRA_CONNECTION_CHANGE, <span class="keyword">false</span>);</span><br><span class="line">            Log.w(TAG, <span class="string">"[MyReceiver]"</span> + intent.getAction() +<span class="string">" connected state change to "</span>+connected);</span><br><span class="line">        } <span class="keyword">else</span> {</span><br><span class="line">            Log.d(TAG, <span class="string">"[MyReceiver] Unhandled intent - "</span> + intent.getAction());</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure></li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Tutorial/" rel="tag"># Tutorial</a>
+              <a href="/tags/Android/" rel="tag"># Android</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/contents/%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%95%99%E7%A8%8B.html" rel="prev" title="搭建个人博客教程">
+                  <i class="fa fa-chevron-left"></i> 搭建个人博客教程
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/contents/Android%E5%AE%9E%E7%8E%B0%E8%87%AA%E7%AD%BE%E5%90%8DHTTPS%E6%95%99%E7%A8%8B.html" rel="next" title="Android 实现自签名 HTTPS 教程">
+                  Android 实现自签名 HTTPS 教程 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">LIU, XIMING</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="Symbols count total">192k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="Reading time total">5:49</span>
+  </span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="/js/third-party/search/local-search.js"></script>
+
+  <script class="next-config" data-name="pdf" type="application/json">{"object_url":{"url":"https://cdn.jsdelivr.net/npm/pdfobject@2.2.6/pdfobject.min.js","integrity":"sha256-77geM50MfxCD17eqyJR+Dag1svjJOLN+BJ2F/DMqMEY="},"url":"/lib/pdf/web/viewer.html"}</script>
+  <script src="/js/third-party/tags/pdf.js"></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdn.jsdelivr.net/npm/mathjax@3.2.0/es5/tex-mml-chtml.js","integrity":"sha256-r+3itOMtGGjap0x+10hu6jW/gZCzxHsoKrOd7gyRSGY="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+
+
+</body>
+</html>
