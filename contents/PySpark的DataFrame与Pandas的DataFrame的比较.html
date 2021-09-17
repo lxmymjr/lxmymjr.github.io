@@ -29,7 +29,7 @@
 <meta property="og:description" content="PySpark 和 Pandas 中都有 DataFrame 这个数据结构，但是他们的使用方法大有不同。 Reference：pyspark 系列 --pandas 与 pyspark 对比 ;Pandas 和 PySpark 中的 DataFrame 比较 ;PySpark API;Pandas API">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2020-10-29T09:59:28.000Z">
-<meta property="article:modified_time" content="2021-09-16T02:56:10.894Z">
+<meta property="article:modified_time" content="2021-09-17T13:31:21.195Z">
 <meta property="article:author" content="LIU, XIMING">
 <meta property="article:tag" content="Tutorial">
 <meta property="article:tag" content="Python">
@@ -149,7 +149,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%B7%A5%E4%BD%9C%E6%96%B9%E5%BC%8F"><span class="nav-number">1.</span> <span class="nav-text">工作方式</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BB%B6%E8%BF%9F%E6%9C%BA%E5%88%B6"><span class="nav-number">2.</span> <span class="nav-text">延迟机制</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%86%85%E5%AD%98%E7%BC%93%E5%AD%98"><span class="nav-number">3.</span> <span class="nav-text">内存缓存</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#dataframe%E5%8F%AF%E5%8F%98%E6%80%A7"><span class="nav-number">4.</span> <span class="nav-text">DataFrame 可变性</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA"><span class="nav-number">5.</span> <span class="nav-text">创建</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#index%E7%B4%A2%E5%BC%95"><span class="nav-number">6.</span> <span class="nav-text">index 索引</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%A1%8C%E7%BB%93%E6%9E%84"><span class="nav-number">7.</span> <span class="nav-text">行结构</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%88%97%E7%BB%93%E6%9E%84"><span class="nav-number">8.</span> <span class="nav-text">列结构</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%88%97%E5%90%8D%E7%A7%B0"><span class="nav-number">9.</span> <span class="nav-text">列名称</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%88%97%E4%BF%AE%E6%94%B9"><span class="nav-number">10.</span> <span class="nav-text">列修改</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%98%BE%E7%A4%BA"><span class="nav-number">11.</span> <span class="nav-text">显示</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8E%92%E5%BA%8F"><span class="nav-number">12.</span> <span class="nav-text">排序</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%80%89%E6%8B%A9%E6%88%96%E5%88%87%E7%89%87"><span class="nav-number">13.</span> <span class="nav-text">选择或切片</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%BF%87%E6%BB%A4"><span class="nav-number">14.</span> <span class="nav-text">过滤</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%88%86%E7%BB%84%E8%81%9A%E5%90%88"><span class="nav-number">15.</span> <span class="nav-text">分组聚合</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BB%9F%E8%AE%A1"><span class="nav-number">16.</span> <span class="nav-text">统计</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%90%88%E5%B9%B6"><span class="nav-number">17.</span> <span class="nav-text">合并</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%88%A0%E9%99%A4"><span class="nav-number">18.</span> <span class="nav-text">删除</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9B%B4%E6%94%B9%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B"><span class="nav-number">19.</span> <span class="nav-text">更改数据类型</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%A4%B1%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86"><span class="nav-number">20.</span> <span class="nav-text">失数据处理</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#sql%E8%AF%AD%E5%8F%A5"><span class="nav-number">21.</span> <span class="nav-text">SQL 语句</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%A4%E8%80%85%E4%BA%92%E7%9B%B8%E8%BD%AC%E6%8D%A2"><span class="nav-number">22.</span> <span class="nav-text">两者互相转换</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8"><span class="nav-number">23.</span> <span class="nav-text">函数应用</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#map-reduce%E6%93%8D%E4%BD%9C"><span class="nav-number">24.</span> <span class="nav-text">map-reduce 操作</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#diff%E6%93%8D%E4%BD%9C"><span class="nav-number">25.</span> <span class="nav-text">diff 操作</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#most-common%E8%AE%A1%E6%95%B0"><span class="nav-number">26.</span> <span class="nav-text">Most Common 计数</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%B7%A5%E4%BD%9C%E6%96%B9%E5%BC%8F"><span class="nav-number">1.</span> <span class="nav-text">工作方式</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BB%B6%E8%BF%9F%E6%9C%BA%E5%88%B6"><span class="nav-number">2.</span> <span class="nav-text">延迟机制</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%86%85%E5%AD%98%E7%BC%93%E5%AD%98"><span class="nav-number">3.</span> <span class="nav-text">内存缓存</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#dataframe%E5%8F%AF%E5%8F%98%E6%80%A7"><span class="nav-number">4.</span> <span class="nav-text">DataFrame 可变性</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA"><span class="nav-number">5.</span> <span class="nav-text">创建</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#index%E7%B4%A2%E5%BC%95"><span class="nav-number">6.</span> <span class="nav-text">index 索引</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%A1%8C%E7%BB%93%E6%9E%84"><span class="nav-number">7.</span> <span class="nav-text">行结构</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%88%97%E7%BB%93%E6%9E%84"><span class="nav-number">8.</span> <span class="nav-text">列结构</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%88%97%E5%90%8D%E7%A7%B0"><span class="nav-number">9.</span> <span class="nav-text">列名称</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%88%97%E4%BF%AE%E6%94%B9"><span class="nav-number">10.</span> <span class="nav-text">列修改</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%98%BE%E7%A4%BA"><span class="nav-number">11.</span> <span class="nav-text">显示</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8E%92%E5%BA%8F"><span class="nav-number">12.</span> <span class="nav-text">排序</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%80%89%E6%8B%A9%E6%88%96%E5%88%87%E7%89%87"><span class="nav-number">13.</span> <span class="nav-text">选择或切片</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%BF%87%E6%BB%A4"><span class="nav-number">14.</span> <span class="nav-text">过滤</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%88%86%E7%BB%84%E8%81%9A%E5%90%88"><span class="nav-number">15.</span> <span class="nav-text">分组聚合</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BB%9F%E8%AE%A1"><span class="nav-number">16.</span> <span class="nav-text">统计</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%90%88%E5%B9%B6"><span class="nav-number">17.</span> <span class="nav-text">合并</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%88%A0%E9%99%A4"><span class="nav-number">18.</span> <span class="nav-text">删除</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9B%B4%E6%94%B9%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B"><span class="nav-number">19.</span> <span class="nav-text">更改数据类型</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%A4%B1%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86"><span class="nav-number">20.</span> <span class="nav-text">失数据处理</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#sql%E8%AF%AD%E5%8F%A5"><span class="nav-number">21.</span> <span class="nav-text">SQL 语句</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%A4%E8%80%85%E4%BA%92%E7%9B%B8%E8%BD%AC%E6%8D%A2"><span class="nav-number">22.</span> <span class="nav-text">两者互相转换</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8"><span class="nav-number">23.</span> <span class="nav-text">函数应用</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#map-reduce%E6%93%8D%E4%BD%9C"><span class="nav-number">24.</span> <span class="nav-text">Map-Reduce 操作</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#diff%E6%93%8D%E4%BD%9C"><span class="nav-number">25.</span> <span class="nav-text">Diff 操作</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#most-common%E8%AE%A1%E6%95%B0"><span class="nav-number">26.</span> <span class="nav-text">Most Common 计数</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#json-%E6%A0%BC%E5%BC%8F%E5%8C%96%E9%80%89%E6%8B%A9%E8%A7%A3%E6%9E%90"><span class="nav-number">27.</span> <span class="nav-text">Json 格式化、选择、解析</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#explode%E6%93%8D%E4%BD%9Cpivot%E6%93%8D%E4%BD%9Cmelt%E6%93%8D%E4%BD%9C"><span class="nav-number">28.</span> <span class="nav-text">Explode 操作、Pivot 操作、Melt 操作</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -265,7 +265,7 @@
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2021-09-16 10:56:10" itemprop="dateModified" datetime="2021-09-16T10:56:10+08:00">2021-09-16</time>
+        <time title="Modified: 2021-09-17 21:31:21" itemprop="dateModified" datetime="2021-09-17T21:31:21+08:00">2021-09-17</time>
       </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -284,14 +284,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">Symbols count in article: </span>
-      <span>5.2k</span>
+      <span>14k</span>
     </span>
     <span class="post-meta-item" title="Reading time">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">Reading time &asymp;</span>
-      <span>9 mins.</span>
+      <span>26 mins.</span>
     </span>
 </div>
 
@@ -308,8 +308,9 @@ Reference：<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p
 <h1 id="工作方式">工作方式</h1>
 <ul>
 <li><p>PySpark<br>
-分布式并行计算框架，内建并行机制 parallelism，所有的数据和操作自动并行分布在各个集群结点上。以处理 in-memory 数据的方式处理 distributed 数据。支持 Hadoop，能处理大量数据。</p></li>
-<li><p>Pandas<br>
+分布式并行计算框架，内建并行机制 parallelism，所有的数据和操作自动并行分布在各个集群结点上。以处理 in-memory 数据的方式处理 distributed 数据。支持 Hadoop，能处理大量数据<br>
+<code>import pyspark.sql.functions as F</code> 导入内置函数库</p></li>
+<li><p> Pandas<br>
 单机 single machine tool，没有并行机制 parallelism，不支持 Hadoop，处理大量数据有瓶颈</p></li>
 </ul>
 <h1 id="延迟机制">延迟机制</h1>
@@ -323,7 +324,7 @@ not lazy-evaluated</p></li>
 <h1 id="内存缓存">内存缓存</h1>
 <ul>
 <li><p>PySpark<br>
-persist () or cache () 将转换的 RDDs 保存在内存</p></li>
+persist () 或 cache () 将转换的 RDDs 保存在内存</p></li>
 <li><p> Pandas<br>
 单机缓存</p></li>
 </ul>
@@ -336,7 +337,7 @@ Pandas 中 DataFrame 是可变的</p></li>
 </ul>
 <h1 id="创建">创建</h1>
 <ul>
-<li><p>PySpark<br>
+<li>PySpark<br>
 直接创建： <code>spark_df = sc.parallelize([(1, 2), (3, 4)]).toDF(['xx',  'yy']</code><br>
 从 pandas_df 转换：<code>spark_df = SQLContext.createDataFrame(pandas_df)</code><br>
 另外，createDataFrame 支持从 list 转换 spark_df，其中 list 元素可以为 tuple，dict，rdd<br>
@@ -344,17 +345,18 @@ Pandas 中 DataFrame 是可变的</p></li>
 读取 parquet 文件：<code>spark_df = spark.read.parquet(parquet_path)</code><br>
 读取 json 文件：<code>spark_df = spark.read.json(json_path)</code><br>
 读取 txt 文件：<code>spark_df = sc.textFile(txt_path).toDF()</code><br>
-注：这些 path 均为 HDFS 路径</p></li>
-<li><p> Pandas<br>
+注：这些 path 均为 HDFS 路径</li>
+<li> Pandas<br>
 直接创建： <code>pandas_df = pd.DataFrame({'xx': {0: 1, 1: 3}, 'yy':  {0: 2, 1: 4}})</code><br>
-从 spark_df 转换：<code>pandas_df = spark_df.toPandas()</code>，或读取其他数据</p></li>
+从 spark_df 转换：<code>pandas_df = spark_df.toPandas()</code>，或读取其他数据<br>
+读取 CSV 文件：<code>pd.read_csv(csv_path)</code><br>
+读取 parquet 文件：<code>pd.read_parquet(parquet_path)</code>，其中如果 parquet_path 如果是 HDFS 路径则需要加前缀 'hdfs://'，比如：<code>'hdfs:///projects/path/to/parquet/'</code></li>
 </ul>
 <h1 id="index索引">index 索引</h1>
 <ul>
 <li><p>PySpark<br>
 没有 index 索引，若需要则要额外创建该列<br>
-<code>df.withColumn('index', F.row_number().over(Window.orderBy(F.monotonically_increasing_id())))</code><br>
-<code>df.rdd.zipWithIndex().toDF().select(F.col('_1').getItem('col_name_1').alias('col_name_1'), F.col('_2').getItem('col_name_2').alias('col_name_2'), ..., F.col('_n').getItem('col_name_n').alias('col_name_n'), F.col('_(n+1)').alias('row_index'))</code> 此方法更快。</p></li>
+</p><figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">df.withColumn(<span class="string">'index'</span>, F.row_number().over(Window.orderBy(F.monotonically_increasing_id())))</span><br><span class="line">df.rdd.zipWithIndex().toDF().select(F.col(<span class="string">'_1'</span>).getItem(<span class="string">'col_name_1'</span>).alias(<span class="string">'col_name_1'</span>), F.col(<span class="string">'_2'</span>).getItem(<span class="string">'col_name_2'</span>).alias(<span class="string">'col_name_2'</span>), ..., F.col(<span class="string">'_n'</span>).getItem(<span class="string">'col_name_n'</span>).alias(<span class="string">'col_name_n'</span>), F.col(<span class="string">'_(n+1)'</span>).alias(<span class="string">'row_index'</span>)) <span class="comment"># 此方法更快</span></span><br></pre></td></tr></tbody></table></figure><p></p></li>
 <li><p>Pandas<br>
 自动创建</p></li>
 </ul>
@@ -375,31 +377,42 @@ Series 结构，属于 Pandas DataFrame 结构</p></li>
 </ul>
 <h1 id="列名称">列名称</h1>
 <ul>
-<li><p>PySpark<br>
+<li>PySpark<br>
 允许重名，修改列名采用 alias 方法<br>
-修改列名：<code>df.withColumnRenamed('old_name', 'new_name')</code></p></li>
-<li><p>Pandas<br>
+修改列名：<code>df.withColumnRenamed('old_name', 'new_name')</code><br>
+<code>df.select(F.col('old_name').alias('new_name'), ...)</code><br>
+<code>df.selectExpr('old_name as new_name', ...)</code></li>
+<li>Pandas<br>
 不允许重名<br>
-修改列名：<code>df.rename(columns={'old_name': 'new_name'})</code></p></li>
+修改列名：<code>df.rename(columns={'old_name': 'new_name'})</code></li>
 </ul>
 <h1 id="列修改">列修改</h1>
 <ul>
-<li><p>PySpark<br>
-原来有 <code>df['xx']</code> 列，<code>df.withColumn('xx', 1)</code></p></li>
-<li><p>Pandas<br>
-原来有 <code>df['xx']</code> 列，<code>df['xx'] = 1</code></p></li>
+<li>PySpark<br>
+原来有 <code>df['xx']</code> 列，<code>df.withColumn('xx', 1)</code><br>
+如需判断逻辑：<code>df.withColumn('xx', F.when(condition expression, true expression).otherwise(false expression))</code><br>
+如需链接：<code>df.withColumn('xx', F.concat(F.col('yy'), F.lit('-'), F.col('zz')))</code> 其中 yy 和 zz 列须为 string 类型，如不是则需要提前类型转换。<br>
+从文件路径取值：<code>df.withColumn('xx', F.input_file_name().substr(start_index, stop_index))</code></li>
+<li>Pandas<br>
+原来有 <code>df['xx']</code> 列，<code>df['xx'] = 1</code><br>
+如需判断逻辑：<code>df.loc[condition expression, 'xx'] = true expression</code><br>
+<code>df.loc[~condition expression, 'xx'] = false expression</code><br>
+<code>df['xx'] = np.where(condition expression, true expression, false expression)</code><br>
+<code>df['xx'] = df.apply(lambda x: true expression if condition expression else false expression, axis=1)</code><br>
+如需链接：<code>df['xx'] = df.yy + '-' + df.zz</code> 其中 yy 和 zz 列须为 string 类型，如不是则需要提前类型转换。</li>
 </ul>
 <h1 id="显示">显示</h1>
 <ul>
-<li>PySpark
-<ol type="1">
-<li>df 不输出具体内容，输出具体内容用 show 方法。<code>df.show(5)</code></li>
-<li>输出形式：<code>DataFrame[age: bigint, name: string]</code></li>
-<li>以树的形式打印概要：<code>df.printSchema()</code></li>
-<li><code>df.columns</code> 输出列的名字</li>
-</ol></li>
+<li>PySpark<br>
+df 不输出具体内容，输出具体内容用 show 方法。<code>df.show(5, truncate=100)</code> 默认显示 20 行，每行显示长度通过 truncate 参数设置<br>
+以树的形式打印概要：<code>df.printSchema()</code><br>
+<code>df.columns</code> 输出列的名字</li>
 <li> Pandas<br>
-df 输出具体内容</li>
+df 输出具体内容<br>
+<code>df.columns</code> 输出列的名字<br>
+<code>pd.set_option('display.max_columns', None) # 显示所有列</code><br>
+<code>pd.set_option('max_colwidth', 100) # 每行显示长度设置</code><br>
+<code>pd.set_option('display.max_rows', None) # 显示所有行</code></li>
 </ul>
 <h1 id="排序">排序</h1>
 <ul>
@@ -416,35 +429,42 @@ df 输出具体内容</li>
 </ul>
 <h1 id="选择或切片">选择或切片</h1>
 <ul>
-<li>PySpark
-<ol type="1">
-<li><code>df.select('xx', 'yy')</code> 选择一列或多列</li>
-<li><code>df.first()</code> 以行的形式返回第一行。（注：行的形式为 <code>Row(col_name1=value1, col_name2=value2, ...)</code>）</li>
-<li><code>df.head(n)</code>，<code>df.take(n)</code> 以行的形式返回前 n 行；<code>df.tail(n)</code> 以行的形式返回最后 n 行</li>
-<li>用 <code>df.collect()</code> 以行的形式返回所有行</li>
-</ol></li>
-<li> Pandas
-<ol type="1">
-<li><code>df.xx</code>，<code>df['xx']</code> 选择列名为 xx 的列，df [k] 选择行名为 k 的行</li>
-<li><code>df.iat[:, k]</code>，<code>df.iloc[:, k]</code> 选择第 k 列，<code>df.iat[k]</code>，<code>df.iloc[k]</code> 选择第 k 行</li>
-</ol></li>
+<li><p>PySpark<br>
+<code>df.select('xx', 'yy')</code> 选择一列或多列<br>
+<code>df.first()</code> 以行的形式返回第一行。（注：行的形式为 <code>[Row(col_name1=value1, col_name2=value2, ...)]</code>）<br>
+<code>df.head(n)</code>，<code>df.take(n)</code> 以行的形式返回前 n 行；<code>df.tail(n)</code> 以行的形式返回最后 n 行<br>
+用 <code>df.collect()</code> 以行的形式返回所有行</p></li>
+<li><p> Pandas<br>
+<code>df.xx</code>，<code>df['xx']</code> 选择列名为 xx 的列，df [k] 选择行名为 k 的行<br>
+<code>df.iat[:, k]</code>，<code>df.iloc[:, k]</code> 选择第 k 列，<code>df.iat[k]</code>，<code>df.iloc[k]</code> 选择第 k 行</p></li>
 </ul>
 <h1 id="过滤">过滤</h1>
 <ul>
 <li><p>PySpark<br>
-<code>df.filter(df['xx']&gt;k)</code> 或者 <code>df.where(df['xx']&gt;k)</code></p></li>
+<code>df.filter(df['xx'] &gt; k)</code> 或者 <code>df.where(df['xx'] &gt; k)</code></p>
+<p>取值存在于：<code>df.filter(F.col('xx').isin(filter_list))</code></p>
+<p>空值处理：</p>
+<ul>
+<li>值为 null：<code>df.filter(F.col('xx').isNull())</code> 和 <code>df.filter(F.col('xx').isNotNull())</code></li>
+<li>值为空字符串：<code>df.filter(F.col('xx') == '')</code></li>
+<li>值为 np.nan：<code>df.filter(F.col('xx') == np.nan)</code></li>
+</ul></li>
 <li><p>Pandas<br>
-<code>df[df['xx']&gt;k]</code> 或者 <code>s[s&gt;k]</code></p></li>
+<code>df[df['xx']&gt;k]</code> 或者 <code>s[s&gt;k]</code></p>
+<p>取值存在于：<code>df[df.xx.isin(filter_list)]</code></p>
+<p>空值处理：包括 null，np.NaN，pd.NaT，None，不包括空字符串 <code>df[df.xx.isnull()]</code> 或 <code>df[df.xx.isna()]</code> 和 <code>df.filter(F.col('xx').notnull())</code> 或 <code>df[df.xx.notnull()]</code> 或 <code>df[df.xx.notna()]</code></p></li>
+<li><p>Examples:</p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt; pdf = pd.DataFrame(<span class="built_in">dict</span>(numpy=[np.NaN], pandas=[pd.NaT], empty=[<span class="string">''</span>], none=[<span class="literal">None</span>]))</span><br><span class="line">&gt;&gt; pdf</span><br><span class="line">   numpy pandas empty  none</span><br><span class="line"><span class="number">0</span>    NaN    NaT        <span class="literal">None</span></span><br><span class="line">&gt;&gt; pdf.isnull()</span><br><span class="line">   numpy  pandas  empty  none</span><br><span class="line"><span class="number">0</span>   <span class="literal">True</span>    <span class="literal">True</span>  <span class="literal">False</span>  <span class="literal">True</span></span><br><span class="line">&gt;&gt; <span class="keyword">from</span> pyspark.sql.types <span class="keyword">import</span> *</span><br><span class="line">&gt;&gt; sdf = spark.createDataFrame(pdf, StructType([StructField(<span class="string">'numpy'</span>, DoubleType(), <span class="literal">True</span>),StructField(<span class="string">'pandas'</span>, StringType(), <span class="literal">True</span>),StructField(<span class="string">'empty'</span>, StringType(), <span class="literal">True</span>),StructField(<span class="string">'pandas'</span>, StringType(), <span class="literal">True</span>)])) <span class="comment"># 必须指定schema，否则报错”ValueError: Some of types cannot be determined after inferring“</span></span><br><span class="line">&gt;&gt; sdf.show()</span><br><span class="line">+-----+------+-----+------+</span><br><span class="line">|numpy|pandas|empty|pandas|</span><br><span class="line">+-----+------+-----+------+</span><br><span class="line">|  NaN|  null|     |  null|</span><br><span class="line">+-----+------+-----+------+</span><br></pre></td></tr></tbody></table></figure></li>
 </ul>
 <h1 id="分组聚合">分组聚合</h1>
 <ul>
 <li><p>PySpark<br>
-<code>df.groupBy('xx')</code> 或者 <code>df.groupBy('xx').avg('yy').show()</code> 应用单个函数<br>
-<code>from pyspark.sql import functions</code> 导入内置函数库<br>
-<code>df.groupBy('xx').agg(functions.avg('yy'), functions.min('yy'), functions.max('yy')).show()</code> 应用多个函数</p></li>
+<code>df.groupBy(cols_to_group)</code> 或者 <code>df.groupBy(cols_to_group).avg('xx').show()</code> 应用单个函数<br>
+<code>df.groupBy(cols_to_group).agg(F.avg('xx'), F.min('xx'), F.max('xx')).show()</code> 应用多个函数</p></li>
 <li><p> Pandas<br>
-<code>df.groupby('xx')</code><br>
-<code>df.groupby('xx').avg('yy')</code></p></li>
+<code>df.groupby(cols_to_group)</code><br>
+<code>df.groupby(cols_to_group).avg('xx')</code></p>
+<p>group filter by function: <code>df.groupby(cols_to_group).filter(function)</code></p></li>
 </ul>
 <h1 id="统计">统计</h1>
 <ul>
@@ -453,7 +473,7 @@ df 输出具体内容</li>
 <code>df.describe()</code> 描述某些列的 count, mean, stddev, min, max</p></li>
 <li><p>Pandas<br>
 <code>df.count()</code> 输出每一列的非空行数<br>
-<code>df.shape</code> 输出行数✖️列数<br>
+<code>df.shape</code> 输出行数 x 列数<br>
 <code>df.describe()</code> 描述某些列的 count, mean, std, min, 25%, 50%, 75%, max</p></li>
 </ul>
 <h1 id="合并">合并</h1>
@@ -461,6 +481,9 @@ df 输出具体内容</li>
 <li><p>PySpark<br>
 扩充列 <code>df.join()</code><br>
 同名列不自动添加后缀，只有键值完全匹配才保留一份副本</p>
+<ul>
+<li>Left;left-semi;left-anti #TODO</li>
+</ul>
 <p>扩充行<br>
 <code>df.union()</code>：两个 df 合并，按位置进行合并，列名以前表为准（a.union (b) 列名顺序以 a 为准）<br>
 <code>df.unoinAll()</code>：同 union 方法<br>
@@ -474,98 +497,216 @@ Pandas 下有 <code>merge</code> 方法，支持多列合并<br>
 </ul>
 <h1 id="删除">删除</h1>
 <ul>
-<li>PySpark
-<ol type="1">
-<li>删除一列：<code>df.drop('xx')</code> 或者 <code>df.drop(F.col('xx'))</code></li>
-<li>删除多列：<code>df.drop(*['xx', 'yy', ...])</code></li>
-<li>删除某（些）行：使用 filter 方法</li>
-</ol></li>
-<li> Pandas
-<ol type="1">
-<li>删除某（些）列：<code>df.drop(['xx', 'xx'], axis=1)</code> 或者 <code>df.drop(columns=['xx', 'yy'])</code></li>
-<li>删除某（些）行：<code>df.drop([0, 1])</code> 其中 0，1 为 index 名字</li>
-</ol></li>
+<li><p>PySpark<br>
+删除一列：<code>df.drop('xx')</code> 或者 <code>df.drop(F.col('xx'))</code><br>
+删除多列：<code>df.drop(*['xx', 'yy', ...])</code><br>
+删除某（些）行：使用 filter 方法<br>
+去重：<code>df.dropDuplicates()</code> 或 <code>df.drop_duplicates()</code> 其中参数必须为数组，<code>df.distinct()</code> 其中不能传入参数。<br>
+在 cols_to_group 相同的情况下保留 xx 列的值最小 / 最大的行：</p>
+<p></p><figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">df.groupBy(cols_to_group).agg(F.<span class="built_in">min</span>/<span class="built_in">max</span>(<span class="string">'xx'</span>).alias(<span class="string">'xx'</span>))`</span><br><span class="line">df.withColumn(<span class="string">'min/max'</span>, F.<span class="built_in">min</span>/<span class="built_in">max</span>(<span class="string">'xx'</span>).over(Window.partitionBy(cols_to_group))).where(F.col(<span class="string">'xx'</span>) == F.col(<span class="string">'min/max'</span>))</span><br><span class="line"><span class="comment"># example</span></span><br><span class="line">&gt;&gt; pdf = pd.DataFrame(<span class="built_in">dict</span>(os=[<span class="string">'ANDROID'</span>, <span class="string">'ANDROID'</span>, <span class="string">'IOS'</span>, <span class="string">'IOS'</span>, <span class="string">'IOS'</span>, <span class="string">'IOS'</span>], region=[<span class="string">'SG'</span>, <span class="string">'SG'</span>, <span class="string">'SG'</span>, <span class="string">'SG'</span>, <span class="string">'CN'</span>, <span class="string">'CN'</span>], value=[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>]))</span><br><span class="line">&gt;&gt; sdf = spark.createDataFrame(pdf)</span><br><span class="line">&gt;&gt; sdf.show()</span><br><span class="line">+-------+------+-----+</span><br><span class="line">|     os|region|value|</span><br><span class="line">+-------+------+-----+</span><br><span class="line">|ANDROID|    SG|    <span class="number">1</span>|</span><br><span class="line">|ANDROID|    SG|    <span class="number">2</span>|</span><br><span class="line">|    IOS|    SG|    <span class="number">3</span>|</span><br><span class="line">|    IOS|    SG|    <span class="number">4</span>|</span><br><span class="line">|    IOS|    CN|    <span class="number">5</span>|</span><br><span class="line">|    IOS|    CN|    <span class="number">6</span>|</span><br><span class="line">+-------+------+-----+</span><br><span class="line">&gt;&gt; sdf.groupBy([<span class="string">'os'</span>, <span class="string">'region'</span>]).agg(F.<span class="built_in">min</span>(<span class="string">'value'</span>)).show()</span><br><span class="line">+-------+------+----------+</span><br><span class="line">|     os|region|<span class="built_in">min</span>(value)|</span><br><span class="line">+-------+------+----------+</span><br><span class="line">|    IOS|    CN|         <span class="number">5</span>|</span><br><span class="line">|    IOS|    SG|         <span class="number">3</span>|</span><br><span class="line">|ANDROID|    SG|         <span class="number">1</span>|</span><br><span class="line">+-------+------+----------+</span><br><span class="line">&gt;&gt; <span class="keyword">from</span> pyspark.sql.window <span class="keyword">import</span> Window</span><br><span class="line">&gt;&gt; sdf.withColumn(<span class="string">'min'</span>, F.<span class="built_in">min</span>(<span class="string">'value'</span>).over(Window.partitionBy([<span class="string">'os'</span>, <span class="string">'region'</span>]))).where(F.col(<span class="string">'value'</span>) == F.col(<span class="string">'min'</span>)).show()</span><br><span class="line">+-------+------+-----+---+</span><br><span class="line">|     os|region|value|<span class="built_in">min</span>|</span><br><span class="line">+-------+------+-----+---+</span><br><span class="line">|    IOS|    CN|    <span class="number">5</span>|  <span class="number">5</span>|</span><br><span class="line">|    IOS|    SG|    <span class="number">3</span>|  <span class="number">3</span>|</span><br><span class="line">|ANDROID|    SG|    <span class="number">1</span>|  <span class="number">1</span>|</span><br><span class="line">+-------+------+-----+---+</span><br></pre></td></tr></tbody></table></figure><p></p></li>
+<li><p>Pandas<br>
+删除某（些）列：<code>df.drop(['xx', 'xx'], axis=1)</code> 或者 <code>df.drop(columns=['xx', 'yy'])</code><br>
+删除某（些）行：<code>df.drop([0, 1])</code> 其中 0，1 为 index 名字<br>
+去重：<code>drop_duplicates(subset=None, keep='first', inplace=False, ignore_index=False)</code> 其中 keep 取值 {‘first’, ‘last’, False}；keep 第一次或者最后一次出现。如果需要根据某列最大最小值保留的话，则需提前排序</p></li>
 </ul>
 <h1 id="更改数据类型">更改数据类型</h1>
 <ul>
-<li>PySpark
-<ol type="1">
-<li>更改指定列的数据类型：<code>df = df.withColumn('xx', F.col('xx').cast(Type()))</code></li>
-</ol></li>
-<li>Pandas
-<ol type="1">
-<li>更改所有列的数据类型：<code>df.astype('type')</code></li>
-<li>更改指定列的数据类型：<code>df.astype({'xx': 'int32'})</code></li>
-</ol></li>
+<li><p>PySpark<br>
+更改指定列的数据类型：<code>df = df.withColumn('xx', F.col('xx').cast(Type()))</code></p></li>
+<li><p>Pandas<br>
+更改所有列的数据类型：<code>df.astype('type')</code><br>
+更改指定列的数据类型：<code>df.astype({'xx': 'int32'})</code></p></li>
 </ul>
 <h1 id="失数据处理">失数据处理</h1>
 <ul>
-<li>PySpark
-<ol type="1">
-<li>不自动添加 NaNs，且不抛出错误</li>
-<li> fillna 函数：<code>df.na.fill()</code></li>
-<li>dropna 函数：<code>df.na.drop()</code></li>
-</ol></li>
-<li>Pandas
-<ol type="1">
-<li>对缺失数据自动添加 NaNs</li>
-<li>fillna 函数：<code>df.fillna()</code></li>
-<li>dropna 函数：<code>df.dropna()</code></li>
-</ol></li>
+<li><p>PySpark<br>
+不自动添加 NaNs，且不抛出错误<br>
+fillna 函数：<code>df.na.fill()</code><br>
+dropna 函数：<code>df.na.drop()</code></p></li>
+<li><p>Pandas<br>
+对缺失数据自动添加 NaNs<br>
+fillna 函数：<code>df.fillna()</code><br>
+dropna 函数：<code>df.dropna()</code></p></li>
 </ul>
 <h1 id="sql语句">SQL 语句</h1>
 <ul>
-<li>PySpark
-<ol type="1">
-<li>表格注册：把 DataFrame 结构注册成 SQL 语句使用类型<br>
+<li><p>PySpark<br>
+表格注册：把 DataFrame 结构注册成 SQL 语句使用类型<br>
 <code>df.registerTempTable('tt')</code> 或者 <code>sqlContext.registerDataFrameAsTable(df, 'tt')</code><br>
-<code>spark.sql('SELECT xx, yy FROM tt WHERE xx &gt;= m AND yy &lt;= n')</code></li>
-<li>功能注册：把函数注册成 SQL 语句使用类型<br>
+<code>spark.sql('SELECT xx, yy FROM tt WHERE xx &gt;= m AND yy &lt;= n')</code><br>
+功能注册：把函数注册成 SQL 语句使用类型<br>
 <code>spark.registerFunction('stringLengthString', lambda x: len(x))</code><br>
-<code>spark.sql("SELECT stringLengthString('test')")</code></li>
-</ol></li>
-<li>Pandas<br>
+<code>spark.sql("SELECT stringLengthString('test')")</code></p></li>
+<li><p>Pandas<br>
 <code>import sqlite3</code><br>
-<code>pd.read_sql('SELECT xx, yy FROM tt WHERE xx &gt;= m AND yy &lt;= n')</code></li>
+<code>pd.read_sql('SELECT xx, yy FROM tt WHERE xx &gt;= m AND yy &lt;= n')</code></p></li>
 </ul>
 <h1 id="两者互相转换">两者互相转换</h1>
 <ul>
 <li><p>PySpark<br>
-<code>pandas_df = spark_df.toPandas()</code></p></li>
-<li><p>Pandas<br>
+<code>pandas_df = spark_df.toPandas()</code><br>
+<code>ArrayType()</code>, <code>StructType()</code>, <code>MapType()</code> 类型需要提前转换成 string，pandas 不支持</p></li>
+<li><p> Pandas<br>
 <code>spark_df = spark.createDataFrame(pandas_df)</code><br>
-转换过程中可能会遇到报错： TypeError: field XXX: Can not merge type A and B<br>
+转换过程中可能会遇到报错： TypeError: field xx: Can not merge type A and B<br>
 原因是该列存在空值。解决方法是转换成 String<br>
-<code>pandas_df.XXX = pandas_df.XXX.astype(str)</code></p></li>
+<code>pandas_df.xx = pandas_df.xx.astype(str)</code></p></li>
 </ul>
 <h1 id="函数应用">函数应用</h1>
 <ul>
-<li><p>Pandas<br>
-<code>df.apply(f)</code> 将 df 的每一列应用函数 f</p></li>
 <li><p>PySpark<br>
 <code>df.foreach(f)</code> 或者 <code>df.rdd.foreach(f)</code> 将 df 的每一列应用函数 f<br>
-<code>df.foreachPartition(f)</code> 或者 <code>df.rdd.foreachPartition(f)</code> 将 df 的每一块应用函数 f</p></li>
+<code>df.foreachPartition(f)</code> 或者 <code>df.rdd.foreachPartition(f)</code> 将 df 的每一块应用函数 f<br>
+UDF (User-defined Function):</p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># one-line way:</span></span><br><span class="line">udf_name = F.udf(<span class="keyword">lambda</span> x, y: expression, ReturnType())</span><br><span class="line"></span><br><span class="line"><span class="comment"># def way:</span></span><br><span class="line"><span class="meta">@F.udf(<span class="params">returnType=ReturnType(<span class="params"></span>)</span>)</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">udf_name</span>(<span class="params">x</span>):</span></span><br><span class="line">   expression</span><br><span class="line">   <span class="keyword">return</span></span><br><span class="line"></span><br><span class="line">df.withColumn(<span class="string">'xx'</span>, udf_name(F.col(<span class="string">'xx'</span>), F.col(<span class="string">'yy'</span>)))</span><br></pre></td></tr></tbody></table></figure></li>
+<li><p>Pandas<br>
+<code>df.apply(f)</code> 将 df 的每一列应用函数 f</p></li>
+<li><p>Pandas udf in PySpark<br>
+Driver 可能缺少必要的 package:pyarrow 导致报错 ModuleNotFoundError: No module named 'pyarrow'。有多种方案解决：</p>
+<ol type="1">
+<li><p>参考 <a target="_blank" rel="noopener" href="https://spark.apache.org/docs/latest/api/python/user_guide/python_packaging.html">Python Package Management</a><br>
+PySpark 允许通过以下方式将 Python 文件 (<code>.py</code>)、压缩的 Python 包 (<code>.zip</code>) 和 Egg 文件 (<code>.egg</code>) 上传到执行程序：<br>
+设置配置 <code>spark.submit.pyFiles</code> 或者 <code>--py-files</code>Spark 脚本中的设置选项或者直接调用 <a target="_blank" rel="noopener" href="https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.SparkContext.addPyFile.html#pyspark.SparkContext.addPyFile"><code>pyspark.SparkContext.addPyFile()</code></a>应用程序。<br>
+这是将额外的自定义 Python 代码发送到集群的直接方法。只添加单个文件或压缩整个包并上传它们。如果使用 <a target="_blank" rel="noopener" href="https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.SparkContext.addPyFile.html#pyspark.SparkContext.addPyFile"><code>pyspark.SparkContext.addPyFile()</code></a>，即使 job 开始运行后也允许使用上传的代码。<br>
+但是不允许添加构建为 <a target="_blank" rel="noopener" href="https://www.python.org/dev/peps/pep-0427/">Wheels</a> 包，因此不允许包含与本机代码的依赖关系。</p></li>
+<li><p>使用 Conda 打包<br>
+<a target="_blank" rel="noopener" href="https://docs.conda.io/en/latest/">Conda</a> 是使用最广泛的 Python 包管理系统之一。PySpark 可以直接使用 Conda 环境通过利用 <a target="_blank" rel="noopener" href="https://conda.github.io/conda-pack/spark.html">conda-pack</a> 来传送第三方 Python 包，它是一个命令行工具，可创建可重定位的 Conda 环境。<br>
+下面的示例创建了一个 Conda 环境以在驱动程序和执行程序上使用，并将其打包到一个存档文件中。此存档文件捕获 Python 的 Conda 环境并存储 Python 解释器及其所有相关依赖项。<br>
+</p><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">conda create -y -n pyspark_conda_env -c conda-forge pyarrow pandas conda-pack</span><br><span class="line">conda activate pyspark_conda_env</span><br><span class="line">conda pack -f -o pyspark_conda_env.tar.gz</span><br></pre></td></tr></tbody></table></figure><br>
+之后可以使用 <code>--archives</code> 选项或 <code>spark.archives</code> 配置（<code>spark.yarn.dist.archives</code> 在 YARN 中）将其与脚本或代码一起发送。它会自动解压缩执行程序上的存档。<br>
+在 <code>spark-submit</code> 脚本的情况下，您可以按如下方式使用它：<p></p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">export PYSPARK_DRIVER_PYTHON=python # Do not set in cluster modes.</span><br><span class="line">export PYSPARK_PYTHON=./environment/bin/python</span><br><span class="line">spark-submit --archives pyspark_conda_env.tar.gz#environment app.py</span><br></pre></td></tr></tbody></table></figure>
+<p>注意 <code>PYSPARK_DRIVER_PYTHON</code> 不应为 YARN 集群模式设置上述内容。<br>
+如果您使用的是常规 Python shell 或 Notebook，您可以尝试如下所示：</p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">from</span> pyspark.sql <span class="keyword">import</span> SparkSession</span><br><span class="line"><span class="keyword">from</span> app <span class="keyword">import</span> main</span><br><span class="line"></span><br><span class="line">os.environ[<span class="string">'PYSPARK_PYTHON'</span>] = <span class="string">'./environment/bin/python'</span></span><br><span class="line">os.environ[<span class="string">'PYSPARK_DRIVER_PYTHON'</span>] = <span class="string">'./environment/bin/python'</span></span><br><span class="line"></span><br><span class="line">spark = SparkSession.builder.config(</span><br><span class="line">    <span class="string">"spark.archives"</span>,  <span class="comment"># 'spark.yarn.dist.archives' in YARN.</span></span><br><span class="line">    <span class="string">"pyspark_conda_env.tar.gz#environment"</span>).getOrCreate()</span><br><span class="line">main(spark)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 或者</span></span><br><span class="line">SPARK_CONF = SparkConf() \</span><br><span class="line">    .<span class="built_in">set</span>(<span class="string">'spark.yarn.dist.archives'</span>, <span class="string">'pyspark_conda_env.tar.gz#environment'</span>) \</span><br><span class="line">    .<span class="built_in">set</span>(<span class="string">'spark.yarn.appMasterEnv.ARROW_PRE_0_15_IPC_FORMAT'</span>, <span class="string">'1'</span>) \</span><br><span class="line">    .<span class="built_in">set</span>(<span class="string">'spark.executorEnv.ARROW_PRE_0_15_IPC_FORMAT'</span>, <span class="string">'1'</span>)</span><br><span class="line">sc = SparkContext(appName=appName, conf=SPARK_CONF)</span><br><span class="line">sc.setLogLevel(<span class="string">'ERROR'</span>)</span><br><span class="line">spark = SparkSession.builder.enableHiveSupport().getOrCreate()</span><br></pre></td></tr></tbody></table></figure>
+<p>对于 pyspark Shell：<br>
+</p><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">export PYSPARK_DRIVER_PYTHON=python</span><br><span class="line">export PYSPARK_PYTHON=./environment/bin/python</span><br><span class="line">pyspark --archives pyspark_conda_env.tar.gz#environment</span><br></pre></td></tr></tbody></table></figure><p></p></li>
+<li><p>使用本机，不用集群<br>
+</p><figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">SPARK_CONF = SparkConf() \</span><br><span class="line">   .setMaster(<span class="string">'local'</span>) \</span><br><span class="line">   .<span class="built_in">set</span>(<span class="string">'spark.submit.deployMode'</span>, <span class="string">'client'</span>)</span><br><span class="line"> sc = SparkContext(appName=appName, conf=SPARK_CONF)</span><br><span class="line"> sc.setLogLevel(<span class="string">'ERROR'</span>)</span><br><span class="line"> spark = SparkSession.builder.enableHiveSupport().getOrCreate()</span><br></pre></td></tr></tbody></table></figure><p></p></li>
+</ol></li>
 </ul>
-<h1 id="map-reduce操作">map-reduce 操作</h1>
+<h1 id="map-reduce操作">Map-Reduce 操作</h1>
 <ul>
-<li>Pandas<br>
-<code>map-reduce操作map(func, list)</code>，<code>reduce(func, list)</code> 返回类型 seq</li>
-<li>PySpark<br>
-<code>df.map(func)</code>，<code>df.reduce(func)</code> 返回类型 seqRDDs</li>
+<li><p>PySpark<br>
+<code>df.map(func)</code>，<code>df.reduce(func)</code> 返回类型 seqRDDs</p></li>
+<li><p>Pandas<br>
+<code>map-reduce操作map(func, list)</code>，<code>reduce(func, list)</code> 返回类型 seq</p></li>
 </ul>
-<h1 id="diff操作">diff 操作</h1>
+<h1 id="diff操作">Diff 操作</h1>
 <ul>
-<li>Pandas<br>
-有 diff 操作，处理时间序列数据（Pandas 会对比当前行与上一行）</li>
-<li>PySpark<br>
-没有 diff 操作（Spark 的上下行是相互独立，分布式存储的）</li>
+<li><p>PySpark<br>
+没有 diff 操作（Spark 的上下行是相互独立，分布式存储的）</p></li>
+<li><p>Pandas<br>
+有 diff 操作，处理时间序列数据（Pandas 会对比当前行与上一行）</p></li>
 </ul>
 <h1 id="most-common计数">Most Common 计数</h1>
 <ul>
-<li>Pandas<br>
-<code>df.value_counts(ascending=False)</code></li>
-<li>PySpark<br>
-<code>df.cube(column_name).count().sort('count', ascending=False).show(5)</code></li>
+<li><p>PySpark<br>
+<code>df.cube(column_name/column_list).count().sort('count', ascending=False).show(5)</code><br>
+<code>df.groupBy(column_name/column_list).agg({'*': 'count'}).withColumnRenamed('count(1)', 'new_count')</code></p></li>
+<li><p>Pandas<br>
+<code>df.value_counts(ascending=False)</code></p></li>
+</ul>
+<h1 id="json-格式化选择解析">Json 格式化、选择、解析</h1>
+<ul>
+<li><p>PySpark<br>
+格式化：<code>df.withColum('json_string', F.to_json(F.struct('key1', 'key2')))</code><br>
+选择：<code>df.select('json_string.key')</code><br>
+解析：<code>json_schema = spark.read.json(df.rdd.map(lambda row: row.json_string)).schema</code><br>
+<code>F.get_json_object('json_string', '$.key')</code><br>
+<code>F.from_json(F.get_json_object('json_string', '$.key'), schema)</code></p></li>
+<li><p>Pandas<br>
+格式化：<code>df['json_string'] = df[['key1', 'key2']].to_dict(orient='records')</code><br>
+选择：<code>df.json_string.apply(pd.Series).key</code><br>
+解析：<code>df.join(pd.concat(list(df['json_string'].apply(lambda x: pd.json_normalize(json.loads(x)))), ignore_index=True))</code></p></li>
+</ul>
+<h1 id="explode操作pivot操作melt操作">Explode 操作、Pivot 操作、Melt 操作</h1>
+<ul>
+<li><p>PySpark<br>
+Explode：<br>
+将 xx 列中的每行的列表 / 数组值分拆形成单独的行<br>
+<code>df.withColumn('xx', explode(F.col('yy'))) # 忽略空值或者空列表/数组</code><br>
+<code>df.withColumn('xx', explode_outer(F.col('yy'))) # 不忽略空值或者空列表/数组</code></p>
+<p>Pivot：<br>
+<code>df.groupBy('Label').pivot('Keys').agg(F.first('Values'))</code> 将<br>
+| Label | Keys | Values |<br>
+| ----- | ------ | :------- |<br>
+| 0 | 'key1' | 'value1' |<br>
+| 0 | 'key2' | 'value2' |<br>
+| 1 | 'key1' | 'value3' |<br>
+| 1 | 'key2' | 'value4' |</p>
+<p>转换为<br>
+| Label | key1 | Key2 |<br>
+| ----- | -------- | -------- |<br>
+| 0 | 'value1' | 'value2' |<br>
+| 1 | 'value3' | 'value4' |</p>
+<p>Melt：<br>
+</p><figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">melt</span>(<span class="params">df, id_vars, col_1, col_2, col_1_name, col_2_name</span>):</span></span><br><span class="line">    _col_1 = F.array(*(F.struct(F.col(c).alias(col_1_name))<span class="keyword">for</span> c <span class="keyword">in</span> col_1))</span><br><span class="line">    _col_2 = F.array(*(F.struct(F.col(c).alias(col_2_name))<span class="keyword">for</span> c <span class="keyword">in</span> col_2))</span><br><span class="line">    _tmp_1 = df.withColumn(<span class="string">'col_1'</span>, F.explode(_col_1)).select(id_vars, <span class="string">'col_1'</span>).rdd.zipWithIndex().toDF().select(F.col(<span class="string">'_1'</span>).getItem(id_vars).alias(id_vars), F.col(<span class="string">'_1'</span>).getItem(<span class="string">'col_1'</span>).alias(<span class="string">'col_1'</span>), F.col(<span class="string">'_2'</span>).alias(<span class="string">'row_index'</span>))</span><br><span class="line">    _tmp_2 = df.withColumn(<span class="string">'col_2'</span>, F.explode(_col_2)).select(id_vars, <span class="string">'col_2'</span>).rdd.zipWithIndex().toDF().select(F.col(<span class="string">'_1'</span>).getItem(id_vars).alias(id_vars), F.col(<span class="string">'_1'</span>).getItem(<span class="string">'col_2'</span>).alias(<span class="string">'col_2'</span>), F.col(<span class="string">'_2'</span>).alias(<span class="string">'row_index'</span>))</span><br><span class="line">    _tmp = _tmp_1.join(_tmp_2, [<span class="string">'row_index'</span>, id_vars])</span><br><span class="line">    cols = [id_vars] + [F.col(<span class="string">'col_1'</span>)[col_1_name].alias(col_1_name)] + [F.col(<span class="string">'col_2'</span>)[col_2_name].alias(col_2_name)]</span><br><span class="line">    <span class="keyword">return</span> _tmp.select(*cols)</span><br><span class="line"></span><br><span class="line">df = melt(df_results, id_vars=<span class="string">'idx'</span>, col_1=[], col_2=[], col_1_name=<span class="string">''</span>, col_2_name=<span class="string">''</span>)</span><br></pre></td></tr></tbody></table></figure><p></p></li>
+<li><p>Pandas<br>
+Explode：<code>df.explode('yy') # explode的列名还是yy</code><br>
+Pivot：<code>df.pivot(index="Label", columns="Key")</code> 将<br>
+| Label | Keys | Values |<br>
+| ----- | ------ | :------- |<br>
+| 0 | 'key1' | 'value1' |<br>
+| 0 | 'key2' | 'value2' |<br>
+| 1 | 'key1' | 'value3' |<br>
+| 1 | 'key2' | 'value4' |</p>
+<p>转换为</p>
+<table>
+<thead>
+<tr>
+<th>
+</th>
+<th colspan="2" align="Center">
+<p>Values</p>
+</th>
+</tr>
+<tr>
+<th>
+<p>Keys</p>
+</th>
+<th>
+<p>key1</p>
+</th>
+<th>
+<p>key2</p>
+</th>
+</tr>
+<tr>
+<th>
+<p>Label</p>
+</th>
+<th>
+</th>
+<th>
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th>
+<p>0</p>
+</th>
+<td>
+<p>value1</p>
+</td>
+<td>
+<p>value2</p>
+</td>
+</tr>
+<tr>
+<th>
+<p>1</p>
+</th>
+<td>
+<p>value3</p>
+</td>
+<td>
+<p>value4</p>
+</td>
+</tr>
+</tbody>
+</table></li>
 </ul>
 
     </div>
@@ -616,22 +757,6 @@ Pandas 下有 <code>merge</code> 方法，支持多列合并<br>
   </span>
   <span class="author" itemprop="copyrightHolder">LIU, XIMING</span>
 </div>
-<div class="wordcount">
-  <span class="post-meta-item">
-    <span class="post-meta-item-icon">
-      <i class="fa fa-chart-line"></i>
-    </span>
-    <span title="Symbols count total">192k</span>
-  </span>
-  <span class="post-meta-item">
-    <span class="post-meta-item-icon">
-      <i class="fa fa-coffee"></i>
-    </span>
-    <span title="Reading time total">5:49</span>
-  </span>
-</div>
-  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a>
-  </div>
 
     </div>
   </footer>

@@ -1,6 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Android 实现自签名 HTTPS 教程</title>
+    <url>/contents/Android%E5%AE%9E%E7%8E%B0%E8%87%AA%E7%AD%BE%E5%90%8DHTTPS%E6%95%99%E7%A8%8B.html</url>
+    <content><![CDATA[<p>本文使用 <a href="https://github.com/square/okhttp">okhttp</a> 的封装类 <a href="https://github.com/hongyangAndroid/okhttputils">okhttp-utils</a> 实现 https 通讯<br>
+okhttp-utils 对应 okhttp 版本 3.3.1.<br>
+<span id="more"></span></p>
+<h1 id="安装">安装</h1>
+<ul>
+<li>Android Studio<br>
+<code>compile 'com.zhy:okhttputils:2.6.2'</code></li>
+<li>Eclipse<br>
+下载最新 jar:<a href="okhttputils-2_6_2.jar?raw=true">okhttputils-2_6_2.jar</a>。<br>
+注：需要同时导入 okhttp 和 okio 的 jar，下载见：<a href="https://github.com/square/okhttp">https://github.com/square/okhttp</a>。</li>
+</ul>
+<h1 id="配置okhttpclient和ssl证书">配置 OkhttpClient 和 SSL 证书</h1>
+<p>在 onCreate 函数中<br>
+</p><figure class="highlight java"><table><tbody><tr><td class="code"><pre><span class="line">InputStream certification = <span class="keyword">null</span>;</span><br><span class="line"><span class="keyword">try</span> {</span><br><span class="line">    certification = getAssets().open(<span class="string">"xxxxx.cer"</span>);</span><br><span class="line">} <span class="keyword">catch</span> (IOException e) {</span><br><span class="line">    e.printStackTrace();</span><br><span class="line">}</span><br><span class="line">HttpsUtils.SSLParams sslParams = HttpsUtils.getSslSocketFactory(<span class="keyword">new</span> InputStream[]{certification}, <span class="keyword">null</span>, <span class="keyword">null</span>);</span><br><span class="line">OkHttpClient okHttpClient = <span class="keyword">new</span> OkHttpClient.Builder()</span><br><span class="line">    .hostnameVerifier(<span class="keyword">new</span> HostnameVerifier() {</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">verify</span><span class="params">(String hostname, SSLSession session)</span> </span>{</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">        }</span><br><span class="line">    })</span><br><span class="line">    .sslSocketFactory(sslParams.sSLSocketFactory, sslParams.trustManager)</span><br><span class="line">    .build();</span><br><span class="line">OkHttpUtils.initClient(okHttpClient);</span><br></pre></td></tr></tbody></table></figure><br>
+其中xxxxx.cer为所连接服务器的证书，可从浏览器导出。<br>
+也可以通过OpenSSL工具自签名生成，生成方法详见文章<a href="https://lxmymjr.github.io/2017/09/19/Python-Web%E6%A1%86%E6%9E%B6-CherryPy/#全局配置-global">Python Web 框架 - CherryPy</a><p></p>
+<h1 id="通过https发送json消息">通过 HTTPS 发送 Json 消息</h1>
+<figure class="highlight java"><table><tbody><tr><td class="code"><pre><span class="line">String url = <span class="string">"https://xxxxx"</span>;</span><br><span class="line">String json = <span class="string">"{\"key1\":\"value1\", \"key1\":\"value1\"}"</span>;</span><br><span class="line">OkHttpUtils</span><br><span class="line">    .postString()</span><br><span class="line">    .url(url)</span><br><span class="line">    .content(json)</span><br><span class="line">    .mediaType(MediaType.parse(<span class="string">"application/json; charset=utf-8"</span>))</span><br><span class="line">    .build()</span><br><span class="line">    .execute(<span class="keyword">new</span> MyStringCallback());</span><br></pre></td></tr></tbody></table></figure>
+<h1 id="通过https发送同步post请求">通过 HTTPS 发送同步 POST 请求</h1>
+<figure class="highlight java"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">new</span> Thread() {</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>{</span><br><span class="line">        String url = <span class="string">"https://xxxxx"</span>;</span><br><span class="line">        Response response;</span><br><span class="line">        <span class="keyword">try</span> {</span><br><span class="line">            response = OkHttpUtils</span><br><span class="line">                    .post()</span><br><span class="line">                    .url(url)</span><br><span class="line">                    .addParams(<span class="string">"abc"</span>, <span class="string">"xxx"</span>)</span><br><span class="line">                    .addParams(<span class="string">"def"</span>, <span class="string">"yyy"</span>)</span><br><span class="line">                    .build()</span><br><span class="line">                    .execute();</span><br><span class="line">            <span class="keyword">if</span> (response.isSuccessful()) {</span><br><span class="line">                Log.d(<span class="string">"OkHTTP"</span>,<span class="string">"OkHTTP is request success"</span>);</span><br><span class="line">            } <span class="keyword">else</span> {</span><br><span class="line">                Log.e(<span class="string">"OkHTTP"</span>, <span class="string">"OkHTTP is request error"</span>);</span><br><span class="line">            }</span><br><span class="line">            String data=response.body().string();</span><br><span class="line">        } <span class="keyword">catch</span> (IOException e) {</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">}.start();</span><br></pre></td></tr></tbody></table></figure>
+<p>同步的 HTTPS 请求不能再主线程中进行，所以要新建一个线程处理同步请求。</p>
+<h1 id="通过https发送异步post请求">通过 HTTPS 发送异步 POST 请求</h1>
+<figure class="highlight java"><table><tbody><tr><td class="code"><pre><span class="line">String url = <span class="string">"https://xxxxx"</span>;</span><br><span class="line">OkHttpUtils</span><br><span class="line">    .post()</span><br><span class="line">    .url(url)</span><br><span class="line">    .addParams(<span class="string">"abc"</span>, <span class="string">"xxx"</span>)</span><br><span class="line">    .addParams(<span class="string">"def"</span>, <span class="string">"yyy"</span>)</span><br><span class="line">    .build()</span><br><span class="line">    .execute(<span class="keyword">new</span> MyStringCallback());</span><br></pre></td></tr></tbody></table></figure>
+<h1 id="post表单形式上传文件">Post 表单形式上传文件</h1>
+<figure class="highlight java"><table><tbody><tr><td class="code"><pre><span class="line">OkHttpUtils.post()</span><br><span class="line">    .addFile(<span class="string">"file"</span>, <span class="string">"filename"</span>, file)</span><br><span class="line">    .url(url)</span><br><span class="line">    .params(params)</span><br><span class="line">    .headers(headers)</span><br><span class="line">    .build()</span><br><span class="line">    .execute(<span class="keyword">new</span> MyStringCallback());</span><br></pre></td></tr></tbody></table></figure>
+<p>支持上传多个文件，addFile 的第一个参数为文件的 key，即类别表单中 <code>&lt;input type="file" name="file"/&gt;</code> 的 name 属性。<br>
+params (params) 和 headers (headers) 可以省略。其中 params (params) 为参数格式，类似 addParams ()。<br>
+</p><figure class="highlight java"><table><tbody><tr><td class="code"><pre><span class="line">Map&lt;String, String&gt; params = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">params.put(<span class="string">"abc"</span>, <span class="string">"xxx"</span>);</span><br><span class="line">params.put(<span class="string">"def"</span>, <span class="string">"yyy"</span>);</span><br></pre></td></tr></tbody></table></figure><p></p>
+<h1 id="处理返回消息">处理返回消息</h1>
+<p>新建类 MyStringCallback：<br>
+</p><figure class="highlight java"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyStringCallback</span> <span class="keyword">extends</span> <span class="title">StringCallback</span></span></span><br><span class="line"><span class="class"></span>{</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onError</span><span class="params">(Call call, Exception e, <span class="keyword">int</span> id)</span></span></span><br><span class="line"><span class="function">    </span>{</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">    }</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onResponse</span><span class="params">(String response, <span class="keyword">int</span> id)</span> </span>{</span><br><span class="line">        Log.i(<span class="string">"HTTP"</span>, <span class="string">"onResponse："</span> + response);</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure><p></p>
+]]></content>
+      <categories>
+        <category>Android</category>
+      </categories>
+      <tags>
+        <tag>Tutorial</tag>
+        <tag>Android</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Backpropagation</title>
     <url>/contents/Backpropagation.html</url>
     <content><![CDATA[<div class="hbe hbe-container" id="hexo-blog-encrypt" data-wpm="Oh, this is an invalid password. Check and try again, please." data-whm="OOPS, these decrypted content may changed, but you can still have a look.">
@@ -101,49 +144,6 @@ Google Cloud Storage 源码：<a href="https://github.com/googleapis/google-clou
 <p>可以使用 putFile () 方法上传设备上的本地文件，例如相机中的照片和视频。putFile () 需要一个 File 并返回 UploadTask，可以使用它来管理和监控上传状态。<br>
 </p><figure class="highlight java"><table><tbody><tr><td class="code"><pre><span class="line">Uri file = Uri.fromFile(<span class="keyword">new</span> File(<span class="string">"path/to/file"</span>));</span><br><span class="line">StorageReference fileRef = storageRef.child(<span class="string">"folder/"</span>+file.getLastPathSegment());</span><br><span class="line">uploadTask = fileRef.putFile(file);</span><br><span class="line"></span><br><span class="line"><span class="comment">// Register observers to listen for when the download is done or if it fails</span></span><br><span class="line">uploadTask.addOnFailureListener(<span class="keyword">new</span> OnFailureListener() {</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onFailure</span><span class="params">(<span class="meta">@NonNull</span> Exception exception)</span> </span>{</span><br><span class="line">        <span class="comment">// Handle unsuccessful uploads</span></span><br><span class="line">    }</span><br><span class="line">}).addOnSuccessListener(<span class="keyword">new</span> OnSuccessListener&lt;UploadTask.TaskSnapshot&gt;() {</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onSuccess</span><span class="params">(UploadTask.TaskSnapshot taskSnapshot)</span> </span>{</span><br><span class="line">        <span class="comment">// taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.</span></span><br><span class="line">        <span class="comment">// ...</span></span><br><span class="line">    }</span><br><span class="line">});</span><br></pre></td></tr></tbody></table></figure><p></p>
 <figure class="highlight kotlin"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> file = Uri.fromFile(File(<span class="string">"path/to/file"</span>))</span><br><span class="line"><span class="keyword">val</span> riversRef = storageRef.child(<span class="string">"folder/<span class="subst">${file.lastPathSegment}</span>"</span>)</span><br><span class="line">uploadTask = riversRef.putFile(file)</span><br><span class="line"></span><br><span class="line"><span class="comment">// Register observers to listen for when the download is done or if it fails</span></span><br><span class="line">uploadTask.addOnFailureListener {</span><br><span class="line">    <span class="comment">// Handle unsuccessful uploads</span></span><br><span class="line">}.addOnSuccessListener {</span><br><span class="line">    <span class="comment">// taskSnapshot.metadata contains file metadata such as size, content-type, etc.</span></span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-]]></content>
-      <categories>
-        <category>Android</category>
-      </categories>
-      <tags>
-        <tag>Tutorial</tag>
-        <tag>Android</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Android 实现自签名 HTTPS 教程</title>
-    <url>/contents/Android%E5%AE%9E%E7%8E%B0%E8%87%AA%E7%AD%BE%E5%90%8DHTTPS%E6%95%99%E7%A8%8B.html</url>
-    <content><![CDATA[<p>本文使用 <a href="https://github.com/square/okhttp">okhttp</a> 的封装类 <a href="https://github.com/hongyangAndroid/okhttputils">okhttp-utils</a> 实现 https 通讯<br>
-okhttp-utils 对应 okhttp 版本 3.3.1.<br>
-<span id="more"></span></p>
-<h1 id="安装">安装</h1>
-<ul>
-<li>Android Studio<br>
-<code>compile 'com.zhy:okhttputils:2.6.2'</code></li>
-<li>Eclipse<br>
-下载最新 jar:<a href="okhttputils-2_6_2.jar?raw=true">okhttputils-2_6_2.jar</a>。<br>
-注：需要同时导入 okhttp 和 okio 的 jar，下载见：<a href="https://github.com/square/okhttp">https://github.com/square/okhttp</a>。</li>
-</ul>
-<h1 id="配置okhttpclient和ssl证书">配置 OkhttpClient 和 SSL 证书</h1>
-<p>在 onCreate 函数中<br>
-</p><figure class="highlight java"><table><tbody><tr><td class="code"><pre><span class="line">InputStream certification = <span class="keyword">null</span>;</span><br><span class="line"><span class="keyword">try</span> {</span><br><span class="line">    certification = getAssets().open(<span class="string">"xxxxx.cer"</span>);</span><br><span class="line">} <span class="keyword">catch</span> (IOException e) {</span><br><span class="line">    e.printStackTrace();</span><br><span class="line">}</span><br><span class="line">HttpsUtils.SSLParams sslParams = HttpsUtils.getSslSocketFactory(<span class="keyword">new</span> InputStream[]{certification}, <span class="keyword">null</span>, <span class="keyword">null</span>);</span><br><span class="line">OkHttpClient okHttpClient = <span class="keyword">new</span> OkHttpClient.Builder()</span><br><span class="line">    .hostnameVerifier(<span class="keyword">new</span> HostnameVerifier() {</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">verify</span><span class="params">(String hostname, SSLSession session)</span> </span>{</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">        }</span><br><span class="line">    })</span><br><span class="line">    .sslSocketFactory(sslParams.sSLSocketFactory, sslParams.trustManager)</span><br><span class="line">    .build();</span><br><span class="line">OkHttpUtils.initClient(okHttpClient);</span><br></pre></td></tr></tbody></table></figure><br>
-其中xxxxx.cer为所连接服务器的证书，可从浏览器导出。<br>
-也可以通过OpenSSL工具自签名生成，生成方法详见文章<a href="https://lxmymjr.github.io/2017/09/19/Python-Web%E6%A1%86%E6%9E%B6-CherryPy/#全局配置-global">Python Web 框架 - CherryPy</a><p></p>
-<h1 id="通过https发送json消息">通过 HTTPS 发送 Json 消息</h1>
-<figure class="highlight java"><table><tbody><tr><td class="code"><pre><span class="line">String url = <span class="string">"https://xxxxx"</span>;</span><br><span class="line">String json = <span class="string">"{\"key1\":\"value1\", \"key1\":\"value1\"}"</span>;</span><br><span class="line">OkHttpUtils</span><br><span class="line">    .postString()</span><br><span class="line">    .url(url)</span><br><span class="line">    .content(json)</span><br><span class="line">    .mediaType(MediaType.parse(<span class="string">"application/json; charset=utf-8"</span>))</span><br><span class="line">    .build()</span><br><span class="line">    .execute(<span class="keyword">new</span> MyStringCallback());</span><br></pre></td></tr></tbody></table></figure>
-<h1 id="通过https发送同步post请求">通过 HTTPS 发送同步 POST 请求</h1>
-<figure class="highlight java"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">new</span> Thread() {</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>{</span><br><span class="line">        String url = <span class="string">"https://xxxxx"</span>;</span><br><span class="line">        Response response;</span><br><span class="line">        <span class="keyword">try</span> {</span><br><span class="line">            response = OkHttpUtils</span><br><span class="line">                    .post()</span><br><span class="line">                    .url(url)</span><br><span class="line">                    .addParams(<span class="string">"abc"</span>, <span class="string">"xxx"</span>)</span><br><span class="line">                    .addParams(<span class="string">"def"</span>, <span class="string">"yyy"</span>)</span><br><span class="line">                    .build()</span><br><span class="line">                    .execute();</span><br><span class="line">            <span class="keyword">if</span> (response.isSuccessful()) {</span><br><span class="line">                Log.d(<span class="string">"OkHTTP"</span>,<span class="string">"OkHTTP is request success"</span>);</span><br><span class="line">            } <span class="keyword">else</span> {</span><br><span class="line">                Log.e(<span class="string">"OkHTTP"</span>, <span class="string">"OkHTTP is request error"</span>);</span><br><span class="line">            }</span><br><span class="line">            String data=response.body().string();</span><br><span class="line">        } <span class="keyword">catch</span> (IOException e) {</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">}.start();</span><br></pre></td></tr></tbody></table></figure>
-<p>同步的 HTTPS 请求不能再主线程中进行，所以要新建一个线程处理同步请求。</p>
-<h1 id="通过https发送异步post请求">通过 HTTPS 发送异步 POST 请求</h1>
-<figure class="highlight java"><table><tbody><tr><td class="code"><pre><span class="line">String url = <span class="string">"https://xxxxx"</span>;</span><br><span class="line">OkHttpUtils</span><br><span class="line">    .post()</span><br><span class="line">    .url(url)</span><br><span class="line">    .addParams(<span class="string">"abc"</span>, <span class="string">"xxx"</span>)</span><br><span class="line">    .addParams(<span class="string">"def"</span>, <span class="string">"yyy"</span>)</span><br><span class="line">    .build()</span><br><span class="line">    .execute(<span class="keyword">new</span> MyStringCallback());</span><br></pre></td></tr></tbody></table></figure>
-<h1 id="post表单形式上传文件">Post 表单形式上传文件</h1>
-<figure class="highlight java"><table><tbody><tr><td class="code"><pre><span class="line">OkHttpUtils.post()</span><br><span class="line">    .addFile(<span class="string">"file"</span>, <span class="string">"filename"</span>, file)</span><br><span class="line">    .url(url)</span><br><span class="line">    .params(params)</span><br><span class="line">    .headers(headers)</span><br><span class="line">    .build()</span><br><span class="line">    .execute(<span class="keyword">new</span> MyStringCallback());</span><br></pre></td></tr></tbody></table></figure>
-<p>支持上传多个文件，addFile 的第一个参数为文件的 key，即类别表单中 <code>&lt;input type="file" name="file"/&gt;</code> 的 name 属性。<br>
-params (params) 和 headers (headers) 可以省略。其中 params (params) 为参数格式，类似 addParams ()。<br>
-</p><figure class="highlight java"><table><tbody><tr><td class="code"><pre><span class="line">Map&lt;String, String&gt; params = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">params.put(<span class="string">"abc"</span>, <span class="string">"xxx"</span>);</span><br><span class="line">params.put(<span class="string">"def"</span>, <span class="string">"yyy"</span>);</span><br></pre></td></tr></tbody></table></figure><p></p>
-<h1 id="处理返回消息">处理返回消息</h1>
-<p>新建类 MyStringCallback：<br>
-</p><figure class="highlight java"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyStringCallback</span> <span class="keyword">extends</span> <span class="title">StringCallback</span></span></span><br><span class="line"><span class="class"></span>{</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onError</span><span class="params">(Call call, Exception e, <span class="keyword">int</span> id)</span></span></span><br><span class="line"><span class="function">    </span>{</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">    }</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onResponse</span><span class="params">(String response, <span class="keyword">int</span> id)</span> </span>{</span><br><span class="line">        Log.i(<span class="string">"HTTP"</span>, <span class="string">"onResponse："</span> + response);</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure><p></p>
 ]]></content>
       <categories>
         <category>Android</category>
@@ -553,284 +553,6 @@ onMessageReceived 是为大多数消息类型提供的，但有以下例外情�
       </tags>
   </entry>
   <entry>
-    <title>PySpark 的 DataFrame 与 Pandas 的 DataFrame 的比较</title>
-    <url>/contents/PySpark%E7%9A%84DataFrame%E4%B8%8EPandas%E7%9A%84DataFrame%E7%9A%84%E6%AF%94%E8%BE%83.html</url>
-    <content><![CDATA[<p>PySpark 和 Pandas 中都有 DataFrame 这个数据结构，但是他们的使用方法大有不同。<br>
-Reference：<a href="https://zhuanlan.zhihu.com/p/34901585">pyspark 系列 --pandas 与 pyspark 对比</a> ;<a href="http://moverzp.com/2018/03/17/Pandas%E5%92%8CPySpark%E4%B8%AD%E7%9A%84DataFrame%E6%AF%94%E8%BE%83/">Pandas 和 PySpark 中的 DataFrame 比较</a> ;<a href="https://spark.apache.org/docs/latest/api/python/pyspark.sql.html">PySpark API</a>;<a href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html">Pandas API</a><br>
-<span id="more"></span></p>
-<h1 id="工作方式">工作方式</h1>
-<ul>
-<li><p>PySpark<br>
-分布式并行计算框架，内建并行机制 parallelism，所有的数据和操作自动并行分布在各个集群结点上。以处理 in-memory 数据的方式处理 distributed 数据。支持 Hadoop，能处理大量数据。</p></li>
-<li><p>Pandas<br>
-单机 single machine tool，没有并行机制 parallelism，不支持 Hadoop，处理大量数据有瓶颈</p></li>
-</ul>
-<h1 id="延迟机制">延迟机制</h1>
-<ul>
-<li><p>PySpark<br>
-lazy-evaluated</p></li>
-<li><p>Pandas<br>
-not lazy-evaluated</p></li>
-</ul>
-<p>注：在程式语言理论中，<strong>惰性求值</strong>（英语：Lazy Evaluation），又译为<strong>惰性计算</strong>、<strong>懒惰求值</strong>，也称为<strong>传需求调用</strong>（call-by-need），是一个计算机编程中的一个概念，目的是要最小化计算机要做的工作。它有两个相关而又有区别的含意，可以表示为 “延迟求值” 和 “最小化求值”。在使用延迟求值的时候，表达式不在它被绑定到变量之后就立即求值，而是在该值被取用的时候求值</p>
-<h1 id="内存缓存">内存缓存</h1>
-<ul>
-<li><p>PySpark<br>
-persist () or cache () 将转换的 RDDs 保存在内存</p></li>
-<li><p> Pandas<br>
-单机缓存</p></li>
-</ul>
-<h1 id="dataframe可变性">DataFrame 可变性</h1>
-<ul>
-<li><p>PySpark<br>
-Spark 中 RDDs 是不可变的，因此 DataFrame 也是不可变的</p></li>
-<li><p> Pandas<br>
-Pandas 中 DataFrame 是可变的</p></li>
-</ul>
-<h1 id="创建">创建</h1>
-<ul>
-<li><p>PySpark<br>
-直接创建： <code>spark_df = sc.parallelize([(1, 2), (3, 4)]).toDF(['xx',  'yy']</code><br>
-从 pandas_df 转换：<code>spark_df = SQLContext.createDataFrame(pandas_df)</code><br>
-另外，createDataFrame 支持从 list 转换 spark_df，其中 list 元素可以为 tuple，dict，rdd<br>
-读取 CSV 文件：<code>spark_df = spark.read.csv(csv_path, header=True)</code> 如果 CSV 文件有 header，则将其读取为列名<br>
-读取 parquet 文件：<code>spark_df = spark.read.parquet(parquet_path)</code><br>
-读取 json 文件：<code>spark_df = spark.read.json(json_path)</code><br>
-读取 txt 文件：<code>spark_df = sc.textFile(txt_path).toDF()</code><br>
-注：这些 path 均为 HDFS 路径</p></li>
-<li><p> Pandas<br>
-直接创建： <code>pandas_df = pd.DataFrame({'xx': {0: 1, 1: 3}, 'yy':  {0: 2, 1: 4}})</code><br>
-从 spark_df 转换：<code>pandas_df = spark_df.toPandas()</code>，或读取其他数据</p></li>
-</ul>
-<h1 id="index索引">index 索引</h1>
-<ul>
-<li><p>PySpark<br>
-没有 index 索引，若需要则要额外创建该列<br>
-<code>df.withColumn('index', F.row_number().over(Window.orderBy(F.monotonically_increasing_id())))</code><br>
-<code>df.rdd.zipWithIndex().toDF().select(F.col('_1').getItem('col_name_1').alias('col_name_1'), F.col('_2').getItem('col_name_2').alias('col_name_2'), ..., F.col('_n').getItem('col_name_n').alias('col_name_n'), F.col('_(n+1)').alias('row_index'))</code> 此方法更快。</p></li>
-<li><p>Pandas<br>
-自动创建</p></li>
-</ul>
-<p>注：当将 pandas_df 转换为 spark_df 时如需保留索引，则可用 <code>spark_df = SQLContext.createDataFrame(pandas_df.reset_index())</code>。</p>
-<h1 id="行结构">行结构</h1>
-<ul>
-<li><p>PySpark<br>
-Row 结构，属于 Spark DataFrame 结构</p></li>
-<li><p> Pandas<br>
-Series 结构，属于 Pandas DataFrame 结构</p></li>
-</ul>
-<h1 id="列结构">列结构</h1>
-<ul>
-<li><p>PySpark<br>
-Column 结构，属于 Spark DataFrame 结构，如：<code>DataFrame[name: string]</code></p></li>
-<li><p>Pandas<br>
-Series 结构，属于 Pandas DataFrame 结构</p></li>
-</ul>
-<h1 id="列名称">列名称</h1>
-<ul>
-<li><p>PySpark<br>
-允许重名，修改列名采用 alias 方法<br>
-修改列名：<code>df.withColumnRenamed('old_name', 'new_name')</code></p></li>
-<li><p>Pandas<br>
-不允许重名<br>
-修改列名：<code>df.rename(columns={'old_name': 'new_name'})</code></p></li>
-</ul>
-<h1 id="列修改">列修改</h1>
-<ul>
-<li><p>PySpark<br>
-原来有 <code>df['xx']</code> 列，<code>df.withColumn('xx', 1)</code></p></li>
-<li><p>Pandas<br>
-原来有 <code>df['xx']</code> 列，<code>df['xx'] = 1</code></p></li>
-</ul>
-<h1 id="显示">显示</h1>
-<ul>
-<li>PySpark
-<ol type="1">
-<li>df 不输出具体内容，输出具体内容用 show 方法。<code>df.show(5)</code></li>
-<li>输出形式：<code>DataFrame[age: bigint, name: string]</code></li>
-<li>以树的形式打印概要：<code>df.printSchema()</code></li>
-<li><code>df.columns</code> 输出列的名字</li>
-</ol></li>
-<li> Pandas<br>
-df 输出具体内容</li>
-</ul>
-<h1 id="排序">排序</h1>
-<ul>
-<li><p>PySpark<br>
-<code>df.sort(df.xx.asc(),df.yy.desc())</code><br>
-<code>df.sort(F.asc('xx'),F.desc('yy'))</code><br>
-<code>df.sort(F.col("xx").asc(), F.col("yy").desc())</code><br>
-<code>df.orderBy(F.col("xx").asc(), F.col("yy").desc())</code><br>
-在列中按值依次进行排序，指定先升序后降序</p></li>
-<li><p> Pandas<br>
-<code>df.sort_index()</code> 按轴进行升序排序<br>
-<code>df.sort_values(['xx', 'yy'], ascending=[True, False])</code> 在列中按值依次进行排序，指定先升序后降序<br>
-<code>df.sort_values(['xx', 'yy'], axis=0)</code>，<code>df.sort_values([1, 2], axis=1)</code> 在列、行中按值进行升序排序</p></li>
-</ul>
-<h1 id="选择或切片">选择或切片</h1>
-<ul>
-<li>PySpark
-<ol type="1">
-<li><code>df.select('xx', 'yy')</code> 选择一列或多列</li>
-<li><code>df.first()</code> 以行的形式返回第一行。（注：行的形式为 <code>Row(col_name1=value1, col_name2=value2, ...)</code>）</li>
-<li><code>df.head(n)</code>，<code>df.take(n)</code> 以行的形式返回前 n 行；<code>df.tail(n)</code> 以行的形式返回最后 n 行</li>
-<li>用 <code>df.collect()</code> 以行的形式返回所有行</li>
-</ol></li>
-<li> Pandas
-<ol type="1">
-<li><code>df.xx</code>，<code>df['xx']</code> 选择列名为 xx 的列，df [k] 选择行名为 k 的行</li>
-<li><code>df.iat[:, k]</code>，<code>df.iloc[:, k]</code> 选择第 k 列，<code>df.iat[k]</code>，<code>df.iloc[k]</code> 选择第 k 行</li>
-</ol></li>
-</ul>
-<h1 id="过滤">过滤</h1>
-<ul>
-<li><p>PySpark<br>
-<code>df.filter(df['xx']&gt;k)</code> 或者 <code>df.where(df['xx']&gt;k)</code></p></li>
-<li><p>Pandas<br>
-<code>df[df['xx']&gt;k]</code> 或者 <code>s[s&gt;k]</code></p></li>
-</ul>
-<h1 id="分组聚合">分组聚合</h1>
-<ul>
-<li><p>PySpark<br>
-<code>df.groupBy('xx')</code> 或者 <code>df.groupBy('xx').avg('yy').show()</code> 应用单个函数<br>
-<code>from pyspark.sql import functions</code> 导入内置函数库<br>
-<code>df.groupBy('xx').agg(functions.avg('yy'), functions.min('yy'), functions.max('yy')).show()</code> 应用多个函数</p></li>
-<li><p> Pandas<br>
-<code>df.groupby('xx')</code><br>
-<code>df.groupby('xx').avg('yy')</code></p></li>
-</ul>
-<h1 id="统计">统计</h1>
-<ul>
-<li><p>PySpark<br>
-<code>df.count()</code> 输出总行数<br>
-<code>df.describe()</code> 描述某些列的 count, mean, stddev, min, max</p></li>
-<li><p>Pandas<br>
-<code>df.count()</code> 输出每一列的非空行数<br>
-<code>df.shape</code> 输出行数✖️列数<br>
-<code>df.describe()</code> 描述某些列的 count, mean, std, min, 25%, 50%, 75%, max</p></li>
-</ul>
-<h1 id="合并">合并</h1>
-<ul>
-<li><p>PySpark<br>
-扩充列 <code>df.join()</code><br>
-同名列不自动添加后缀，只有键值完全匹配才保留一份副本</p>
-<p>扩充行<br>
-<code>df.union()</code>：两个 df 合并，按位置进行合并，列名以前表为准（a.union (b) 列名顺序以 a 为准）<br>
-<code>df.unoinAll()</code>：同 union 方法<br>
-<code>df.unionByName()</code>：两个 df 合并，按列名进行合并</p></li>
-<li><p> Pandas<br>
-Pandas 下有 <code>concat</code> 方法，支持轴向合并<br>
-Pandas 下有 <code>merge</code> 方法，支持多列合并<br>
-同名列自动添加后缀，对应键仅保留一份副本<br>
-<code>df.join()</code> 支持多列合并<br>
-<code>df.append()</code> 支持多行合并</p></li>
-</ul>
-<h1 id="删除">删除</h1>
-<ul>
-<li>PySpark
-<ol type="1">
-<li>删除一列：<code>df.drop('xx')</code> 或者 <code>df.drop(F.col('xx'))</code></li>
-<li>删除多列：<code>df.drop(*['xx', 'yy', ...])</code></li>
-<li>删除某（些）行：使用 filter 方法</li>
-</ol></li>
-<li> Pandas
-<ol type="1">
-<li>删除某（些）列：<code>df.drop(['xx', 'xx'], axis=1)</code> 或者 <code>df.drop(columns=['xx', 'yy'])</code></li>
-<li>删除某（些）行：<code>df.drop([0, 1])</code> 其中 0，1 为 index 名字</li>
-</ol></li>
-</ul>
-<h1 id="更改数据类型">更改数据类型</h1>
-<ul>
-<li>PySpark
-<ol type="1">
-<li>更改指定列的数据类型：<code>df = df.withColumn('xx', F.col('xx').cast(Type()))</code></li>
-</ol></li>
-<li>Pandas
-<ol type="1">
-<li>更改所有列的数据类型：<code>df.astype('type')</code></li>
-<li>更改指定列的数据类型：<code>df.astype({'xx': 'int32'})</code></li>
-</ol></li>
-</ul>
-<h1 id="失数据处理">失数据处理</h1>
-<ul>
-<li>PySpark
-<ol type="1">
-<li>不自动添加 NaNs，且不抛出错误</li>
-<li> fillna 函数：<code>df.na.fill()</code></li>
-<li>dropna 函数：<code>df.na.drop()</code></li>
-</ol></li>
-<li>Pandas
-<ol type="1">
-<li>对缺失数据自动添加 NaNs</li>
-<li>fillna 函数：<code>df.fillna()</code></li>
-<li>dropna 函数：<code>df.dropna()</code></li>
-</ol></li>
-</ul>
-<h1 id="sql语句">SQL 语句</h1>
-<ul>
-<li>PySpark
-<ol type="1">
-<li>表格注册：把 DataFrame 结构注册成 SQL 语句使用类型<br>
-<code>df.registerTempTable('tt')</code> 或者 <code>sqlContext.registerDataFrameAsTable(df, 'tt')</code><br>
-<code>spark.sql('SELECT xx, yy FROM tt WHERE xx &gt;= m AND yy &lt;= n')</code></li>
-<li>功能注册：把函数注册成 SQL 语句使用类型<br>
-<code>spark.registerFunction('stringLengthString', lambda x: len(x))</code><br>
-<code>spark.sql("SELECT stringLengthString('test')")</code></li>
-</ol></li>
-<li>Pandas<br>
-<code>import sqlite3</code><br>
-<code>pd.read_sql('SELECT xx, yy FROM tt WHERE xx &gt;= m AND yy &lt;= n')</code></li>
-</ul>
-<h1 id="两者互相转换">两者互相转换</h1>
-<ul>
-<li><p>PySpark<br>
-<code>pandas_df = spark_df.toPandas()</code></p></li>
-<li><p>Pandas<br>
-<code>spark_df = spark.createDataFrame(pandas_df)</code><br>
-转换过程中可能会遇到报错： TypeError: field XXX: Can not merge type A and B<br>
-原因是该列存在空值。解决方法是转换成 String<br>
-<code>pandas_df.XXX = pandas_df.XXX.astype(str)</code></p></li>
-</ul>
-<h1 id="函数应用">函数应用</h1>
-<ul>
-<li><p>Pandas<br>
-<code>df.apply(f)</code> 将 df 的每一列应用函数 f</p></li>
-<li><p>PySpark<br>
-<code>df.foreach(f)</code> 或者 <code>df.rdd.foreach(f)</code> 将 df 的每一列应用函数 f<br>
-<code>df.foreachPartition(f)</code> 或者 <code>df.rdd.foreachPartition(f)</code> 将 df 的每一块应用函数 f</p></li>
-</ul>
-<h1 id="map-reduce操作">map-reduce 操作</h1>
-<ul>
-<li>Pandas<br>
-<code>map-reduce操作map(func, list)</code>，<code>reduce(func, list)</code> 返回类型 seq</li>
-<li>PySpark<br>
-<code>df.map(func)</code>，<code>df.reduce(func)</code> 返回类型 seqRDDs</li>
-</ul>
-<h1 id="diff操作">diff 操作</h1>
-<ul>
-<li>Pandas<br>
-有 diff 操作，处理时间序列数据（Pandas 会对比当前行与上一行）</li>
-<li>PySpark<br>
-没有 diff 操作（Spark 的上下行是相互独立，分布式存储的）</li>
-</ul>
-<h1 id="most-common计数">Most Common 计数</h1>
-<ul>
-<li>Pandas<br>
-<code>df.value_counts(ascending=False)</code></li>
-<li>PySpark<br>
-<code>df.cube(column_name).count().sort('count', ascending=False).show(5)</code></li>
-</ul>
-]]></content>
-      <categories>
-        <category>Python</category>
-      </categories>
-      <tags>
-        <tag>Tutorial</tag>
-        <tag>Python</tag>
-        <tag>Data Analysis</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Machine Learning：1. Regression</title>
     <url>/contents/ML-1-Regression.html</url>
     <content><![CDATA[<div class="hbe hbe-container" id="hexo-blog-encrypt" data-wpm="Oh, this is an invalid password. Check and try again, please." data-whm="OOPS, these decrypted content may changed, but you can still have a look.">
@@ -851,6 +573,425 @@ Pandas 下有 <code>merge</code> 方法，支持多列合并<br>
       <tags>
         <tag>Learning Notes</tag>
         <tag>Machine Learning</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>PySpark 的 DataFrame 与 Pandas 的 DataFrame 的比较</title>
+    <url>/contents/PySpark%E7%9A%84DataFrame%E4%B8%8EPandas%E7%9A%84DataFrame%E7%9A%84%E6%AF%94%E8%BE%83.html</url>
+    <content><![CDATA[<p>PySpark 和 Pandas 中都有 DataFrame 这个数据结构，但是他们的使用方法大有不同。<br>
+Reference：<a href="https://zhuanlan.zhihu.com/p/34901585">pyspark 系列 --pandas 与 pyspark 对比</a> ;<a href="http://moverzp.com/2018/03/17/Pandas%E5%92%8CPySpark%E4%B8%AD%E7%9A%84DataFrame%E6%AF%94%E8%BE%83/">Pandas 和 PySpark 中的 DataFrame 比较</a> ;<a href="https://spark.apache.org/docs/latest/api/python/pyspark.sql.html">PySpark API</a>;<a href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html">Pandas API</a><br>
+<span id="more"></span></p>
+<h1 id="工作方式">工作方式</h1>
+<ul>
+<li><p>PySpark<br>
+分布式并行计算框架，内建并行机制 parallelism，所有的数据和操作自动并行分布在各个集群结点上。以处理 in-memory 数据的方式处理 distributed 数据。支持 Hadoop，能处理大量数据<br>
+<code>import pyspark.sql.functions as F</code> 导入内置函数库</p></li>
+<li><p> Pandas<br>
+单机 single machine tool，没有并行机制 parallelism，不支持 Hadoop，处理大量数据有瓶颈</p></li>
+</ul>
+<h1 id="延迟机制">延迟机制</h1>
+<ul>
+<li><p>PySpark<br>
+lazy-evaluated</p></li>
+<li><p>Pandas<br>
+not lazy-evaluated</p></li>
+</ul>
+<p>注：在程式语言理论中，<strong>惰性求值</strong>（英语：Lazy Evaluation），又译为<strong>惰性计算</strong>、<strong>懒惰求值</strong>，也称为<strong>传需求调用</strong>（call-by-need），是一个计算机编程中的一个概念，目的是要最小化计算机要做的工作。它有两个相关而又有区别的含意，可以表示为 “延迟求值” 和 “最小化求值”。在使用延迟求值的时候，表达式不在它被绑定到变量之后就立即求值，而是在该值被取用的时候求值</p>
+<h1 id="内存缓存">内存缓存</h1>
+<ul>
+<li><p>PySpark<br>
+persist () 或 cache () 将转换的 RDDs 保存在内存</p></li>
+<li><p> Pandas<br>
+单机缓存</p></li>
+</ul>
+<h1 id="dataframe可变性">DataFrame 可变性</h1>
+<ul>
+<li><p>PySpark<br>
+Spark 中 RDDs 是不可变的，因此 DataFrame 也是不可变的</p></li>
+<li><p> Pandas<br>
+Pandas 中 DataFrame 是可变的</p></li>
+</ul>
+<h1 id="创建">创建</h1>
+<ul>
+<li>PySpark<br>
+直接创建： <code>spark_df = sc.parallelize([(1, 2), (3, 4)]).toDF(['xx',  'yy']</code><br>
+从 pandas_df 转换：<code>spark_df = SQLContext.createDataFrame(pandas_df)</code><br>
+另外，createDataFrame 支持从 list 转换 spark_df，其中 list 元素可以为 tuple，dict，rdd<br>
+读取 CSV 文件：<code>spark_df = spark.read.csv(csv_path, header=True)</code> 如果 CSV 文件有 header，则将其读取为列名<br>
+读取 parquet 文件：<code>spark_df = spark.read.parquet(parquet_path)</code><br>
+读取 json 文件：<code>spark_df = spark.read.json(json_path)</code><br>
+读取 txt 文件：<code>spark_df = sc.textFile(txt_path).toDF()</code><br>
+注：这些 path 均为 HDFS 路径</li>
+<li> Pandas<br>
+直接创建： <code>pandas_df = pd.DataFrame({'xx': {0: 1, 1: 3}, 'yy':  {0: 2, 1: 4}})</code><br>
+从 spark_df 转换：<code>pandas_df = spark_df.toPandas()</code>，或读取其他数据<br>
+读取 CSV 文件：<code>pd.read_csv(csv_path)</code><br>
+读取 parquet 文件：<code>pd.read_parquet(parquet_path)</code>，其中如果 parquet_path 如果是 HDFS 路径则需要加前缀 'hdfs://'，比如：<code>'hdfs:///projects/path/to/parquet/'</code></li>
+</ul>
+<h1 id="index索引">index 索引</h1>
+<ul>
+<li><p>PySpark<br>
+没有 index 索引，若需要则要额外创建该列<br>
+</p><figure class="highlight python"><table><tbody><tr><td class="code"><pre><span class="line">df.withColumn(<span class="string">'index'</span>, F.row_number().over(Window.orderBy(F.monotonically_increasing_id())))</span><br><span class="line">df.rdd.zipWithIndex().toDF().select(F.col(<span class="string">'_1'</span>).getItem(<span class="string">'col_name_1'</span>).alias(<span class="string">'col_name_1'</span>), F.col(<span class="string">'_2'</span>).getItem(<span class="string">'col_name_2'</span>).alias(<span class="string">'col_name_2'</span>), ..., F.col(<span class="string">'_n'</span>).getItem(<span class="string">'col_name_n'</span>).alias(<span class="string">'col_name_n'</span>), F.col(<span class="string">'_(n+1)'</span>).alias(<span class="string">'row_index'</span>)) <span class="comment"># 此方法更快</span></span><br></pre></td></tr></tbody></table></figure><p></p></li>
+<li><p>Pandas<br>
+自动创建</p></li>
+</ul>
+<p>注：当将 pandas_df 转换为 spark_df 时如需保留索引，则可用 <code>spark_df = SQLContext.createDataFrame(pandas_df.reset_index())</code>。</p>
+<h1 id="行结构">行结构</h1>
+<ul>
+<li><p>PySpark<br>
+Row 结构，属于 Spark DataFrame 结构</p></li>
+<li><p> Pandas<br>
+Series 结构，属于 Pandas DataFrame 结构</p></li>
+</ul>
+<h1 id="列结构">列结构</h1>
+<ul>
+<li><p>PySpark<br>
+Column 结构，属于 Spark DataFrame 结构，如：<code>DataFrame[name: string]</code></p></li>
+<li><p>Pandas<br>
+Series 结构，属于 Pandas DataFrame 结构</p></li>
+</ul>
+<h1 id="列名称">列名称</h1>
+<ul>
+<li>PySpark<br>
+允许重名，修改列名采用 alias 方法<br>
+修改列名：<code>df.withColumnRenamed('old_name', 'new_name')</code><br>
+<code>df.select(F.col('old_name').alias('new_name'), ...)</code><br>
+<code>df.selectExpr('old_name as new_name', ...)</code></li>
+<li>Pandas<br>
+不允许重名<br>
+修改列名：<code>df.rename(columns={'old_name': 'new_name'})</code></li>
+</ul>
+<h1 id="列修改">列修改</h1>
+<ul>
+<li>PySpark<br>
+原来有 <code>df['xx']</code> 列，<code>df.withColumn('xx', 1)</code><br>
+如需判断逻辑：<code>df.withColumn('xx', F.when(condition expression, true expression).otherwise(false expression))</code><br>
+如需链接：<code>df.withColumn('xx', F.concat(F.col('yy'), F.lit('-'), F.col('zz')))</code> 其中 yy 和 zz 列须为 string 类型，如不是则需要提前类型转换。<br>
+从文件路径取值：<code>df.withColumn('xx', F.input_file_name().substr(start_index, stop_index))</code></li>
+<li>Pandas<br>
+原来有 <code>df['xx']</code> 列，<code>df['xx'] = 1</code><br>
+如需判断逻辑：<code>df.loc[condition expression, 'xx'] = true expression</code><br>
+<code>df.loc[~condition expression, 'xx'] = false expression</code><br>
+<code>df['xx'] = np.where(condition expression, true expression, false expression)</code><br>
+<code>df['xx'] = df.apply(lambda x: true expression if condition expression else false expression, axis=1)</code><br>
+如需链接：<code>df['xx'] = df.yy + '-' + df.zz</code> 其中 yy 和 zz 列须为 string 类型，如不是则需要提前类型转换。</li>
+</ul>
+<h1 id="显示">显示</h1>
+<ul>
+<li>PySpark<br>
+df 不输出具体内容，输出具体内容用 show 方法。<code>df.show(5, truncate=100)</code> 默认显示 20 行，每行显示长度通过 truncate 参数设置<br>
+以树的形式打印概要：<code>df.printSchema()</code><br>
+<code>df.columns</code> 输出列的名字</li>
+<li> Pandas<br>
+df 输出具体内容<br>
+<code>df.columns</code> 输出列的名字<br>
+<code>pd.set_option('display.max_columns', None) # 显示所有列</code><br>
+<code>pd.set_option('max_colwidth', 100) # 每行显示长度设置</code><br>
+<code>pd.set_option('display.max_rows', None) # 显示所有行</code></li>
+</ul>
+<h1 id="排序">排序</h1>
+<ul>
+<li><p>PySpark<br>
+<code>df.sort(df.xx.asc(),df.yy.desc())</code><br>
+<code>df.sort(F.asc('xx'),F.desc('yy'))</code><br>
+<code>df.sort(F.col("xx").asc(), F.col("yy").desc())</code><br>
+<code>df.orderBy(F.col("xx").asc(), F.col("yy").desc())</code><br>
+在列中按值依次进行排序，指定先升序后降序</p></li>
+<li><p> Pandas<br>
+<code>df.sort_index()</code> 按轴进行升序排序<br>
+<code>df.sort_values(['xx', 'yy'], ascending=[True, False])</code> 在列中按值依次进行排序，指定先升序后降序<br>
+<code>df.sort_values(['xx', 'yy'], axis=0)</code>，<code>df.sort_values([1, 2], axis=1)</code> 在列、行中按值进行升序排序</p></li>
+</ul>
+<h1 id="选择或切片">选择或切片</h1>
+<ul>
+<li><p>PySpark<br>
+<code>df.select('xx', 'yy')</code> 选择一列或多列<br>
+<code>df.first()</code> 以行的形式返回第一行。（注：行的形式为 <code>[Row(col_name1=value1, col_name2=value2, ...)]</code>）<br>
+<code>df.head(n)</code>，<code>df.take(n)</code> 以行的形式返回前 n 行；<code>df.tail(n)</code> 以行的形式返回最后 n 行<br>
+用 <code>df.collect()</code> 以行的形式返回所有行</p></li>
+<li><p> Pandas<br>
+<code>df.xx</code>，<code>df['xx']</code> 选择列名为 xx 的列，df [k] 选择行名为 k 的行<br>
+<code>df.iat[:, k]</code>，<code>df.iloc[:, k]</code> 选择第 k 列，<code>df.iat[k]</code>，<code>df.iloc[k]</code> 选择第 k 行</p></li>
+</ul>
+<h1 id="过滤">过滤</h1>
+<ul>
+<li><p>PySpark<br>
+<code>df.filter(df['xx'] &gt; k)</code> 或者 <code>df.where(df['xx'] &gt; k)</code></p>
+<p>取值存在于：<code>df.filter(F.col('xx').isin(filter_list))</code></p>
+<p>空值处理：</p>
+<ul>
+<li>值为 null：<code>df.filter(F.col('xx').isNull())</code> 和 <code>df.filter(F.col('xx').isNotNull())</code></li>
+<li>值为空字符串：<code>df.filter(F.col('xx') == '')</code></li>
+<li>值为 np.nan：<code>df.filter(F.col('xx') == np.nan)</code></li>
+</ul></li>
+<li><p>Pandas<br>
+<code>df[df['xx']&gt;k]</code> 或者 <code>s[s&gt;k]</code></p>
+<p>取值存在于：<code>df[df.xx.isin(filter_list)]</code></p>
+<p>空值处理：包括 null，np.NaN，pd.NaT，None，不包括空字符串 <code>df[df.xx.isnull()]</code> 或 <code>df[df.xx.isna()]</code> 和 <code>df.filter(F.col('xx').notnull())</code> 或 <code>df[df.xx.notnull()]</code> 或 <code>df[df.xx.notna()]</code></p></li>
+<li><p>Examples:</p>
+<figure class="highlight python"><table><tbody><tr><td class="code"><pre><span class="line">&gt;&gt; pdf = pd.DataFrame(<span class="built_in">dict</span>(numpy=[np.NaN], pandas=[pd.NaT], empty=[<span class="string">''</span>], none=[<span class="literal">None</span>]))</span><br><span class="line">&gt;&gt; pdf</span><br><span class="line">   numpy pandas empty  none</span><br><span class="line"><span class="number">0</span>    NaN    NaT        <span class="literal">None</span></span><br><span class="line">&gt;&gt; pdf.isnull()</span><br><span class="line">   numpy  pandas  empty  none</span><br><span class="line"><span class="number">0</span>   <span class="literal">True</span>    <span class="literal">True</span>  <span class="literal">False</span>  <span class="literal">True</span></span><br><span class="line">&gt;&gt; <span class="keyword">from</span> pyspark.sql.types <span class="keyword">import</span> *</span><br><span class="line">&gt;&gt; sdf = spark.createDataFrame(pdf, StructType([StructField(<span class="string">'numpy'</span>, DoubleType(), <span class="literal">True</span>),StructField(<span class="string">'pandas'</span>, StringType(), <span class="literal">True</span>),StructField(<span class="string">'empty'</span>, StringType(), <span class="literal">True</span>),StructField(<span class="string">'pandas'</span>, StringType(), <span class="literal">True</span>)])) <span class="comment"># 必须指定schema，否则报错”ValueError: Some of types cannot be determined after inferring“</span></span><br><span class="line">&gt;&gt; sdf.show()</span><br><span class="line">+-----+------+-----+------+</span><br><span class="line">|numpy|pandas|empty|pandas|</span><br><span class="line">+-----+------+-----+------+</span><br><span class="line">|  NaN|  null|     |  null|</span><br><span class="line">+-----+------+-----+------+</span><br></pre></td></tr></tbody></table></figure></li>
+</ul>
+<h1 id="分组聚合">分组聚合</h1>
+<ul>
+<li><p>PySpark<br>
+<code>df.groupBy(cols_to_group)</code> 或者 <code>df.groupBy(cols_to_group).avg('xx').show()</code> 应用单个函数<br>
+<code>df.groupBy(cols_to_group).agg(F.avg('xx'), F.min('xx'), F.max('xx')).show()</code> 应用多个函数</p></li>
+<li><p> Pandas<br>
+<code>df.groupby(cols_to_group)</code><br>
+<code>df.groupby(cols_to_group).avg('xx')</code></p>
+<p>group filter by function: <code>df.groupby(cols_to_group).filter(function)</code></p></li>
+</ul>
+<h1 id="统计">统计</h1>
+<ul>
+<li><p>PySpark<br>
+<code>df.count()</code> 输出总行数<br>
+<code>df.describe()</code> 描述某些列的 count, mean, stddev, min, max</p></li>
+<li><p>Pandas<br>
+<code>df.count()</code> 输出每一列的非空行数<br>
+<code>df.shape</code> 输出行数 x 列数<br>
+<code>df.describe()</code> 描述某些列的 count, mean, std, min, 25%, 50%, 75%, max</p></li>
+</ul>
+<h1 id="合并">合并</h1>
+<ul>
+<li><p>PySpark<br>
+扩充列 <code>df.join()</code><br>
+同名列不自动添加后缀，只有键值完全匹配才保留一份副本</p>
+<ul>
+<li>Left;left-semi;left-anti #TODO</li>
+</ul>
+<p>扩充行<br>
+<code>df.union()</code>：两个 df 合并，按位置进行合并，列名以前表为准（a.union (b) 列名顺序以 a 为准）<br>
+<code>df.unoinAll()</code>：同 union 方法<br>
+<code>df.unionByName()</code>：两个 df 合并，按列名进行合并</p></li>
+<li><p> Pandas<br>
+Pandas 下有 <code>concat</code> 方法，支持轴向合并<br>
+Pandas 下有 <code>merge</code> 方法，支持多列合并<br>
+同名列自动添加后缀，对应键仅保留一份副本<br>
+<code>df.join()</code> 支持多列合并<br>
+<code>df.append()</code> 支持多行合并</p></li>
+</ul>
+<h1 id="删除">删除</h1>
+<ul>
+<li><p>PySpark<br>
+删除一列：<code>df.drop('xx')</code> 或者 <code>df.drop(F.col('xx'))</code><br>
+删除多列：<code>df.drop(*['xx', 'yy', ...])</code><br>
+删除某（些）行：使用 filter 方法<br>
+去重：<code>df.dropDuplicates()</code> 或 <code>df.drop_duplicates()</code> 其中参数必须为数组，<code>df.distinct()</code> 其中不能传入参数。<br>
+在 cols_to_group 相同的情况下保留 xx 列的值最小 / 最大的行：</p>
+<p></p><figure class="highlight python"><table><tbody><tr><td class="code"><pre><span class="line">df.groupBy(cols_to_group).agg(F.<span class="built_in">min</span>/<span class="built_in">max</span>(<span class="string">'xx'</span>).alias(<span class="string">'xx'</span>))`</span><br><span class="line">df.withColumn(<span class="string">'min/max'</span>, F.<span class="built_in">min</span>/<span class="built_in">max</span>(<span class="string">'xx'</span>).over(Window.partitionBy(cols_to_group))).where(F.col(<span class="string">'xx'</span>) == F.col(<span class="string">'min/max'</span>))</span><br><span class="line"><span class="comment"># example</span></span><br><span class="line">&gt;&gt; pdf = pd.DataFrame(<span class="built_in">dict</span>(os=[<span class="string">'ANDROID'</span>, <span class="string">'ANDROID'</span>, <span class="string">'IOS'</span>, <span class="string">'IOS'</span>, <span class="string">'IOS'</span>, <span class="string">'IOS'</span>], region=[<span class="string">'SG'</span>, <span class="string">'SG'</span>, <span class="string">'SG'</span>, <span class="string">'SG'</span>, <span class="string">'CN'</span>, <span class="string">'CN'</span>], value=[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>]))</span><br><span class="line">&gt;&gt; sdf = spark.createDataFrame(pdf)</span><br><span class="line">&gt;&gt; sdf.show()</span><br><span class="line">+-------+------+-----+</span><br><span class="line">|     os|region|value|</span><br><span class="line">+-------+------+-----+</span><br><span class="line">|ANDROID|    SG|    <span class="number">1</span>|</span><br><span class="line">|ANDROID|    SG|    <span class="number">2</span>|</span><br><span class="line">|    IOS|    SG|    <span class="number">3</span>|</span><br><span class="line">|    IOS|    SG|    <span class="number">4</span>|</span><br><span class="line">|    IOS|    CN|    <span class="number">5</span>|</span><br><span class="line">|    IOS|    CN|    <span class="number">6</span>|</span><br><span class="line">+-------+------+-----+</span><br><span class="line">&gt;&gt; sdf.groupBy([<span class="string">'os'</span>, <span class="string">'region'</span>]).agg(F.<span class="built_in">min</span>(<span class="string">'value'</span>)).show()</span><br><span class="line">+-------+------+----------+</span><br><span class="line">|     os|region|<span class="built_in">min</span>(value)|</span><br><span class="line">+-------+------+----------+</span><br><span class="line">|    IOS|    CN|         <span class="number">5</span>|</span><br><span class="line">|    IOS|    SG|         <span class="number">3</span>|</span><br><span class="line">|ANDROID|    SG|         <span class="number">1</span>|</span><br><span class="line">+-------+------+----------+</span><br><span class="line">&gt;&gt; <span class="keyword">from</span> pyspark.sql.window <span class="keyword">import</span> Window</span><br><span class="line">&gt;&gt; sdf.withColumn(<span class="string">'min'</span>, F.<span class="built_in">min</span>(<span class="string">'value'</span>).over(Window.partitionBy([<span class="string">'os'</span>, <span class="string">'region'</span>]))).where(F.col(<span class="string">'value'</span>) == F.col(<span class="string">'min'</span>)).show()</span><br><span class="line">+-------+------+-----+---+</span><br><span class="line">|     os|region|value|<span class="built_in">min</span>|</span><br><span class="line">+-------+------+-----+---+</span><br><span class="line">|    IOS|    CN|    <span class="number">5</span>|  <span class="number">5</span>|</span><br><span class="line">|    IOS|    SG|    <span class="number">3</span>|  <span class="number">3</span>|</span><br><span class="line">|ANDROID|    SG|    <span class="number">1</span>|  <span class="number">1</span>|</span><br><span class="line">+-------+------+-----+---+</span><br></pre></td></tr></tbody></table></figure><p></p></li>
+<li><p>Pandas<br>
+删除某（些）列：<code>df.drop(['xx', 'xx'], axis=1)</code> 或者 <code>df.drop(columns=['xx', 'yy'])</code><br>
+删除某（些）行：<code>df.drop([0, 1])</code> 其中 0，1 为 index 名字<br>
+去重：<code>drop_duplicates(subset=None, keep='first', inplace=False, ignore_index=False)</code> 其中 keep 取值 {‘first’, ‘last’, False}；keep 第一次或者最后一次出现。如果需要根据某列最大最小值保留的话，则需提前排序</p></li>
+</ul>
+<h1 id="更改数据类型">更改数据类型</h1>
+<ul>
+<li><p>PySpark<br>
+更改指定列的数据类型：<code>df = df.withColumn('xx', F.col('xx').cast(Type()))</code></p></li>
+<li><p>Pandas<br>
+更改所有列的数据类型：<code>df.astype('type')</code><br>
+更改指定列的数据类型：<code>df.astype({'xx': 'int32'})</code></p></li>
+</ul>
+<h1 id="失数据处理">失数据处理</h1>
+<ul>
+<li><p>PySpark<br>
+不自动添加 NaNs，且不抛出错误<br>
+fillna 函数：<code>df.na.fill()</code><br>
+dropna 函数：<code>df.na.drop()</code></p></li>
+<li><p>Pandas<br>
+对缺失数据自动添加 NaNs<br>
+fillna 函数：<code>df.fillna()</code><br>
+dropna 函数：<code>df.dropna()</code></p></li>
+</ul>
+<h1 id="sql语句">SQL 语句</h1>
+<ul>
+<li><p>PySpark<br>
+表格注册：把 DataFrame 结构注册成 SQL 语句使用类型<br>
+<code>df.registerTempTable('tt')</code> 或者 <code>sqlContext.registerDataFrameAsTable(df, 'tt')</code><br>
+<code>spark.sql('SELECT xx, yy FROM tt WHERE xx &gt;= m AND yy &lt;= n')</code><br>
+功能注册：把函数注册成 SQL 语句使用类型<br>
+<code>spark.registerFunction('stringLengthString', lambda x: len(x))</code><br>
+<code>spark.sql("SELECT stringLengthString('test')")</code></p></li>
+<li><p>Pandas<br>
+<code>import sqlite3</code><br>
+<code>pd.read_sql('SELECT xx, yy FROM tt WHERE xx &gt;= m AND yy &lt;= n')</code></p></li>
+</ul>
+<h1 id="两者互相转换">两者互相转换</h1>
+<ul>
+<li><p>PySpark<br>
+<code>pandas_df = spark_df.toPandas()</code><br>
+<code>ArrayType()</code>, <code>StructType()</code>, <code>MapType()</code> 类型需要提前转换成 string，pandas 不支持</p></li>
+<li><p> Pandas<br>
+<code>spark_df = spark.createDataFrame(pandas_df)</code><br>
+转换过程中可能会遇到报错： TypeError: field xx: Can not merge type A and B<br>
+原因是该列存在空值。解决方法是转换成 String<br>
+<code>pandas_df.xx = pandas_df.xx.astype(str)</code></p></li>
+</ul>
+<h1 id="函数应用">函数应用</h1>
+<ul>
+<li><p>PySpark<br>
+<code>df.foreach(f)</code> 或者 <code>df.rdd.foreach(f)</code> 将 df 的每一列应用函数 f<br>
+<code>df.foreachPartition(f)</code> 或者 <code>df.rdd.foreachPartition(f)</code> 将 df 的每一块应用函数 f<br>
+UDF (User-defined Function):</p>
+<figure class="highlight python"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment"># one-line way:</span></span><br><span class="line">udf_name = F.udf(<span class="keyword">lambda</span> x, y: expression, ReturnType())</span><br><span class="line"></span><br><span class="line"><span class="comment"># def way:</span></span><br><span class="line"><span class="meta">@F.udf(<span class="params">returnType=ReturnType(<span class="params"></span>)</span>)</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">udf_name</span>(<span class="params">x</span>):</span></span><br><span class="line">   expression</span><br><span class="line">   <span class="keyword">return</span></span><br><span class="line"></span><br><span class="line">df.withColumn(<span class="string">'xx'</span>, udf_name(F.col(<span class="string">'xx'</span>), F.col(<span class="string">'yy'</span>)))</span><br></pre></td></tr></tbody></table></figure></li>
+<li><p>Pandas<br>
+<code>df.apply(f)</code> 将 df 的每一列应用函数 f</p></li>
+<li><p>Pandas udf in PySpark<br>
+Driver 可能缺少必要的 package:pyarrow 导致报错 ModuleNotFoundError: No module named 'pyarrow'。有多种方案解决：</p>
+<ol type="1">
+<li><p>参考 <a href="https://spark.apache.org/docs/latest/api/python/user_guide/python_packaging.html">Python Package Management</a><br>
+PySpark 允许通过以下方式将 Python 文件 (<code>.py</code>)、压缩的 Python 包 (<code>.zip</code>) 和 Egg 文件 (<code>.egg</code>) 上传到执行程序：<br>
+设置配置 <code>spark.submit.pyFiles</code> 或者 <code>--py-files</code>Spark 脚本中的设置选项或者直接调用 <a href="https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.SparkContext.addPyFile.html#pyspark.SparkContext.addPyFile"><code>pyspark.SparkContext.addPyFile()</code></a>应用程序。<br>
+这是将额外的自定义 Python 代码发送到集群的直接方法。只添加单个文件或压缩整个包并上传它们。如果使用 <a href="https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.SparkContext.addPyFile.html#pyspark.SparkContext.addPyFile"><code>pyspark.SparkContext.addPyFile()</code></a>，即使 job 开始运行后也允许使用上传的代码。<br>
+但是不允许添加构建为 <a href="https://www.python.org/dev/peps/pep-0427/">Wheels</a> 包，因此不允许包含与本机代码的依赖关系。</p></li>
+<li><p>使用 Conda 打包<br>
+<a href="https://docs.conda.io/en/latest/">Conda</a> 是使用最广泛的 Python 包管理系统之一。PySpark 可以直接使用 Conda 环境通过利用 <a href="https://conda.github.io/conda-pack/spark.html">conda-pack</a> 来传送第三方 Python 包，它是一个命令行工具，可创建可重定位的 Conda 环境。<br>
+下面的示例创建了一个 Conda 环境以在驱动程序和执行程序上使用，并将其打包到一个存档文件中。此存档文件捕获 Python 的 Conda 环境并存储 Python 解释器及其所有相关依赖项。<br>
+</p><figure class="highlight shell"><table><tbody><tr><td class="code"><pre><span class="line">conda create -y -n pyspark_conda_env -c conda-forge pyarrow pandas conda-pack</span><br><span class="line">conda activate pyspark_conda_env</span><br><span class="line">conda pack -f -o pyspark_conda_env.tar.gz</span><br></pre></td></tr></tbody></table></figure><br>
+之后可以使用 <code>--archives</code> 选项或 <code>spark.archives</code> 配置（<code>spark.yarn.dist.archives</code> 在 YARN 中）将其与脚本或代码一起发送。它会自动解压缩执行程序上的存档。<br>
+在 <code>spark-submit</code> 脚本的情况下，您可以按如下方式使用它：<p></p>
+<figure class="highlight shell"><table><tbody><tr><td class="code"><pre><span class="line">export PYSPARK_DRIVER_PYTHON=python # Do not set in cluster modes.</span><br><span class="line">export PYSPARK_PYTHON=./environment/bin/python</span><br><span class="line">spark-submit --archives pyspark_conda_env.tar.gz#environment app.py</span><br></pre></td></tr></tbody></table></figure>
+<p>注意 <code>PYSPARK_DRIVER_PYTHON</code> 不应为 YARN 集群模式设置上述内容。<br>
+如果您使用的是常规 Python shell 或 Notebook，您可以尝试如下所示：</p>
+<figure class="highlight python"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">from</span> pyspark.sql <span class="keyword">import</span> SparkSession</span><br><span class="line"><span class="keyword">from</span> app <span class="keyword">import</span> main</span><br><span class="line"></span><br><span class="line">os.environ[<span class="string">'PYSPARK_PYTHON'</span>] = <span class="string">'./environment/bin/python'</span></span><br><span class="line">os.environ[<span class="string">'PYSPARK_DRIVER_PYTHON'</span>] = <span class="string">'./environment/bin/python'</span></span><br><span class="line"></span><br><span class="line">spark = SparkSession.builder.config(</span><br><span class="line">    <span class="string">"spark.archives"</span>,  <span class="comment"># 'spark.yarn.dist.archives' in YARN.</span></span><br><span class="line">    <span class="string">"pyspark_conda_env.tar.gz#environment"</span>).getOrCreate()</span><br><span class="line">main(spark)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 或者</span></span><br><span class="line">SPARK_CONF = SparkConf() \</span><br><span class="line">    .<span class="built_in">set</span>(<span class="string">'spark.yarn.dist.archives'</span>, <span class="string">'pyspark_conda_env.tar.gz#environment'</span>) \</span><br><span class="line">    .<span class="built_in">set</span>(<span class="string">'spark.yarn.appMasterEnv.ARROW_PRE_0_15_IPC_FORMAT'</span>, <span class="string">'1'</span>) \</span><br><span class="line">    .<span class="built_in">set</span>(<span class="string">'spark.executorEnv.ARROW_PRE_0_15_IPC_FORMAT'</span>, <span class="string">'1'</span>)</span><br><span class="line">sc = SparkContext(appName=appName, conf=SPARK_CONF)</span><br><span class="line">sc.setLogLevel(<span class="string">'ERROR'</span>)</span><br><span class="line">spark = SparkSession.builder.enableHiveSupport().getOrCreate()</span><br></pre></td></tr></tbody></table></figure>
+<p>对于 pyspark Shell：<br>
+</p><figure class="highlight shell"><table><tbody><tr><td class="code"><pre><span class="line">export PYSPARK_DRIVER_PYTHON=python</span><br><span class="line">export PYSPARK_PYTHON=./environment/bin/python</span><br><span class="line">pyspark --archives pyspark_conda_env.tar.gz#environment</span><br></pre></td></tr></tbody></table></figure><p></p></li>
+<li><p>使用本机，不用集群<br>
+</p><figure class="highlight python"><table><tbody><tr><td class="code"><pre><span class="line">SPARK_CONF = SparkConf() \</span><br><span class="line">   .setMaster(<span class="string">'local'</span>) \</span><br><span class="line">   .<span class="built_in">set</span>(<span class="string">'spark.submit.deployMode'</span>, <span class="string">'client'</span>)</span><br><span class="line"> sc = SparkContext(appName=appName, conf=SPARK_CONF)</span><br><span class="line"> sc.setLogLevel(<span class="string">'ERROR'</span>)</span><br><span class="line"> spark = SparkSession.builder.enableHiveSupport().getOrCreate()</span><br></pre></td></tr></tbody></table></figure><p></p></li>
+</ol></li>
+</ul>
+<h1 id="map-reduce操作">Map-Reduce 操作</h1>
+<ul>
+<li><p>PySpark<br>
+<code>df.map(func)</code>，<code>df.reduce(func)</code> 返回类型 seqRDDs</p></li>
+<li><p>Pandas<br>
+<code>map-reduce操作map(func, list)</code>，<code>reduce(func, list)</code> 返回类型 seq</p></li>
+</ul>
+<h1 id="diff操作">Diff 操作</h1>
+<ul>
+<li><p>PySpark<br>
+没有 diff 操作（Spark 的上下行是相互独立，分布式存储的）</p></li>
+<li><p>Pandas<br>
+有 diff 操作，处理时间序列数据（Pandas 会对比当前行与上一行）</p></li>
+</ul>
+<h1 id="most-common计数">Most Common 计数</h1>
+<ul>
+<li><p>PySpark<br>
+<code>df.cube(column_name/column_list).count().sort('count', ascending=False).show(5)</code><br>
+<code>df.groupBy(column_name/column_list).agg({'*': 'count'}).withColumnRenamed('count(1)', 'new_count')</code></p></li>
+<li><p>Pandas<br>
+<code>df.value_counts(ascending=False)</code></p></li>
+</ul>
+<h1 id="json-格式化选择解析">Json 格式化、选择、解析</h1>
+<ul>
+<li><p>PySpark<br>
+格式化：<code>df.withColum('json_string', F.to_json(F.struct('key1', 'key2')))</code><br>
+选择：<code>df.select('json_string.key')</code><br>
+解析：<code>json_schema = spark.read.json(df.rdd.map(lambda row: row.json_string)).schema</code><br>
+<code>F.get_json_object('json_string', '$.key')</code><br>
+<code>F.from_json(F.get_json_object('json_string', '$.key'), schema)</code></p></li>
+<li><p>Pandas<br>
+格式化：<code>df['json_string'] = df[['key1', 'key2']].to_dict(orient='records')</code><br>
+选择：<code>df.json_string.apply(pd.Series).key</code><br>
+解析：<code>df.join(pd.concat(list(df['json_string'].apply(lambda x: pd.json_normalize(json.loads(x)))), ignore_index=True))</code></p></li>
+</ul>
+<h1 id="explode操作pivot操作melt操作">Explode 操作、Pivot 操作、Melt 操作</h1>
+<ul>
+<li><p>PySpark<br>
+Explode：<br>
+将 xx 列中的每行的列表 / 数组值分拆形成单独的行<br>
+<code>df.withColumn('xx', explode(F.col('yy'))) # 忽略空值或者空列表/数组</code><br>
+<code>df.withColumn('xx', explode_outer(F.col('yy'))) # 不忽略空值或者空列表/数组</code></p>
+<p>Pivot：<br>
+<code>df.groupBy('Label').pivot('Keys').agg(F.first('Values'))</code> 将<br>
+| Label | Keys | Values |<br>
+| ----- | ------ | :------- |<br>
+| 0 | 'key1' | 'value1' |<br>
+| 0 | 'key2' | 'value2' |<br>
+| 1 | 'key1' | 'value3' |<br>
+| 1 | 'key2' | 'value4' |</p>
+<p>转换为<br>
+| Label | key1 | Key2 |<br>
+| ----- | -------- | -------- |<br>
+| 0 | 'value1' | 'value2' |<br>
+| 1 | 'value3' | 'value4' |</p>
+<p>Melt：<br>
+</p><figure class="highlight python"><table><tbody><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">melt</span>(<span class="params">df, id_vars, col_1, col_2, col_1_name, col_2_name</span>):</span></span><br><span class="line">    _col_1 = F.array(*(F.struct(F.col(c).alias(col_1_name))<span class="keyword">for</span> c <span class="keyword">in</span> col_1))</span><br><span class="line">    _col_2 = F.array(*(F.struct(F.col(c).alias(col_2_name))<span class="keyword">for</span> c <span class="keyword">in</span> col_2))</span><br><span class="line">    _tmp_1 = df.withColumn(<span class="string">'col_1'</span>, F.explode(_col_1)).select(id_vars, <span class="string">'col_1'</span>).rdd.zipWithIndex().toDF().select(F.col(<span class="string">'_1'</span>).getItem(id_vars).alias(id_vars), F.col(<span class="string">'_1'</span>).getItem(<span class="string">'col_1'</span>).alias(<span class="string">'col_1'</span>), F.col(<span class="string">'_2'</span>).alias(<span class="string">'row_index'</span>))</span><br><span class="line">    _tmp_2 = df.withColumn(<span class="string">'col_2'</span>, F.explode(_col_2)).select(id_vars, <span class="string">'col_2'</span>).rdd.zipWithIndex().toDF().select(F.col(<span class="string">'_1'</span>).getItem(id_vars).alias(id_vars), F.col(<span class="string">'_1'</span>).getItem(<span class="string">'col_2'</span>).alias(<span class="string">'col_2'</span>), F.col(<span class="string">'_2'</span>).alias(<span class="string">'row_index'</span>))</span><br><span class="line">    _tmp = _tmp_1.join(_tmp_2, [<span class="string">'row_index'</span>, id_vars])</span><br><span class="line">    cols = [id_vars] + [F.col(<span class="string">'col_1'</span>)[col_1_name].alias(col_1_name)] + [F.col(<span class="string">'col_2'</span>)[col_2_name].alias(col_2_name)]</span><br><span class="line">    <span class="keyword">return</span> _tmp.select(*cols)</span><br><span class="line"></span><br><span class="line">df = melt(df_results, id_vars=<span class="string">'idx'</span>, col_1=[], col_2=[], col_1_name=<span class="string">''</span>, col_2_name=<span class="string">''</span>)</span><br></pre></td></tr></tbody></table></figure><p></p></li>
+<li><p>Pandas<br>
+Explode：<code>df.explode('yy') # explode的列名还是yy</code><br>
+Pivot：<code>df.pivot(index="Label", columns="Key")</code> 将<br>
+| Label | Keys | Values |<br>
+| ----- | ------ | :------- |<br>
+| 0 | 'key1' | 'value1' |<br>
+| 0 | 'key2' | 'value2' |<br>
+| 1 | 'key1' | 'value3' |<br>
+| 1 | 'key2' | 'value4' |</p>
+<p>转换为</p>
+<table>
+<thead>
+<tr>
+<th>
+</th>
+<th colspan="2" align="Center">
+<p>Values</p>
+</th>
+</tr>
+<tr>
+<th>
+<p>Keys</p>
+</th>
+<th>
+<p>key1</p>
+</th>
+<th>
+<p>key2</p>
+</th>
+</tr>
+<tr>
+<th>
+<p>Label</p>
+</th>
+<th>
+</th>
+<th>
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th>
+<p>0</p>
+</th>
+<td>
+<p>value1</p>
+</td>
+<td>
+<p>value2</p>
+</td>
+</tr>
+<tr>
+<th>
+<p>1</p>
+</th>
+<td>
+<p>value3</p>
+</td>
+<td>
+<p>value4</p>
+</td>
+</tr>
+</tbody>
+</table></li>
+</ul>
+]]></content>
+      <categories>
+        <category>Python</category>
+      </categories>
+      <tags>
+        <tag>Tutorial</tag>
+        <tag>Python</tag>
+        <tag>Data Analysis</tag>
       </tags>
   </entry>
   <entry>
@@ -3575,6 +3716,83 @@ https://chromedriver.storage.googleapis.com/index.html?path=72.0.3626.69/<br>
       </tags>
   </entry>
   <entry>
+    <title>极光推送 JPush 教程</title>
+    <url>/contents/%E6%9E%81%E5%85%89%E6%8E%A8%E9%80%81JPush%E6%95%99%E7%A8%8B.html</url>
+    <content><![CDATA[<p>现在很多 Android 或者 iOS 应用都需要服务器推送，有很多第三方应用可以实现此功能，如 Firebase Cloud Messaging (原 Google Cloud Messaging) 和 Apple Push Notifications。由于 Google 官方的推送服务 Firebase Cloud Messaging 不能再中国使用，所以在此介绍极光推送的使用。<br>
+<span id="more"></span></p>
+<h1 id="准备工作">准备工作</h1>
+<ol type="1">
+<li>注册成为 JPush 开发者<br>
+在 <a href="https://www.jiguang.cn/accounts/login/form">JPush 开发者服务</a>注册账号并登陆。</li>
+<li>创建应用<br>
+点击 “应用管理” 页面的 “创建应用” 按钮。填写应用名称，应用图标，Android 应用包名（不可更改），iOS 开发证书及密码，iOS 生产证书及密码。</li>
+<li>记录 APPKey 和 Master Secret<br>
+点击刚创建的应用详情页面，记录 APPKey 和 Master Secret</li>
+</ol>
+<h1 id="服务器端">服务器端</h1>
+<p>本文使用 Python 作为服务器脚本语言。<br>
+官方文档：<a href="https://docs.jiguang.cn/jpush/server/3rd/python_sdk/">Python SDK</a><br>
+SDK 下载：<a href="https://sdkfiledl.jiguang.cn/jpush-api-python-client-3.2.4.zip">Python SDK v3.2.4</a><br>
+官方源码：<a href="https://github.com/jpush/jpush-api-python-client">jpush-api-python-client</a><br>
+官方 API：<a href="https://github.com/jpush/jpush-api-python-client/blob/master/docs/push/push.md">jpush python api</a><br>
+官方 API：<a href="https://docs.jiguang.cn/jpush/server/push/rest_api_v3_push/">REST Push API</a></p>
+<h2 id="环境配置">环境配置</h2>
+<p>pip 方式：<code>pip install jpush</code><br>
+easy_install 方式：<code>easy_install jpush</code><br>
+使用源码方式：<code>python setup.py install</code></p>
+<h2 id="服务器设置">服务器设置</h2>
+<p>新建 conf.py 文件：<br>
+</p><figure class="highlight python"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment"># please put your app_key and master_secret here</span></span><br><span class="line">app_key = <span class="string">u'your app_key'</span></span><br><span class="line">master_secret = <span class="string">u'your master_secret'</span></span><br></pre></td></tr></tbody></table></figure><p></p>
+<h2 id="服务端主函数">服务端主函数</h2>
+<figure class="highlight python"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> conf <span class="keyword">import</span> app_key, master_secret</span><br><span class="line">_jpush = jpush.JPush(app_key, master_secret) <span class="comment">#初始化jpush</span></span><br><span class="line">_jpush.set_logging(<span class="string">"DEBUG"</span>) <span class="comment">#设置日志</span></span><br><span class="line">push = _jpush.create_push() <span class="comment">#初始化push</span></span><br><span class="line">push.platform = jpush.all_ <span class="comment">#设置推送所有平台</span></span><br><span class="line">push.platform = jpush.platform(*types) <span class="comment">#设置推送指定平台，关键字为"android", "ios","winphone"</span></span><br><span class="line">push.audience = jpush.registration_id(*reg_ids) <span class="comment">#根据注册id指定推送设备</span></span><br><span class="line">push.audience = jpush.alias(*alias) <span class="comment">#根据别名指定推送设备，别名在开发者服务平台中设置</span></span><br><span class="line">push.audience = jpush.tag(*tag) <span class="comment">#根据标签指定推送设备，标签在开发者服务平台中设置，多个标签之间是 OR 的关系，即取并集。</span></span><br><span class="line">push.audience = jpush.tag_and(*tag_ands) <span class="comment">#根据标签指定推送设备，标签在开发者服务平台中设置，多个标签之间是 AND 关系，即取交集。</span></span><br><span class="line">push.notification = jpush.notification(alert=<span class="literal">None</span>, ios=<span class="literal">None</span>, android=<span class="literal">None</span>, winphone=<span class="literal">None</span>) <span class="comment">#指定通知内容，如果下方各平台定义了alert，则覆盖这里的定义</span></span><br><span class="line">ios = jpush.ios(alert=<span class="literal">None</span>, badge=<span class="literal">None</span>, sound=<span class="literal">None</span>, content_available=<span class="literal">False</span>, extras=<span class="literal">None</span>, sound_disable=<span class="literal">False</span>) <span class="comment">#指定通知内容，声音，角标，唤醒，扩展字段</span></span><br><span class="line">android = jpush.android(alert, title=<span class="literal">None</span>, builder_id=<span class="literal">None</span>, extras=<span class="literal">None</span>) <span class="comment">#指定通知内容，标题，样式，扩展字段</span></span><br><span class="line">push.message = jpush.message(msg_content, title=<span class="literal">None</span>, content_type=<span class="literal">None</span>, extras=<span class="literal">None</span>) <span class="comment">#指定消息内容</span></span><br><span class="line">push.smsmessage = jpush.smsmessage(content,delay_time) <span class="comment">#指定短信内容和延迟时间（单位为秒，不能超过24小时。设置为0，表示立即发送短信。该参数仅对android平台有效，iOS 和 Winphone平台则会立即发送短信）</span></span><br><span class="line">result = push.send() <span class="comment">#执行推送</span></span><br></pre></td></tr></tbody></table></figure>
+<h1 id="android客户端">Android 客户端</h1>
+<p>官方集成文档：<a href="https://docs.jiguang.cn/jpush/client/Android/android_guide/">Android SDK 集成指南</a><br>
+官方 API：<a href="https://docs.jiguang.cn/jpush/client/Android/android_api/">Android SDK API</a><br>
+SDK 下载：<a href="https://www.jiguang.cn/downloads/sdk/android/">Android SDK</a><br>
+目前 SDK 只支持 Android 2.3 或以上版本的手机系统。富媒体信息流功能则需 Android3.0 或以上版本的系统。</p>
+<h2 id="jcenter自动集成步骤">jcenter 自动集成步骤</h2>
+<p>说明：使用 jcenter 自动集成的开发者，不需要在项目中添加 jar 和 so，jcenter 会自动完成依赖；在 AndroidManifest.xml 中不需要添加任何 JPush SDK 相关的配置，jcenter 会自动导入。</p>
+<ol type="1">
+<li>确认 android studio 的 Project 根目录的主 gradle 中配置了 jcenter 支持。（新建 project 默认配置就支持）<br>
+<figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">buildscript {</span><br><span class="line">    repositories {</span><br><span class="line">        jcenter()</span><br><span class="line">    }</span><br><span class="line">    ......</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line">allprojects {</span><br><span class="line">    repositories {</span><br><span class="line">        jcenter()</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure></li>
+<li>在 module 的 gradle 中添加依赖和 AndroidManifest 的替换变量。<br>
+<figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">android {</span><br><span class="line">    ......</span><br><span class="line">    defaultConfig {</span><br><span class="line">        applicationId "com.xxx.xxx" //JPush上注册的包名.</span><br><span class="line">        ......</span><br><span class="line"></span><br><span class="line">        ndk {</span><br><span class="line">            //选择要添加的对应cpu类型的.so库。</span><br><span class="line">            abiFilters 'armeabi', 'armeabi-v7a', 'arm64-v8a'</span><br><span class="line">            // 还可以添加 'x86', 'x86_64', 'mips', 'mips64'</span><br><span class="line">        }</span><br><span class="line"></span><br><span class="line">        manifestPlaceholders = [</span><br><span class="line">            JPUSH_PKGNAME : applicationId,</span><br><span class="line">            JPUSH_APPKEY : "你的appkey", //JPush上注册的包名对应的appkey.</span><br><span class="line">            JPUSH_CHANNEL : "自定义渠道名称", //用户渠道统计的渠道名称</span><br><span class="line">        ]</span><br><span class="line">        ......</span><br><span class="line">    }</span><br><span class="line">    ......</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line">dependencies {</span><br><span class="line">    ......</span><br><span class="line"></span><br><span class="line">    compile 'cn.jiguang.sdk:jpush:x.x.x'  // 此处为JPush的版本号</span><br><span class="line">    compile 'cn.jiguang.sdk:jcore:x.x.x'  // 此处为JCore的版本号</span><br><span class="line">    ......</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure><br>
+注：如果在添加以上 abiFilter 配置之后 android Studio 出现以下提示：<br>
+<figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">NDK integration is deprecated in the current plugin. Consider trying the new experimental plugin.</span><br></pre></td></tr></tbody></table></figure><br>
+则在 Project 根目录的 gradle.properties 文件中添加：<br>
+<figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">android.useDeprecatedNdk=true</span><br></pre></td></tr></tbody></table></figure><br>
+说明：若没有 res/drawable-xxxx/jpush_notification_icon 这个资源默认使用应用图标作为通知 icon，在 5.0 以上系统将应用图标作为 statusbar icon 可能显示不正常，用户可定义没有阴影和渐变色的 icon 替换这个文件，文件名不要变。</li>
+</ol>
+<h2 id="初始化sdk">初始化 SDK</h2>
+<p>在主 activity 中：</p>
+<ol type="1">
+<li>import cn.jpush.android.api.JPushInterface;</li>
+<li> 在 onCreate 函数中<br>
+<figure class="highlight java"><table><tbody><tr><td class="code"><pre><span class="line">JPushInterface.setDebugMode(<span class="keyword">true</span>); <span class="comment">//开启调试</span></span><br><span class="line">JPushInterface.init(<span class="keyword">this</span>); <span class="comment">//初始化</span></span><br><span class="line">rid = JPushInterface.getRegistrationID(getApplicationContext()); <span class="comment">//获取Registration ID</span></span><br></pre></td></tr></tbody></table></figure></li>
+</ol>
+<h2 id="接收推送消息receiver">接收推送消息 Receiver</h2>
+<p>JPush SDK 收到推送，通过广播的方式，转发给开发者 App，这样开发者就可以灵活地进行处理。<br>
+这个动作不是必须的。用户有需要才定义 Receiver 类来处理 SDK 过来的广播。<br>
+如果不做这个动作，即不写自定义 Receiver，也不在 AndroidManifest.xml 里配置这个 Receiver，则默认的行为是：</p>
+<ol type="1">
+<li>接收到推送的自定义消息，则没有被处理</li>
+<li>可以正常收到通知，用户点击打开应用主界面<br>
+### 接受广播<br>
+如果全部类型的广播都接收，则需要在 AndroidManifest.xml 里添加如下的配置信息：<br>
+<figure class="highlight xml"><table><tbody><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">receiver</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:name</span>=<span class="string">"Your Receiver"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:enabled</span>=<span class="string">"true"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">intent-filter</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">action</span> <span class="attr">android:name</span>=<span class="string">"cn.jpush.android.intent.REGISTRATION"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">action</span> <span class="attr">android:name</span>=<span class="string">"cn.jpush.android.intent.MESSAGE_RECEIVED"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">action</span> <span class="attr">android:name</span>=<span class="string">"cn.jpush.android.intent.NOTIFICATION_RECEIVED"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">action</span> <span class="attr">android:name</span>=<span class="string">"cn.jpush.android.intent.NOTIFICATION_OPENED"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">action</span> <span class="attr">android:name</span>=<span class="string">"cn.jpush.android.intent.NOTIFICATION_CLICK_ACTION"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">action</span> <span class="attr">android:name</span>=<span class="string">"cn.jpush.android.intent.CONNECTION"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">category</span> <span class="attr">android:name</span>=<span class="string">"You package Name"</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">intent-filter</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">receiver</span>&gt;</span></span><br></pre></td></tr></tbody></table></figure><br>
+### 开发者自定义 Receiver 代码示例<br>
+<figure class="highlight java"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> name;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> android.content.BroadcastReceiver;</span><br><span class="line"><span class="keyword">import</span> android.content.Context;</span><br><span class="line"><span class="keyword">import</span> android.content.Intent;</span><br><span class="line"><span class="keyword">import</span> android.os.Bundle;</span><br><span class="line"><span class="keyword">import</span> android.util.Log;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> cn.jpush.android.api.JPushInterface;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyReceiver</span> <span class="keyword">extends</span> <span class="title">BroadcastReceiver</span> </span>{</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String TAG = <span class="string">"JPush"</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onReceive</span><span class="params">(Context context, Intent intent)</span> </span>{</span><br><span class="line">        Bundle bundle = intent.getExtras();</span><br><span class="line">        Log.d(TAG, <span class="string">"[MyReceiver] onReceive - "</span> + intent.getAction());</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (JPushInterface.ACTION_REGISTRATION_ID.equals(intent.getAction())) {</span><br><span class="line">            String regId = bundle.getString(JPushInterface.EXTRA_REGISTRATION_ID);</span><br><span class="line">            Log.d(TAG, <span class="string">"[MyReceiver] 接收Registration Id : "</span> + regId);</span><br><span class="line">            <span class="comment">//send the Registration Id to your server...</span></span><br><span class="line"></span><br><span class="line">        } <span class="keyword">else</span> <span class="keyword">if</span> (JPushInterface.ACTION_MESSAGE_RECEIVED.equals(intent.getAction())) {</span><br><span class="line">            Log.d(TAG, <span class="string">"[MyReceiver] 接收到推送下来的自定义消息: "</span> + bundle.getString(JPushInterface.EXTRA_MESSAGE));</span><br><span class="line"></span><br><span class="line">        } <span class="keyword">else</span> <span class="keyword">if</span> (JPushInterface.ACTION_NOTIFICATION_RECEIVED.equals(intent.getAction())) {</span><br><span class="line">            Log.d(TAG, <span class="string">"[MyReceiver] 接收到推送下来的通知: "</span> + bundle.getString(JPushInterface.EXTRA_ALERT) +</span><br><span class="line">                    <span class="string">", extras: "</span> + bundle.getString(JPushInterface.EXTRA_EXTRA));</span><br><span class="line">            <span class="keyword">int</span> notifactionId = bundle.getInt(JPushInterface.EXTRA_NOTIFICATION_ID);</span><br><span class="line">            Log.d(TAG, <span class="string">"[MyReceiver] 接收到推送下来的通知的ID: "</span> + notifactionId);</span><br><span class="line"></span><br><span class="line">        } <span class="keyword">else</span> <span class="keyword">if</span> (JPushInterface.ACTION_NOTIFICATION_OPENED.equals(intent.getAction())) {</span><br><span class="line">            Log.d(TAG, <span class="string">"[MyReceiver] 用户点击打开了通知"</span>);</span><br><span class="line"></span><br><span class="line">            <span class="comment">//打开自定义的Activity</span></span><br><span class="line">            Intent i = <span class="keyword">new</span> Intent(context, 需要跳转的activity名称.class);</span><br><span class="line">            i.putExtras(bundle);</span><br><span class="line">            <span class="comment">//i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);</span></span><br><span class="line">            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP );</span><br><span class="line">            context.startActivity(i);</span><br><span class="line"></span><br><span class="line">        } <span class="keyword">else</span> <span class="keyword">if</span> (JPushInterface.ACTION_RICHPUSH_CALLBACK.equals(intent.getAction())) {</span><br><span class="line">            Log.d(TAG, <span class="string">"[MyReceiver] 用户收到到RICH PUSH CALLBACK: "</span> + bundle.getString(JPushInterface.EXTRA_EXTRA));</span><br><span class="line">            <span class="comment">//在这里根据 JPushInterface.EXTRA_EXTRA 的内容处理代码，比如打开新的Activity， 打开一个网页等..</span></span><br><span class="line"></span><br><span class="line">        } <span class="keyword">else</span> <span class="keyword">if</span>(JPushInterface.ACTION_CONNECTION_CHANGE.equals(intent.getAction())) {</span><br><span class="line">            <span class="keyword">boolean</span> connected = intent.getBooleanExtra(JPushInterface.EXTRA_CONNECTION_CHANGE, <span class="keyword">false</span>);</span><br><span class="line">            Log.w(TAG, <span class="string">"[MyReceiver]"</span> + intent.getAction() +<span class="string">" connected state change to "</span>+connected);</span><br><span class="line">        } <span class="keyword">else</span> {</span><br><span class="line">            Log.d(TAG, <span class="string">"[MyReceiver] Unhandled intent - "</span> + intent.getAction());</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure></li>
+</ol>
+]]></content>
+      <categories>
+        <category>Android</category>
+      </categories>
+      <tags>
+        <tag>Tutorial</tag>
+        <tag>Android</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>搭建个人博客教程</title>
     <url>/contents/%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%95%99%E7%A8%8B.html</url>
     <content><![CDATA[<p>本文参考知乎专栏<a href="https://zhuanlan.zhihu.com/p/25471760">《教你免费搭建个人博客，Hexo&amp;Github》</a>，感谢作者。<br>
@@ -3584,41 +3802,41 @@ https://chromedriver.storage.googleapis.com/index.html?path=72.0.3626.69/<br>
 <span id="more"></span></p>
 <h1 id="安装">安装</h1>
 <ol type="1">
-<li><p>进入个人 GitHub 主页，右上角 + 号，选择 new repository，Repository name 填用户名。</p></li>
-<li><p>安装 <a href="https://nodejs.org/en/">Node.js</a>。</p>
-<p>Windows 系统直接官网下载安装。</p>
-<p>MacOS 系统推荐使用 <a href="https://github.com/Homebrew/install">Homebrew</a> 安装：在 Terminal 中输入 <code>brew install node</code>。</p>
-<p>安装 <a href="https://github.com/Homebrew/install">Homebrew</a>：在 Terminal 中输入 <code>/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"</code>。</p></li>
-<li><p>安装 <a href="https://git-scm.com">Git</a>。</p>
-<p>Windows 系统直接官网下载安装。</p>
-<p>MacOS 系统在 Terminal 中输入 <code>brew install git</code>（一般系统自带，可省略此步）。</p></li>
-<li><p>安装完成后，在开始菜单里找到 "Git"-&gt;"Git Bash"，输入：<br>
+<li>进入个人 GitHub 主页，右上角 + 号，选择 new repository，Repository name 填用户名。</li>
+<li>安装 <a href="https://nodejs.org/en/">Node.js</a>。<br>
+Windows 系统直接官网下载安装。<br>
+MacOS 系统推荐使用 <a href="https://github.com/Homebrew/install">Homebrew</a> 安装：在 Terminal 中输入 <code>brew install node</code>。<br>
+安装 <a href="https://github.com/Homebrew/install">Homebrew</a>：在 Terminal 中输入 <code>/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"</code>。</li>
+<li>安装 <a href="https://git-scm.com">Git</a>。<br>
+Windows 系统直接官网下载安装。<br>
+MacOS 系统在 Terminal 中输入 <code>brew install git</code>（一般系统自带，可省略此步）。</li>
+<li>安装完成后，在开始菜单里找到 "Git"-&gt;"Git Bash"，输入：<br>
 <code>$ git config --global user.name "用户名"</code> （不要引号）<br>
 <code>$ git config --global user.email "注册邮箱"</code> （不要引号）<br>
-名称和注册邮箱是 GitHub 上的（MacOS 无需此步）。</p></li>
-<li><p>安装 <a href="https://hexo.io/zh-cn/">Hexo</a>：输入 <code>$(sudo) npm install -g hexo-cli</code>。</p></li>
-<li><p>安装 <a href="https://github.com/jgm/pandoc/blob/master/INSTALL.md">pandoc</a>（MacOS 需要安装）：输入 <code>$ brew install pandoc</code>。</p></li>
+名称和注册邮箱是 GitHub 上的（MacOS 无需此步）。</li>
+<li>安装 <a href="https://hexo.io/zh-cn/">Hexo</a>：输入 <code>$(sudo) npm install -g hexo-cli</code>。</li>
+<li>安装 <a href="https://github.com/jgm/pandoc/blob/master/INSTALL.md">pandoc</a>（MacOS 需要安装）：输入 <code>$ brew install pandoc</code>。</li>
 </ol>
 <h1 id="更新">更新</h1>
 <ol type="1">
 <li>更新 Node.js 版本：在<a href="https://nodejs.org/en/download/current/">官网</a>上下载安装包覆盖安装。</li>
-<li>更新 Hexo 版本：在 Hexo 博客的根目录右键运行 Git Bash 并输入 <code>npm outdated</code> 检查最新版本的模块，确认根目录下有 package.json 文件。根据最新版本的模块检查结果修改 package.json 文件中对应的版本号。删除根目录下的 node_modules 文件夹，然后输入 <code>npm install --save</code> 更新模块。输入 <code>hexo version</code> 检查版本信息。输入 <code>npm outdated -g</code> 检查 Hexo CLI 是否有新版本，如有则输入 <code>npm install -g hexo-cli</code> 进行升级。</li>
 <li>更新 npm 版本：在命令行或终端中输入 <code>(sudo) npm install npm@latest -g</code> 进行更新，输入 <code>npm -v</code> 查看版本号，在<a href="https://github.com/npm/cli">官网</a>中查看最新版本号。</li>
 <li>更新 npm package 版本：<br>
 命令行或终端中输入 <code>npm outdated</code> 和 <code>npm -g outdated</code> 列出需要更新的版本。<br>
 命令行或终端中输入 <code>npm update</code> 和 <code>npm -g update</code> 更新到 outdated 列出 wanted 的版本。<br>
-命令行或终端中输入 <code>npm install package-name@latest</code> 强制更新到最新版本</li>
+命令行或终端中输入 <code>npm install package-name@latest</code> 强制更新到最新版本。</li>
+<li>更新 Hexo 版本：在 Hexo 博客的根目录右键运行 Git Bash 并输入 <code>npm outdated</code> 检查最新版本的模块，确认根目录下有 package.json 文件。根据最新版本的模块检查结果修改 package.json 文件中对应的版本号。删除根目录下的 node_modules 文件夹，然后输入 <code>npm install --save</code> 更新模块。输入 <code>hexo version</code> 检查版本信息。输入 <code>npm outdated -g</code> 检查 Hexo CLI 是否有新版本，如有则输入 <code>npm install -g hexo-cli</code> 进行升级。</li>
 </ol>
 <h1 id="配置">配置</h1>
 <ol type="1">
-<li><p>新建文件夹 "Blog" 作为 Hexo 博客的根目录。</p></li>
-<li><p>在 Hexo 博客的根目录右键运行 Git Bash 并输入：<code>$ hexo i "文件夹名"</code>，此处起名为 "Blog"。</p></li>
-<li><p>在 Hexo 博客的根目录右键运行 Git Bash 并输入：<code>$ hexo g</code>，生成文章；输入 <code>$ hexo s</code>，启动本地服务器。访问 http://localhost:4000/ 即可查看博客效果。</p></li>
-<li><p>打开 Git Bash（Windows）/Terminal（MacOS），输入 <code>$(sudo) ssh-keygen -t rsa -C "GitHub的注册邮箱地址"</code>，一直回车直到出现信息 <code>Your public key has been saved in /path/to/id_rsa.pub</code></p>
-<p>MacOS：先检查 SSH Key 是否已经生成，在 Terminal 上输入 <code>ls -al ~/.ssh</code></p></li>
-<li><p>根据路径找到 id_rsa.pub，用 sublime 打开，复制全部内容，然后打开<a href="https://github.com/settings/keys">网址</a>（GitHub -&gt;Setting -&gt; SSH and GPG keys），点击 New SSH key 按钮，Title 填写 "Blog"，Key 填写刚刚复制的内容，完成后点击 Add SSH key 按钮。</p></li>
-<li><p>在 Blog 目录下，用 sublime 打开站点配置文件（_config.yml 文件），修改网站相关信息：<br>
-</p><figure class="highlight yml"><table><tbody><tr><td class="code"><pre><span class="line"><span class="attr">title:</span> <span class="comment">#网站标题</span></span><br><span class="line"><span class="attr">subtitle:</span> <span class="comment">#副标题</span></span><br><span class="line"><span class="attr">description:</span> <span class="comment">#网页描述</span></span><br><span class="line"><span class="attr">author:</span> <span class="comment">#作者名</span></span><br><span class="line"><span class="attr">deploy:</span></span><br><span class="line">  <span class="attr">type:</span> <span class="string">git</span></span><br><span class="line">  <span class="attr">repo:</span> <span class="string">https://github.com/"用户名"/"用户名".github.io.git</span></span><br><span class="line">  <span class="attr">branch:</span> <span class="string">master</span> <span class="comment">#配置部署</span></span><br></pre></td></tr></tbody></table></figure><p></p></li>
+<li>新建文件夹 "Blog" 作为 Hexo 博客的根目录。</li>
+<li>在 Hexo 博客的根目录右键运行 Git Bash 并输入：<code>$ hexo i "文件夹名"</code>，此处起名为 "Blog"。</li>
+<li>在 Hexo 博客的根目录右键运行 Git Bash 并输入：<code>$ hexo g</code>，生成文章；输入 <code>$ hexo s</code>，启动本地服务器。访问 http://localhost:4000/ 即可查看博客效果。</li>
+<li>打开 Git Bash（Windows）/Terminal（MacOS），输入 <code>$(sudo) ssh-keygen -t rsa -C "GitHub的注册邮箱地址"</code>，一直回车直到出现信息 <code>Your public key has been saved in /path/to/id_rsa.pub</code><br>
+MacOS：先检查 SSH Key 是否已经生成，在 Terminal 上输入 <code>ls -al ~/.ssh</code></li>
+<li>根据路径找到 id_rsa.pub，用 sublime 打开，复制全部内容，然后打开<a href="https://github.com/settings/keys">网址</a>（GitHub -&gt;Setting -&gt; SSH and GPG keys），点击 New SSH key 按钮，Title 填写 "Blog"，Key 填写刚刚复制的内容，完成后点击 Add SSH key 按钮。</li>
+<li>在 Blog 目录下，用 sublime 打开站点配置文件（_config.yml 文件），修改网站相关信息：<br>
+<figure class="highlight yml"><table><tbody><tr><td class="code"><pre><span class="line"><span class="attr">title:</span> <span class="comment">#网站标题</span></span><br><span class="line"><span class="attr">subtitle:</span> <span class="comment">#副标题</span></span><br><span class="line"><span class="attr">description:</span> <span class="comment">#网页描述</span></span><br><span class="line"><span class="attr">author:</span> <span class="comment">#作者名</span></span><br><span class="line"><span class="attr">deploy:</span></span><br><span class="line">  <span class="attr">type:</span> <span class="string">git</span></span><br><span class="line">  <span class="attr">repo:</span> <span class="string">https://github.com/"用户名"/"用户名".github.io.git</span></span><br><span class="line">  <span class="attr">branch:</span> <span class="string">master</span> <span class="comment">#配置部署</span></span><br></pre></td></tr></tbody></table></figure></li>
 </ol>
 <h1 id="发表文章">发表文章</h1>
 <ol type="1">
@@ -3706,7 +3924,7 @@ Scheme 的切换通过更改主题配置文件，搜索 scheme 关键字。你�
 <li>本地搜索功能：在 Hexo 博客的根目录右键运行 Git Bash 并输入：<code>$ npm install hexo-generator-searchdb --save</code>。编辑 Hexo 博客的根目录下的站点配置文件，新增以下内容到任意位置，然后在主题配置文件中配置 local_search 项目：<br>
 <figure class="highlight yml"><table><tbody><tr><td class="code"><pre><span class="line"><span class="attr">search:</span></span><br><span class="line">  <span class="attr">path:</span> <span class="string">search.xml</span></span><br><span class="line">  <span class="attr">field:</span> <span class="string">post</span></span><br><span class="line">  <span class="attr">format:</span> <span class="string">html</span></span><br><span class="line">  <span class="attr">limit:</span> <span class="number">10000</span></span><br></pre></td></tr></tbody></table></figure></li>
 <li>新建 Blog/source/_data/styles.styl 文件：<br>
-<figure class="highlight css"><table><tbody><tr><td class="code"><pre><span class="line">// Custom styles.</span><br><span class="line">//修改右上角xmliu's blog颜色及高度</span><br><span class="line"><span class="selector-class">.site-brand-container</span> {</span><br><span class="line">    <span class="attribute">background</span>: <span class="number">#0080FF</span>;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="selector-class">.site-meta</span> {</span><br><span class="line">  <span class="attribute">background</span>: <span class="number">#0080FF</span>;</span><br><span class="line">  <span class="attribute">padding</span>: <span class="number">0</span> <span class="number">5px</span>;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line">//扩大左侧栏</span><br><span class="line"><span class="selector-class">.sidebar</span> {</span><br><span class="line">    <span class="attribute">width</span>: <span class="number">300px</span>;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line">//去掉目录中Home和Search上下的空白</span><br><span class="line"><span class="selector-class">.menu</span> {</span><br><span class="line">  <span class="attribute">padding</span>: <span class="number">0em</span> <span class="number">0</span>;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line">//减少主界面文章标题和预览之间距离</span><br><span class="line"><span class="selector-class">.posts-expand</span> <span class="selector-class">.post-meta</span> {</span><br><span class="line">  <span class="attribute">margin</span>: <span class="number">10px</span> <span class="number">0</span> <span class="number">10px</span> <span class="number">0</span>;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line">//减少主界面文章预览和Read more按钮之间距离</span><br><span class="line"><span class="selector-class">.post-button</span> {</span><br><span class="line">  <span class="attribute">margin-top</span>: <span class="number">10px</span>;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line">//将<span class="attribute">background</span><span class="selector-class">.jpg</span>放在node_modules\hexo-theme-next\source\images目录下</span><br><span class="line"><span class="selector-tag">body</span> {</span><br><span class="line">  <span class="attribute">background</span>: <span class="built_in">url</span>(<span class="string">/images/background.jpg</span>);</span><br><span class="line">  <span class="attribute">background-attachment</span>: fixed;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line">//页面底部文字变白色</span><br><span class="line"><span class="selector-class">.footer</span> {</span><br><span class="line">  <span class="attribute">color</span>: white;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line">//Archive界面</span><br><span class="line">//去掉title</span><br><span class="line"><span class="selector-class">.posts-collapse</span> <span class="selector-class">.collection-title</span> {</span><br><span class="line">  <span class="attribute">display</span>: none;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line">//去掉年份上下空白</span><br><span class="line"><span class="selector-class">.posts-collapse</span> <span class="selector-class">.post-content</span> <span class="selector-class">.collection-year</span> {</span><br><span class="line">    <span class="attribute">margin</span>: <span class="number">0</span>;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line">//去掉标题上下空白</span><br><span class="line"><span class="selector-class">.posts-collapse</span> <span class="selector-class">.post-content</span> <span class="selector-class">.post-header</span> {</span><br><span class="line">    <span class="attribute">margin</span>: <span class="number">0</span>;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line">//取消整栏上下空白 减少左边距</span><br><span class="line"><span class="selector-class">.post-block</span> {</span><br><span class="line">    <span class="attribute">padding-left</span>: <span class="number">0</span>;</span><br><span class="line">    <span class="attribute">padding-top</span>: <span class="number">20px</span></span><br><span class="line">    padding-bottom: <span class="number">20px</span></span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="keyword">@media</span> (<span class="attribute">min-width</span>: <span class="number">1200px</span>) {</span><br><span class="line">  //缩小两边距离</span><br><span class="line">  <span class="selector-class">.main</span> {</span><br><span class="line">    <span class="attribute">width</span>: <span class="number">1360px</span>;</span><br><span class="line">  }</span><br><span class="line"></span><br><span class="line">  //扩大主内容栏</span><br><span class="line">  <span class="selector-class">.main-inner</span> {</span><br><span class="line">      <span class="attribute">width</span>: <span class="built_in">calc</span>(<span class="number">100%</span> - <span class="number">312px</span>);</span><br><span class="line">  }</span><br><span class="line"></span><br><span class="line">  //扩大左侧栏</span><br><span class="line">  <span class="selector-class">.header-inner</span> {</span><br><span class="line">      <span class="attribute">width</span>: <span class="number">300px</span>;</span><br><span class="line">  }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure></li>
+<figure class="highlight css"><table><tbody><tr><td class="code"><pre><span class="line">// Custom styles.</span><br><span class="line">//修改右上角xmliu's blog颜色及高度</span><br><span class="line"><span class="selector-class">.site-brand-container</span> {</span><br><span class="line">    <span class="attribute">background</span>: <span class="number">#0080FF</span>;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="selector-class">.site-meta</span> {</span><br><span class="line">  <span class="attribute">background</span>: <span class="number">#0080FF</span>;</span><br><span class="line">  <span class="attribute">padding</span>: <span class="number">0</span> <span class="number">5px</span>;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line">//扩大左侧栏</span><br><span class="line"><span class="selector-class">.sidebar</span> {</span><br><span class="line">    <span class="attribute">width</span>: <span class="number">300px</span>;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line">//去掉目录中Home和Search上下的空白</span><br><span class="line"><span class="selector-class">.menu</span> {</span><br><span class="line">  <span class="attribute">padding</span>: <span class="number">0em</span> <span class="number">0</span>;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line">//减少主界面文章标题和预览之间距离</span><br><span class="line"><span class="selector-class">.posts-expand</span> <span class="selector-class">.post-header</span> {</span><br><span class="line">  <span class="attribute">margin</span>: <span class="number">10px</span> <span class="number">0</span> <span class="number">10px</span> <span class="number">0</span>;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line">//减少主界面文章预览和Read more按钮之间距离</span><br><span class="line"><span class="selector-class">.post-button</span> {</span><br><span class="line">  <span class="attribute">margin-top</span>: <span class="number">10px</span>;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line">//将<span class="attribute">background</span><span class="selector-class">.jpg</span>放在node_modules\hexo-theme-next\source\images目录下</span><br><span class="line"><span class="selector-tag">body</span> {</span><br><span class="line">  <span class="attribute">background</span>: <span class="built_in">url</span>(<span class="string">/images/background.jpg</span>);</span><br><span class="line">  <span class="attribute">background-attachment</span>: fixed;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line">//页面底部文字变白色</span><br><span class="line"><span class="selector-class">.footer</span> {</span><br><span class="line">  <span class="attribute">color</span>: white;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line">//Archive界面</span><br><span class="line">//去掉title</span><br><span class="line"><span class="selector-class">.posts-collapse</span> <span class="selector-class">.collection-title</span> {</span><br><span class="line">  <span class="attribute">display</span>: none;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line">//去掉年份上下空白</span><br><span class="line"><span class="selector-class">.posts-collapse</span> <span class="selector-class">.post-content</span> <span class="selector-class">.collection-year</span> {</span><br><span class="line">    <span class="attribute">margin</span>: <span class="number">0</span>;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line">//去掉标题上下空白</span><br><span class="line"><span class="selector-class">.posts-collapse</span> <span class="selector-class">.post-content</span> <span class="selector-class">.post-header</span> {</span><br><span class="line">    <span class="attribute">margin</span>: <span class="number">0</span>;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line">//减少左边距</span><br><span class="line"><span class="selector-class">.posts-collapse</span> <span class="selector-class">.post-content</span> {</span><br><span class="line">    <span class="attribute">margin</span>: <span class="number">0</span>;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line">//取消整栏上下空白</span><br><span class="line"><span class="selector-class">.post-block</span> {</span><br><span class="line">    <span class="attribute">padding-top</span>: <span class="number">20px</span></span><br><span class="line">    padding-bottom: <span class="number">20px</span></span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="keyword">@media</span> (<span class="attribute">min-width</span>: <span class="number">1200px</span>) {</span><br><span class="line">  //缩小两边距离</span><br><span class="line">  <span class="selector-class">.main</span> {</span><br><span class="line">    <span class="attribute">width</span>: <span class="number">1360px</span>;</span><br><span class="line">  }</span><br><span class="line"></span><br><span class="line">  //扩大主内容栏</span><br><span class="line">  <span class="selector-class">.main-inner</span> {</span><br><span class="line">      <span class="attribute">width</span>: <span class="built_in">calc</span>(<span class="number">100%</span> - <span class="number">312px</span>);</span><br><span class="line">  }</span><br><span class="line"></span><br><span class="line">  //扩大左侧栏</span><br><span class="line">  <span class="selector-class">.header-inner</span> {</span><br><span class="line">      <span class="attribute">width</span>: <span class="number">300px</span>;</span><br><span class="line">  }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure></li>
 </ol>
 <h1 id="seo优化指南">SEO 优化指南</h1>
 <p>方便搜索引擎收录本博客，参考文章<a href="http://blog.mobing.net/content/hexo/hexo-next-seo.html">基于 Hexo 中 Next 主题的 SEO 优化指南</a>，<a href="http://hui-wang.info/2016/10/23/Hexo插件之百度主动提交链接/">Hexo 插件之百度主动提交链接</a></p>
@@ -3774,8 +3992,7 @@ windows 平台 push 过程中会提示输入 GitHub 的用户名和的密码。<
 <code>$ (sudo) npm install -g hexo-cli</code><br>
 3.2. 初始化 Hexo 并安装相应依赖包。<br>
 <code>$ (sudo) npm install #会根据package.json文件中的依赖列表安装相应依赖包</code><br>
-3.3. 将 Blog/source/_data/_config.yml 复制到 Blog/node_modules-theme-next<br>
-将 Blog/source/_data/background.jpg 复制到 Blog/node_modules-theme-next。<br>
+3.3. 将 Blog/source/_data/background.jpg 复制到 Blog/node_modules-theme-next。<br>
 3.4. 输入命令 <code>$ hexo g</code> 和命令 <code>$ hexo s</code>，然后在浏览器输入 <code>localhost:4000</code> 中进行预览。如果没有问题那么新电脑上就配置成功了。<br>
 3.5. 发表文章的操作同原电脑（见上）。</p></li>
 <li><p>把新电脑上的 Hexo 从本地同步到 GitHub 仓库。<br>
@@ -3952,83 +4169,6 @@ mathfrak：<span class="math inline">\(\mathfrak {ABCDEFGHIJKLMNOPQRSTUVWXYZabcd
       </categories>
       <tags>
         <tag>Tutorial</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>极光推送 JPush 教程</title>
-    <url>/contents/%E6%9E%81%E5%85%89%E6%8E%A8%E9%80%81JPush%E6%95%99%E7%A8%8B.html</url>
-    <content><![CDATA[<p>现在很多 Android 或者 iOS 应用都需要服务器推送，有很多第三方应用可以实现此功能，如 Firebase Cloud Messaging (原 Google Cloud Messaging) 和 Apple Push Notifications。由于 Google 官方的推送服务 Firebase Cloud Messaging 不能再中国使用，所以在此介绍极光推送的使用。<br>
-<span id="more"></span></p>
-<h1 id="准备工作">准备工作</h1>
-<ol type="1">
-<li>注册成为 JPush 开发者<br>
-在 <a href="https://www.jiguang.cn/accounts/login/form">JPush 开发者服务</a>注册账号并登陆。</li>
-<li>创建应用<br>
-点击 “应用管理” 页面的 “创建应用” 按钮。填写应用名称，应用图标，Android 应用包名（不可更改），iOS 开发证书及密码，iOS 生产证书及密码。</li>
-<li>记录 APPKey 和 Master Secret<br>
-点击刚创建的应用详情页面，记录 APPKey 和 Master Secret</li>
-</ol>
-<h1 id="服务器端">服务器端</h1>
-<p>本文使用 Python 作为服务器脚本语言。<br>
-官方文档：<a href="https://docs.jiguang.cn/jpush/server/3rd/python_sdk/">Python SDK</a><br>
-SDK 下载：<a href="https://sdkfiledl.jiguang.cn/jpush-api-python-client-3.2.4.zip">Python SDK v3.2.4</a><br>
-官方源码：<a href="https://github.com/jpush/jpush-api-python-client">jpush-api-python-client</a><br>
-官方 API：<a href="https://github.com/jpush/jpush-api-python-client/blob/master/docs/push/push.md">jpush python api</a><br>
-官方 API：<a href="https://docs.jiguang.cn/jpush/server/push/rest_api_v3_push/">REST Push API</a></p>
-<h2 id="环境配置">环境配置</h2>
-<p>pip 方式：<code>pip install jpush</code><br>
-easy_install 方式：<code>easy_install jpush</code><br>
-使用源码方式：<code>python setup.py install</code></p>
-<h2 id="服务器设置">服务器设置</h2>
-<p>新建 conf.py 文件：<br>
-</p><figure class="highlight python"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment"># please put your app_key and master_secret here</span></span><br><span class="line">app_key = <span class="string">u'your app_key'</span></span><br><span class="line">master_secret = <span class="string">u'your master_secret'</span></span><br></pre></td></tr></tbody></table></figure><p></p>
-<h2 id="服务端主函数">服务端主函数</h2>
-<figure class="highlight python"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> conf <span class="keyword">import</span> app_key, master_secret</span><br><span class="line">_jpush = jpush.JPush(app_key, master_secret) <span class="comment">#初始化jpush</span></span><br><span class="line">_jpush.set_logging(<span class="string">"DEBUG"</span>) <span class="comment">#设置日志</span></span><br><span class="line">push = _jpush.create_push() <span class="comment">#初始化push</span></span><br><span class="line">push.platform = jpush.all_ <span class="comment">#设置推送所有平台</span></span><br><span class="line">push.platform = jpush.platform(*types) <span class="comment">#设置推送指定平台，关键字为"android", "ios","winphone"</span></span><br><span class="line">push.audience = jpush.registration_id(*reg_ids) <span class="comment">#根据注册id指定推送设备</span></span><br><span class="line">push.audience = jpush.alias(*alias) <span class="comment">#根据别名指定推送设备，别名在开发者服务平台中设置</span></span><br><span class="line">push.audience = jpush.tag(*tag) <span class="comment">#根据标签指定推送设备，标签在开发者服务平台中设置，多个标签之间是 OR 的关系，即取并集。</span></span><br><span class="line">push.audience = jpush.tag_and(*tag_ands) <span class="comment">#根据标签指定推送设备，标签在开发者服务平台中设置，多个标签之间是 AND 关系，即取交集。</span></span><br><span class="line">push.notification = jpush.notification(alert=<span class="literal">None</span>, ios=<span class="literal">None</span>, android=<span class="literal">None</span>, winphone=<span class="literal">None</span>) <span class="comment">#指定通知内容，如果下方各平台定义了alert，则覆盖这里的定义</span></span><br><span class="line">ios = jpush.ios(alert=<span class="literal">None</span>, badge=<span class="literal">None</span>, sound=<span class="literal">None</span>, content_available=<span class="literal">False</span>, extras=<span class="literal">None</span>, sound_disable=<span class="literal">False</span>) <span class="comment">#指定通知内容，声音，角标，唤醒，扩展字段</span></span><br><span class="line">android = jpush.android(alert, title=<span class="literal">None</span>, builder_id=<span class="literal">None</span>, extras=<span class="literal">None</span>) <span class="comment">#指定通知内容，标题，样式，扩展字段</span></span><br><span class="line">push.message = jpush.message(msg_content, title=<span class="literal">None</span>, content_type=<span class="literal">None</span>, extras=<span class="literal">None</span>) <span class="comment">#指定消息内容</span></span><br><span class="line">push.smsmessage = jpush.smsmessage(content,delay_time) <span class="comment">#指定短信内容和延迟时间（单位为秒，不能超过24小时。设置为0，表示立即发送短信。该参数仅对android平台有效，iOS 和 Winphone平台则会立即发送短信）</span></span><br><span class="line">result = push.send() <span class="comment">#执行推送</span></span><br></pre></td></tr></tbody></table></figure>
-<h1 id="android客户端">Android 客户端</h1>
-<p>官方集成文档：<a href="https://docs.jiguang.cn/jpush/client/Android/android_guide/">Android SDK 集成指南</a><br>
-官方 API：<a href="https://docs.jiguang.cn/jpush/client/Android/android_api/">Android SDK API</a><br>
-SDK 下载：<a href="https://www.jiguang.cn/downloads/sdk/android/">Android SDK</a><br>
-目前 SDK 只支持 Android 2.3 或以上版本的手机系统。富媒体信息流功能则需 Android3.0 或以上版本的系统。</p>
-<h2 id="jcenter自动集成步骤">jcenter 自动集成步骤</h2>
-<p>说明：使用 jcenter 自动集成的开发者，不需要在项目中添加 jar 和 so，jcenter 会自动完成依赖；在 AndroidManifest.xml 中不需要添加任何 JPush SDK 相关的配置，jcenter 会自动导入。</p>
-<ol type="1">
-<li>确认 android studio 的 Project 根目录的主 gradle 中配置了 jcenter 支持。（新建 project 默认配置就支持）<br>
-<figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">buildscript {</span><br><span class="line">    repositories {</span><br><span class="line">        jcenter()</span><br><span class="line">    }</span><br><span class="line">    ......</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line">allprojects {</span><br><span class="line">    repositories {</span><br><span class="line">        jcenter()</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure></li>
-<li>在 module 的 gradle 中添加依赖和 AndroidManifest 的替换变量。<br>
-<figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">android {</span><br><span class="line">    ......</span><br><span class="line">    defaultConfig {</span><br><span class="line">        applicationId "com.xxx.xxx" //JPush上注册的包名.</span><br><span class="line">        ......</span><br><span class="line"></span><br><span class="line">        ndk {</span><br><span class="line">            //选择要添加的对应cpu类型的.so库。</span><br><span class="line">            abiFilters 'armeabi', 'armeabi-v7a', 'arm64-v8a'</span><br><span class="line">            // 还可以添加 'x86', 'x86_64', 'mips', 'mips64'</span><br><span class="line">        }</span><br><span class="line"></span><br><span class="line">        manifestPlaceholders = [</span><br><span class="line">            JPUSH_PKGNAME : applicationId,</span><br><span class="line">            JPUSH_APPKEY : "你的appkey", //JPush上注册的包名对应的appkey.</span><br><span class="line">            JPUSH_CHANNEL : "自定义渠道名称", //用户渠道统计的渠道名称</span><br><span class="line">        ]</span><br><span class="line">        ......</span><br><span class="line">    }</span><br><span class="line">    ......</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line">dependencies {</span><br><span class="line">    ......</span><br><span class="line"></span><br><span class="line">    compile 'cn.jiguang.sdk:jpush:x.x.x'  // 此处为JPush的版本号</span><br><span class="line">    compile 'cn.jiguang.sdk:jcore:x.x.x'  // 此处为JCore的版本号</span><br><span class="line">    ......</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure><br>
-注：如果在添加以上 abiFilter 配置之后 android Studio 出现以下提示：<br>
-<figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">NDK integration is deprecated in the current plugin. Consider trying the new experimental plugin.</span><br></pre></td></tr></tbody></table></figure><br>
-则在 Project 根目录的 gradle.properties 文件中添加：<br>
-<figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">android.useDeprecatedNdk=true</span><br></pre></td></tr></tbody></table></figure><br>
-说明：若没有 res/drawable-xxxx/jpush_notification_icon 这个资源默认使用应用图标作为通知 icon，在 5.0 以上系统将应用图标作为 statusbar icon 可能显示不正常，用户可定义没有阴影和渐变色的 icon 替换这个文件，文件名不要变。</li>
-</ol>
-<h2 id="初始化sdk">初始化 SDK</h2>
-<p>在主 activity 中：</p>
-<ol type="1">
-<li>import cn.jpush.android.api.JPushInterface;</li>
-<li> 在 onCreate 函数中<br>
-<figure class="highlight java"><table><tbody><tr><td class="code"><pre><span class="line">JPushInterface.setDebugMode(<span class="keyword">true</span>); <span class="comment">//开启调试</span></span><br><span class="line">JPushInterface.init(<span class="keyword">this</span>); <span class="comment">//初始化</span></span><br><span class="line">rid = JPushInterface.getRegistrationID(getApplicationContext()); <span class="comment">//获取Registration ID</span></span><br></pre></td></tr></tbody></table></figure></li>
-</ol>
-<h2 id="接收推送消息receiver">接收推送消息 Receiver</h2>
-<p>JPush SDK 收到推送，通过广播的方式，转发给开发者 App，这样开发者就可以灵活地进行处理。<br>
-这个动作不是必须的。用户有需要才定义 Receiver 类来处理 SDK 过来的广播。<br>
-如果不做这个动作，即不写自定义 Receiver，也不在 AndroidManifest.xml 里配置这个 Receiver，则默认的行为是：</p>
-<ol type="1">
-<li>接收到推送的自定义消息，则没有被处理</li>
-<li>可以正常收到通知，用户点击打开应用主界面<br>
-### 接受广播<br>
-如果全部类型的广播都接收，则需要在 AndroidManifest.xml 里添加如下的配置信息：<br>
-<figure class="highlight xml"><table><tbody><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">receiver</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:name</span>=<span class="string">"Your Receiver"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:enabled</span>=<span class="string">"true"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">intent-filter</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">action</span> <span class="attr">android:name</span>=<span class="string">"cn.jpush.android.intent.REGISTRATION"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">action</span> <span class="attr">android:name</span>=<span class="string">"cn.jpush.android.intent.MESSAGE_RECEIVED"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">action</span> <span class="attr">android:name</span>=<span class="string">"cn.jpush.android.intent.NOTIFICATION_RECEIVED"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">action</span> <span class="attr">android:name</span>=<span class="string">"cn.jpush.android.intent.NOTIFICATION_OPENED"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">action</span> <span class="attr">android:name</span>=<span class="string">"cn.jpush.android.intent.NOTIFICATION_CLICK_ACTION"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">action</span> <span class="attr">android:name</span>=<span class="string">"cn.jpush.android.intent.CONNECTION"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">category</span> <span class="attr">android:name</span>=<span class="string">"You package Name"</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">intent-filter</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">receiver</span>&gt;</span></span><br></pre></td></tr></tbody></table></figure><br>
-### 开发者自定义 Receiver 代码示例<br>
-<figure class="highlight java"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> name;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> android.content.BroadcastReceiver;</span><br><span class="line"><span class="keyword">import</span> android.content.Context;</span><br><span class="line"><span class="keyword">import</span> android.content.Intent;</span><br><span class="line"><span class="keyword">import</span> android.os.Bundle;</span><br><span class="line"><span class="keyword">import</span> android.util.Log;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> cn.jpush.android.api.JPushInterface;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyReceiver</span> <span class="keyword">extends</span> <span class="title">BroadcastReceiver</span> </span>{</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String TAG = <span class="string">"JPush"</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onReceive</span><span class="params">(Context context, Intent intent)</span> </span>{</span><br><span class="line">        Bundle bundle = intent.getExtras();</span><br><span class="line">        Log.d(TAG, <span class="string">"[MyReceiver] onReceive - "</span> + intent.getAction());</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (JPushInterface.ACTION_REGISTRATION_ID.equals(intent.getAction())) {</span><br><span class="line">            String regId = bundle.getString(JPushInterface.EXTRA_REGISTRATION_ID);</span><br><span class="line">            Log.d(TAG, <span class="string">"[MyReceiver] 接收Registration Id : "</span> + regId);</span><br><span class="line">            <span class="comment">//send the Registration Id to your server...</span></span><br><span class="line"></span><br><span class="line">        } <span class="keyword">else</span> <span class="keyword">if</span> (JPushInterface.ACTION_MESSAGE_RECEIVED.equals(intent.getAction())) {</span><br><span class="line">            Log.d(TAG, <span class="string">"[MyReceiver] 接收到推送下来的自定义消息: "</span> + bundle.getString(JPushInterface.EXTRA_MESSAGE));</span><br><span class="line"></span><br><span class="line">        } <span class="keyword">else</span> <span class="keyword">if</span> (JPushInterface.ACTION_NOTIFICATION_RECEIVED.equals(intent.getAction())) {</span><br><span class="line">            Log.d(TAG, <span class="string">"[MyReceiver] 接收到推送下来的通知: "</span> + bundle.getString(JPushInterface.EXTRA_ALERT) +</span><br><span class="line">                    <span class="string">", extras: "</span> + bundle.getString(JPushInterface.EXTRA_EXTRA));</span><br><span class="line">            <span class="keyword">int</span> notifactionId = bundle.getInt(JPushInterface.EXTRA_NOTIFICATION_ID);</span><br><span class="line">            Log.d(TAG, <span class="string">"[MyReceiver] 接收到推送下来的通知的ID: "</span> + notifactionId);</span><br><span class="line"></span><br><span class="line">        } <span class="keyword">else</span> <span class="keyword">if</span> (JPushInterface.ACTION_NOTIFICATION_OPENED.equals(intent.getAction())) {</span><br><span class="line">            Log.d(TAG, <span class="string">"[MyReceiver] 用户点击打开了通知"</span>);</span><br><span class="line"></span><br><span class="line">            <span class="comment">//打开自定义的Activity</span></span><br><span class="line">            Intent i = <span class="keyword">new</span> Intent(context, 需要跳转的activity名称.class);</span><br><span class="line">            i.putExtras(bundle);</span><br><span class="line">            <span class="comment">//i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);</span></span><br><span class="line">            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP );</span><br><span class="line">            context.startActivity(i);</span><br><span class="line"></span><br><span class="line">        } <span class="keyword">else</span> <span class="keyword">if</span> (JPushInterface.ACTION_RICHPUSH_CALLBACK.equals(intent.getAction())) {</span><br><span class="line">            Log.d(TAG, <span class="string">"[MyReceiver] 用户收到到RICH PUSH CALLBACK: "</span> + bundle.getString(JPushInterface.EXTRA_EXTRA));</span><br><span class="line">            <span class="comment">//在这里根据 JPushInterface.EXTRA_EXTRA 的内容处理代码，比如打开新的Activity， 打开一个网页等..</span></span><br><span class="line"></span><br><span class="line">        } <span class="keyword">else</span> <span class="keyword">if</span>(JPushInterface.ACTION_CONNECTION_CHANGE.equals(intent.getAction())) {</span><br><span class="line">            <span class="keyword">boolean</span> connected = intent.getBooleanExtra(JPushInterface.EXTRA_CONNECTION_CHANGE, <span class="keyword">false</span>);</span><br><span class="line">            Log.w(TAG, <span class="string">"[MyReceiver]"</span> + intent.getAction() +<span class="string">" connected state change to "</span>+connected);</span><br><span class="line">        } <span class="keyword">else</span> {</span><br><span class="line">            Log.d(TAG, <span class="string">"[MyReceiver] Unhandled intent - "</span> + intent.getAction());</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure></li>
-</ol>
-]]></content>
-      <categories>
-        <category>Android</category>
-      </categories>
-      <tags>
-        <tag>Tutorial</tag>
-        <tag>Android</tag>
       </tags>
   </entry>
   <entry>
