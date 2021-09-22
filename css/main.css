@@ -3035,7 +3035,7 @@ p {
 }
 table {
   margin: 0;
-  width: 0%;
+  width: fit-content;
 }
 caption,
 th,
