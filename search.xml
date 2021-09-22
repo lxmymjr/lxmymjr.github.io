@@ -3807,7 +3807,8 @@ https://chromedriver.storage.googleapis.com/index.html?path=72.0.3626.69/<br>
 <li>安装 <a href="https://nodejs.org/en/">Node.js</a>。<br>
 Windows 系统直接官网下载安装。<br>
 MacOS 系统推荐使用 <a href="https://github.com/Homebrew/install">Homebrew</a> 安装：在 Terminal 中输入 <code>brew install node</code>。<br>
-安装 <a href="https://github.com/Homebrew/install">Homebrew</a>：在 Terminal 中输入 <code>/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"</code>。</li>
+安装 <a href="https://github.com/Homebrew/install">Homebrew</a>：在 Terminal 中输入<br>
+<figure class="highlight sh"><table><tbody><tr><td class="code"><pre><span class="line">/bin/bash -c <span class="string">"<span class="subst">$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)</span>"</span></span><br></pre></td></tr></tbody></table></figure></li>
 <li>安装 <a href="https://git-scm.com">Git</a>。<br>
 Windows 系统直接官网下载安装。<br>
 MacOS 系统在 Terminal 中输入 <code>brew install git</code>（一般系统自带，可省略此步）。</li>
