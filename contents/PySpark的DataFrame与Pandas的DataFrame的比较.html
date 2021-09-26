@@ -29,7 +29,7 @@
 <meta property="og:description" content="PySpark 和 Pandas 中都有 DataFrame 这个数据结构，但是他们的使用方法大有不同。 Reference：pyspark 系列 --pandas 与 pyspark 对比 ;Pandas 和 PySpark 中的 DataFrame 比较 ;PySpark API;Pandas API">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2020-10-29T09:59:28.000Z">
-<meta property="article:modified_time" content="2021-09-22T12:57:24.399Z">
+<meta property="article:modified_time" content="2021-09-26T05:33:43.137Z">
 <meta property="article:author" content="LIU, XIMING">
 <meta property="article:tag" content="Tutorial">
 <meta property="article:tag" content="Python">
@@ -265,7 +265,7 @@
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2021-09-22 20:57:24" itemprop="dateModified" datetime="2021-09-22T20:57:24+08:00">2021-09-22</time>
+        <time title="Modified: 2021-09-26 13:33:43" itemprop="dateModified" datetime="2021-09-26T13:33:43+08:00">2021-09-26</time>
       </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -284,14 +284,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">Symbols count in article: </span>
-      <span>27k</span>
+      <span>28k</span>
     </span>
     <span class="post-meta-item" title="Reading time">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">Reading time &asymp;</span>
-      <span>50 mins.</span>
+      <span>51 mins.</span>
     </span>
 </div>
 
@@ -357,7 +357,7 @@ Pandas 中 DataFrame 是可变的</p></li>
 <li><p>PySpark<br>
 </p><figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.repartition(partition_num).write.mode(<span class="string">'overwrite'</span>/<span class="string">'append'</span>).partitionBy(col_name).parquet(parquet_path)</span><br></pre></td></tr></tbody></table></figure><p></p></li>
 <li><p>Pandas<br>
-</p><figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">df.to_csv(csv_path, index=<span class="literal">True</span>/<span class="literal">False</span>) <span class="comment"># 是否保留index</span></span><br><span class="line">df.to_pickle(csv_pickle)</span><br><span class="line">df.to_parquet(parquet_path)</span><br><span class="line">df.to_csv(csv_path, index=<span class="literal">True</span>/<span class="literal">False</span>)</span><br></pre></td></tr></tbody></table></figure><p></p></li>
+</p><figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">df.to_csv(csv_path, index=<span class="literal">True</span>/<span class="literal">False</span>) <span class="comment"># 是否保留index</span></span><br><span class="line">df.to_pickle(csv_pickle)</span><br><span class="line">df.to_parquet(parquet_path)</span><br><span class="line">df.to_json(json_path, orient=<span class="string">'split'</span>/<span class="string">'records'</span>/<span class="string">'index'</span>/<span class="string">'columns'</span>/<span class="string">'values'</span>/<span class="string">'table'</span>)</span><br><span class="line"><span class="comment"># ‘split’ : dict like {‘index’ -&gt; [index], ‘columns’ -&gt; [columns], ‘data’ -&gt; [values]}</span></span><br><span class="line"><span class="comment"># ‘records’ : list like [{column -&gt; value}, … , {column -&gt; value}]</span></span><br><span class="line"><span class="comment"># ‘index’ : dict like {index -&gt; {column -&gt; value}}</span></span><br><span class="line"><span class="comment"># ‘columns’ : dict like {column -&gt; {index -&gt; value}}</span></span><br><span class="line"><span class="comment"># ‘values’ : just the values array</span></span><br><span class="line"><span class="comment"># ‘table’ : dict like {‘schema’: {schema}, ‘data’: {data}}</span></span><br></pre></td></tr></tbody></table></figure><p></p></li>
 </ul>
 <h1 id="index索引">index 索引</h1>
 <ul>
@@ -400,7 +400,7 @@ Series 结构，属于 Pandas DataFrame 结构</p></li>
 原来有 <code>df['xx']</code> 列，<code>df.withColumn('xx', 1)</code><br>
 如需判断逻辑：<code>df.withColumn('xx', F.when(condition expression, true expression).otherwise(false expression))</code><br>
 如需链接：<code>df.withColumn('xx', F.concat(F.col('yy'), F.lit('-'), F.col('zz')))</code> 其中 yy 和 zz 列须为 string 类型，如不是则需要提前类型转换。<br>
-从文件路径取值：<code>df.withColumn('xx', F.input_file_name().substr(start_index, stop_index))</code></li>
+从文件路径取值：<code>df.withColumn('xx', F.input_file_name().substr(start_index, length))</code></li>
 <li>Pandas<br>
 原来有 <code>df['xx']</code> 列，<code>df['xx'] = 1</code><br>
 如需判断逻辑：<code>df.loc[condition expression, 'xx'] = true expression</code><br>
@@ -614,7 +614,7 @@ PySpark 允许通过以下方式将 Python 文件 (<code>.py</code>)、压缩的
 <h1 id="most-common计数">Most Common 计数</h1>
 <ul>
 <li><p>PySpark<br>
-</p><figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">df.cube(column_name/column_list).count().sort(<span class="string">'count'</span>, ascending=<span class="literal">False</span>)</span><br><span class="line">df.groupBy(column_name/column_list).agg({<span class="string">'*'</span>: <span class="string">'count'</span>}).withColumnRenamed(<span class="string">'count(1)'</span>, <span class="string">'new_count'</span>)</span><br></pre></td></tr></tbody></table></figure><p></p></li>
+</p><figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">df.cube(column_name/column_list).count().sort(<span class="string">'count'</span>, ascending=<span class="literal">False</span>)</span><br><span class="line">df.groupBy(column_name/column_list).agg({<span class="string">'*'</span>: <span class="string">'count'</span>}).withColumnRenamed(<span class="string">'count(1)'</span>, <span class="string">'new_count'</span>)</span><br><span class="line">df.groupBy(column_name/column_list).agg(F.count(<span class="string">'*'</span>).alias(<span class="string">'new_count'</span>))</span><br><span class="line">df.groupBy(column_name/column_list).agg(F.countDistinct(<span class="string">'*'</span>).alias(<span class="string">'new_count'</span>))</span><br></pre></td></tr></tbody></table></figure><p></p></li>
 <li><p>Pandas<br>
 <code>df.value_counts(ascending=False)</code></p></li>
 </ul>
